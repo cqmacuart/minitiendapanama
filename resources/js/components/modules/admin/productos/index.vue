@@ -1,0 +1,335 @@
+<template>
+  <section class="container col-12 mt-3">
+    <form
+      :action="`${ruta}/admin/productos/${this.productvalue}/${this.categoryvalue}/${this.statusvalue}`"
+    >
+      <div class="col-12 text-center pb-2">
+        <div
+          class="col-12 d-flex flex-nowrap flex-column flex-md-row justify-content-around"
+        >
+          <el-input
+            placeholder="Producto por nombre"
+            v-model="productvalue"
+            @keyup.enter="getAllProducts"
+          ></el-input>
+          <el-select v-model="categoryvalue" clearable placeholder="Categoría">
+            <el-option
+              v-for="item in catoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              @keyup.enter="getAllProducts"
+            ></el-option>
+          </el-select>
+          <el-select v-model="statusvalue" clearable placeholder="Estado">
+            <el-option
+              v-for="item in statoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              @keyup.enter="getAllProducts"
+            ></el-option>
+          </el-select>
+        </div>
+        <div class="p-1">
+          <button class="btn btn-primary btn-sm">
+            <span class="fas fa-search"></span>
+            Buscar / Reiniciar
+          </button>
+        </div>
+      </div>
+    </form>
+    <div class="table-responsive pb-5">
+      <template v-if="productList.length">
+        <table class="categories-table table table-sm table-hover bordered">
+          <thead class="table-active">
+            <tr>
+              <th class="text-center text-nowrap" style="width: 1%">
+                <router-link :to="{ name: 'admin.productos.create' }">
+                  <el-button
+                    type="warning"
+                    icon="el-icon-plus"
+                    size="mini"
+                    circle
+                  ></el-button>
+                </router-link>
+              </th>
+              <th class="text-center text-nowrap" style="width: 20%">Imagen</th>
+              <th>Producto</th>
+              <th class="text-center">Categoría</th>
+              <th class="text-center">Posición</th>
+              <th class="text-center">Precio</th>
+              <th class="text-center">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="prod in resultadosPaginados"
+              :key="prod.id"
+              class="text-nowrap"
+            >
+              <td class="text-center align-middle">
+                <router-link
+                  :to="{
+                    name: 'admin.productos.edit',
+                    params: { id: prod.value },
+                  }"
+                >
+                  <el-button
+                    type="primary"
+                    icon="el-icon-edit"
+                    size="mini"
+                    circle
+                  ></el-button>
+                </router-link>
+                <el-button
+                  type="info"
+                  icon="el-icon-delete"
+                  size="mini"
+                  circle
+                  @click="deleteProduct(prod.value)"
+                ></el-button>
+              </td>
+              <td class="align-middle">
+                <div
+                  class="img-fluid text-center"
+                  style="max-height: 70px; overflow: hidden"
+                >
+                  <img
+                    :src="`/img/products/${prod.image}`"
+                    :alt="prod.label"
+                    style="max-width: 120px"
+                  />
+                </div>
+              </td>
+              <td class="align-middle">
+                <!-- <span class="fas fa-eye"></span> -->
+                {{ prod.label }}
+              </td>
+              <td
+                class="text-center text-nowrap align-middle"
+                style="width: 10%"
+              >
+                {{ prod.category }}
+              </td>
+              <td
+                class="text-center text-nowrap align-middle"
+                style="width: 10%"
+              >
+                {{ prod.position }}
+              </td>
+              <td
+                class="text-center text-nowrap align-middle"
+                style="width: 10%"
+              >
+                {{ prod.price }}
+              </td>
+              <td
+                class="text-center text-nowrap align-middle"
+                style="width: 10%"
+              >
+                <label v-if="prod.status == 1" class="badge badge-success"
+                  >Activo</label
+                >
+                <label v-else class="badge badge-danger">Inactive</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <div class="mt-2">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" v-if="pageNumber > 0">
+                <a
+                  class="page-link"
+                  href="#"
+                  tabindex="-1"
+                  aria-disabled="true"
+                  @click.prevent="prevPage"
+                  >Previous</a
+                >
+              </li>
+              <li
+                class="page-item"
+                v-for="(page, index) in paginas"
+                :key="index"
+                :class="page == pageNumber ? ' active' : ''"
+              >
+                <a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="selectPage(page)"
+                  >{{ page + 1 }}</a
+                >
+              </li>
+              <li class="page-item" v-if="pageNumber < pageCount - 1">
+                <a class="page-link" href="#" @click.prevent="nextPage">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </template>
+      <template v-else>
+        <div class="alert alert-info">
+          <p>No se han encontrado registros...</p>
+        </div>
+      </template>
+    </div>
+  </section>
+</template>
+
+<script>
+export default {
+  props: ["ruta", "producto", "estado", "categoria"],
+  data() {
+    return {
+      catoptions: [],
+      statoptions: [
+        { value: 1, label: "Activo" },
+        { value: 2, label: "Inactivo" },
+      ],
+      productList: [],
+      productvalue: null,
+      categoryvalue: null,
+      statusvalue: null,
+      //   Paginación
+      pageNumber: 0,
+      perPage: 5,
+    };
+  },
+  mounted() {
+    this.getAllProducts();
+    this.getAllCategories();
+  },
+  computed: {
+    //   metodos de paginacion
+    pageCount() {
+      let a = this.productList.length,
+        b = this.perPage;
+      return Math.ceil(a / b);
+    },
+    resultadosPaginados() {
+      let inicio = this.pageNumber * this.perPage,
+        fin = inicio + this.perPage;
+      return this.productList.slice(inicio, fin);
+    },
+    paginas() {
+      let a = this.productList.length,
+        b = this.perPage;
+      let pageCount = Math.ceil(a / b);
+      let count = 0,
+        pageArray = [];
+      while (count < pageCount) {
+        pageArray.push(count);
+        count++;
+      }
+      return pageArray;
+    },
+  },
+  methods: {
+    //   Cargar Categorías Guardadas
+    getAllProducts: function () {
+      this.productList = [];
+      let url =
+        this.producto || this.categoria || this.estado
+          ? `/products/filtered/${this.producto}/${this.categoria}/${this.estado}`
+          : `/products`;
+      axios
+        .get(url)
+        .then((response) => {
+          this.incializarPaginacion();
+          response.data.forEach((element) => {
+            this.productList.push({
+              value: element.id,
+              label: element.nombre,
+              image: element.image,
+              category: element.categoryname,
+              position: element.position,
+              status: element.estado_id,
+              price: element.price,
+            });
+          });
+        })
+        .catch((error) => {
+          //no estas autenticado
+          if (error.response.status == 401) {
+            // this.app.Toastr.error("Caduco su Sesión");
+            // localStorage.removeItem("user-authenticate");
+            // this.$router.push("/login");
+            console.log("Ha ocurrido un error");
+            // console.log(error.response.status);
+          }
+        });
+    },
+    getAllCategories: function () {
+      axios
+        .get("/categories")
+        .then((response) => {
+          response.data.forEach((element) => {
+            this.catoptions.push({
+              value: element.id,
+              label: element.nombre,
+            });
+          });
+        })
+        .catch((error) => {
+          //no estas autenticado
+          if (error.response.status == 401) {
+            // this.app.Toastr.error("Caduco su Sesión");
+            // localStorage.removeItem("user-authenticate");
+            // this.$router.push("/login");
+            console.log(error.response.status);
+          }
+        });
+    },
+    deleteProduct: function (id) {
+      this.$confirm(
+        "Esta a punto de eliminar este producto. ¿Desea continuar?",
+        "Mensaje",
+        {
+          confirmButtonText: "Si",
+          cancelButtonText: "No",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          axios.delete(`/products/${id}`).then((response) => {
+            if (response) {
+              this.$message({
+                type: "success",
+                message: "Producto eliminado",
+              });
+              this.getAllProducts();
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Eliminación cancelada",
+          });
+        });
+    },
+    onSubmit() {
+      return true;
+    },
+    // Metodos de paginación
+    nextPage() {
+      this.pageNumber++;
+    },
+    prevPage() {
+      this.pageNumber--;
+    },
+    selectPage(page) {
+      this.pageNumber = page;
+    },
+    incializarPaginacion() {
+      this.pageNumber = 0;
+    },
+  },
+};
+</script>
+
+<style>
+</style>

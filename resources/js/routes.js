@@ -1,0 +1,162 @@
+import Vue from "vue";
+import Router from "vue-router";
+import VueMeta from "vue-meta";
+
+Vue.use(Router);
+Vue.use(VueMeta);
+
+export default new Router({
+    routes: [
+        // Customer Page
+        {
+            path: "/:filter?",
+            name: "inicio",
+            props: true,
+            component: require("./components/modules/customer/category/index")
+                .default
+        },
+        // Categories Path
+        {
+            path: "/categoria/:id",
+            name: "categoria",
+            props: true,
+            component: require("./components/modules/customer/category/index")
+                .default,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        // Product Path
+        {
+            path: "/producto/:id",
+            name: "producto",
+            props: true,
+            component: require("./components/modules/customer/category/product")
+                .default
+        },
+        // Order Page
+        {
+            path: "/mipedido/:serial",
+            name: "mipedido",
+            props: true,
+            component: require("./components/modules/customer/index").default
+        },
+        // Cart Page
+        {
+            path: "/cart",
+            name: "cart",
+            component: require("./components/modules/customer/cart/index")
+                .default,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: "/cart/checkout",
+            name: "cart.checkout",
+            component: require("./components/modules/customer/cart/checkout")
+                .default,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        // Login Page
+        {
+            path: "/admin/login",
+            name: "admin.login",
+            component: require("./components/modules/authenticate/login")
+                .default
+        },
+        // Admin Page
+        { path: "/admin", name: "admin", redirect: { path: "/admin/home" } },
+        {
+            path: "/admin/home",
+            name: "admin.home",
+            component: require("./components/modules/admin/index").default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        // Admin Categorias
+        {
+            path: "/admin/categorias",
+            name: "admin.categorias",
+            component: require("./components/modules/admin/categorias/index")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        {
+            path: "/admin/categorias/create",
+            name: "admin.categorias.create",
+            component: require("./components/modules/admin/categorias/create")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        {
+            path: "/admin/categorias/:id",
+            name: "admin.categorias.edit",
+            props: true,
+            component: require("./components/modules/admin/categorias/edit")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        // Admin Productos
+        {
+            path: "/admin/productos/:producto?/:categoria?/:estado?",
+            name: "admin.productos",
+            props: true,
+            component: require("./components/modules/admin/productos/index")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        {
+            path: "/admin/productos/create",
+            name: "admin.productos.create",
+            component: require("./components/modules/admin/productos/create")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        {
+            path: "/admin/productos/:id",
+            name: "admin.productos.edit",
+            props: true,
+            component: require("./components/modules/admin/productos/edit")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        // Admin Pedidos
+        {
+            path: "/admin/pedidos",
+            name: "admin.pedidos",
+            component: require("./components/modules/admin/pedidos/index")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        // Admin Settings
+        {
+            path: "/admin/configuracion",
+            name: "admin.configuracion",
+            component: require("./components/modules/admin/configuracion/index")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        }
+    ],
+    mode: "history",
+    linkExactActiveClass: "item-active"
+});
