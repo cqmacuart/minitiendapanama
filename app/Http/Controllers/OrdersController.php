@@ -34,8 +34,8 @@ class OrdersController extends Controller
         //
         $query = DB::table('vw_orders');
         $orders = $query->orderBy('id', 'ASC')
-            ->where("status", $filtro)
-            ->orWhere("pedido", "LIKE", '%' . $filtro)
+            // ->where("status", $filtro)
+            // ->orWhere("pedido", "LIKE", '%' . $filtro)
             ->get();
         return response()->json($orders, 200);
     }
