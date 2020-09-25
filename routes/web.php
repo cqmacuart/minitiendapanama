@@ -12,13 +12,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// categories routes
+// offline routes
 Route::get('/offline', function () {
     return view('vendor/laravelpwa/offline');
 });
 
+// categories routes
 Route::get('/categories/info', 'CategoriesController@info');
 Route::post('/categories/saveFile', 'CategoriesController@saveFileImage');
+Route::get('/categories/page', 'CategoriesController@pageIndex');
 Route::resource('/categories', 'CategoriesController');
 
 //products routes
@@ -27,6 +29,7 @@ Route::post('/products/saveFile', 'ProductsController@saveFileImage');
 Route::get('/products/filteredByCategory/{id}', 'ProductsController@filteredByCategory');
 Route::get('/products/filteredBySearch/{filter}', 'ProductsController@filteredBySearch');
 Route::get('/products/filtered/{producto?}/{categoria?}/{estado?}', 'ProductsController@filtered');
+Route::get('/products/page', 'ProductsController@pageIndex');
 Route::resource('/products', 'ProductsController');
 
 // orders routes

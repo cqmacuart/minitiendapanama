@@ -29,6 +29,18 @@ class CategoriesController extends Controller
         }
         return $categories;
     }
+
+    public function pageIndex()
+    {
+        //
+        $categories = Category::where('estado_id', 1)->get();
+        foreach ($categories as $category) {
+            $optionsc[$category->id] = $category->nombre;
+        }
+        return $categories;
+    }
+
+
     public function info()
     {
         //

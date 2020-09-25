@@ -27,6 +27,13 @@ class ProductsController extends Controller
         return $products;
     }
 
+    public function pageIndex()
+    {
+        //
+        $products = Product::addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
+        return $products;
+    }
+
     public function info()
     {
         //
@@ -43,7 +50,7 @@ class ProductsController extends Controller
     public function filteredByCategory($id)
     {
         //
-        $products = Product::where('category_id', $id)->orderBy('position', 'asc')->get();
+        $products = Product::where('category_id', $id)->where('estado_id', 1)->orderBy('position', 'asc')->get();
         return $products;
     }
 
@@ -54,6 +61,7 @@ class ProductsController extends Controller
             ->orWhere('nombre', 'LIKE', '%' . $filter . '%')
             ->orWhere('short_des', 'LIKE', '%' . $filter . '%')
             ->orWhere('long_des', 'LIKE', '%' . $filter . '%')
+            ->where('estado_id', 1)
             ->orderBy('position', 'asc')
             ->get();
         return $products;

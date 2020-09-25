@@ -8,11 +8,12 @@
               <span class="fas fa-home"></span>
             </router-link>
           </li>
-          <li class="nav-item" v-for="(cat) in catList" :key="cat.id">
+          <li class="nav-item" v-for="cat in catList" :key="cat.id">
             <router-link
               class="nav-link py-1"
-              :to="{name: 'categoria', params: { id: cat.value }}"
-            >{{cat.label}}</router-link>
+              :to="{ name: 'categoria', params: { id: cat.value } }"
+              >{{ cat.label }}</router-link
+            >
           </li>
         </ul>
       </div>
@@ -35,7 +36,7 @@ export default {
     //   Cargar Categorías Guardadas
     getAllCategories: function () {
       axios
-        .get("/categories")
+        .get("/categories/page")
         .then((response) => {
           response.data.forEach((element) => {
             this.catList.push({
