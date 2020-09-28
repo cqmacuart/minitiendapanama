@@ -251,39 +251,24 @@ export default {
       titleTemplate: `%s`,
       meta: [
         {
-          vmid: "description",
           name: "description",
           content: `${this.metaDescription}`,
         },
+        { property: "og:title", content: `%s | ${this.metaTitle}` },
+        { property: "og:site_name", content: "My Mobile Store" },
         {
-          vmid: "og:title",
-          property: "og:title",
-          content: `%s | ${this.metaTitle}`,
-        },
-        {
-          vmid: "og:site_name",
-          property: "og:site_name",
-          content: "My Mobile Store",
-        },
-        {
-          vmid: "og:description",
           property: "og:description",
           content: `${this.metaDescription}`,
         },
+        { property: "og:type", content: "article" },
         {
-          vmid: "og:type",
-          property: "og:type",
-          content: "article",
-        },
-        {
-          vmid: "og:url",
           property: "og:url",
           content: `${this.metaRuta}`,
         },
         {
-          vmid: "og:image",
           property: "og:image",
           content: `${this.ruta}/img/products/${this.metaImage}`,
+          //   content: `${this.ruta}/img/products/${this.metaImage}`,
         },
       ],
     };
