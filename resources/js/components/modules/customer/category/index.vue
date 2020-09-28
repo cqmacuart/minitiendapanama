@@ -232,32 +232,6 @@ export default {
           icon: "fab fah fa-lg fa-twitter",
           color: "#1da1f2",
         },
-        // { network: 'instapaper', name: 'Instapaper', icon: 'fas fah fa-lg fa-italic', color: '#428bca' },
-        // { network: 'baidu', name: 'Baidu', icon: 'fas fah fa-lg fa-paw', color: '#2529d8' },
-        // { network: 'buffer', name: 'Buffer', icon: 'fab fah fa-lg fa-buffer', color: '#323b43' },
-        // { network: 'email', name: 'Email', icon: 'far fah fa-lg fa-envelope', color: '#333333' },
-        // { network: 'evernote', name: 'Evernote', icon: 'fab fah fa-lg fa-evernote', color: '#2dbe60' },
-        // { network: 'flipboard', name: 'Flipboard', icon: 'fab fah fa-lg fa-flipboard', color: '#e12828' },
-        // { network: 'hackernews', name: 'HackerNews', icon: 'fab fah fa-lg fa-hacker-news', color: '#ff4000' },
-        // { network: 'line', name: 'Line', icon: 'fab fah fa-lg fa-line', color: '#00c300' },
-        // { network: 'linkedin', name: 'LinkedIn', icon: 'fab fah fa-lg fa-linkedin', color: '#007bb5' },
-        // { network: 'odnoklassniki', name: 'Odnoklassniki', icon: 'fab fah fa-lg fa-odnoklassniki', color: '#ed812b' },
-        // { network: 'pinterest', name: 'Pinterest', icon: 'fab fah fa-lg fa-pinterest', color: '#bd081c' },
-        // { network: 'pocket', name: 'Pocket', icon: 'fab fah fa-lg fa-get-pocket', color: '#ef4056' },
-        // { network: 'quora', name: 'Quora', icon: 'fab fah fa-lg fa-quora', color: '#a82400' },
-        // { network: 'reddit', name: 'Reddit', icon: 'fab fah fa-lg fa-reddit-alien', color: '#ff4500' },
-        // { network: 'skype', name: 'Skype', icon: 'fab fah fa-lg fa-skype', color: '#00aff0' },
-        // { network: 'sms', name: 'SMS', icon: 'far fah fa-lg fa-comment-dots', color: '#333333' },
-        // { network: 'stumbleupon', name: 'StumbleUpon', icon: 'fab fah fa-lg fa-stumbleupon', color: '#eb4924' },
-        // { network: 'telegram', name: 'Telegram', icon: 'fab fah fa-lg fa-telegram-plane', color: '#0088cc' },
-        // { network: 'tumblr', name: 'Tumblr', icon: 'fab fah fa-lg fa-tumblr', color: '#35465c' },
-        // { network: 'viber', name: 'Viber', icon: 'fab fah fa-lg fa-viber', color: '#59267c' },
-        // { network: 'vk', name: 'Vk', icon: 'fab fah fa-lg fa-vk', color: '#4a76a8' },
-        // { network: 'weibo', name: 'Weibo', icon: 'fab fah fa-lg fa-weibo', color: '#e9152d' },
-        // { network: 'wordpress', name: 'Wordpress', icon: 'fab fah fa-lg fa-wordpress', color: '#21759b' },
-        // { network: 'xing', name: 'Xing', icon: 'fab fah fa-lg fa-xing', color: '#026466' },
-        // { network: 'yammer', name: 'Yammer', icon: 'fab fah fa-lg fa-yammer', color: '#0072c6' },
-        // { network: 'fakeblock', name: 'Custom Network', icon: 'fab fah fa-lg fa-vuejs', color: '#41b883' }
       ],
       // META VARIABLES
       metaTitle: "",
@@ -271,42 +245,49 @@ export default {
     };
   },
   // META INFO
-  //   metaInfo() {
-  //     return {
-  //       title: `My Mobile Store`,
-  //       titleTemplate: `%s | ${this.metaTitle}`,
-  //       meta: [
-  //         {
-  //           name: "description",
-  //           content: `${this.metaDescription}`,
-  //         },
-  //         { property: "og:title", content: `%s | ${this.metaTitle}` },
-  //         { property: "og:site_name", content: "My Mobile Store" },
-  //         {
-  //           property: "og:description",
-  //           content: `${this.metaDescription}`,
-  //         },
-  //         { property: "og:type", content: "article" },
-  //         {
-  //           property: "og:url",
-  //           content: `${this.metaRuta}`,
-  //         },
-  //         {
-  //           property: "og:image",
-  //           content: `${this.ruta}/img/products/${this.metaImage}`,
-  //           //   content: `${this.ruta}/img/products/${this.metaImage}`,
-  //         },
-  //       ],
-  //     };
-  //   },
-  //   metaInfo: {
-  //     title: "My Example App",
-  //     titleTemplate: "%s - Yay!",
-  //     htmlAttrs: {
-  //       lang: "en",
-  //       amp: true,
-  //     },
-  //   },
+  metaInfo() {
+    return {
+      title: `My Mobile Store`,
+      titleTemplate: `%s`,
+      meta: [
+        {
+          vmid: "description",
+          name: "description",
+          content: `${this.metaDescription}`,
+        },
+        {
+          vmid: "og:title",
+          property: "og:title",
+          content: `%s | ${this.metaTitle}`,
+        },
+        {
+          vmid: "og:site_name",
+          property: "og:site_name",
+          content: "My Mobile Store",
+        },
+        {
+          vmid: "og:description",
+          property: "og:description",
+          content: `${this.metaDescription}`,
+        },
+        {
+          vmid: "og:type",
+          property: "og:type",
+          content: "article",
+        },
+        {
+          vmid: "og:url",
+          property: "og:url",
+          content: `${this.metaRuta}`,
+        },
+        {
+          vmid: "og:image",
+          property: "og:image",
+          content: `${this.ruta}/img/products/${this.metaImage}`,
+        },
+      ],
+    };
+  },
   // META INFO END
   watch: {
     id: {

@@ -18,8 +18,10 @@ Vue.component("Admin", require("./components/Admin.vue").default);
 Vue.component("Auth", require("./components/Auth.vue").default);
 
 import router from "./routes";
+import VueMeta from "vue-meta";
 import VueSocialSharing from "vue-social-sharing";
 
+window.Vue.use(VueMeta);
 window.Vue.use(VueSocialSharing);
 
 router.beforeEach((to, from, next) => {
