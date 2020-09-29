@@ -118,7 +118,6 @@ export default {
   mounted() {
     this.checkingCartCount();
     this.getCurrenProduct();
-    this.metaInfo();
   },
   methods: {
     getCurrenProduct() {
