@@ -192,7 +192,7 @@ export default {
             sessionStorage.removeItem("currCustomer");
           }
           window.open(
-            "https://wa.me/3184163107?text=Hola, Me gustaría realizar el siguiente pedido: " +
+            "https://wa.me/+573184163107?text=Hola, Me gustaría realizar el siguiente pedido: " +
               response.data.link,
             "_blank"
           );
