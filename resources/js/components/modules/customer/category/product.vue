@@ -7,19 +7,34 @@
         :key="index"
       >
         <section class="col-12 col-sm-6 p-0 m-0 text-center">
-          <img :src="`/img/products/${item.image}`" alt class="img-fluid" v-if="item.image" />
+          <img
+            :src="`/img/products/${item.image}`"
+            alt
+            class="img-fluid"
+            v-if="item.image"
+          />
         </section>
         <section class="col-12 col-sm-6 p-0 m-0 text-center p-3 rounded border">
-          <h2 class="text-muted m-0 text-left font-weight-bolder" v-text="item.nombre"></h2>
+          <h2
+            class="text-muted m-0 text-left font-weight-bolder"
+            v-text="item.nombre"
+          ></h2>
           <small>
             <p v-text="item.short_des" class="text-muted m-0 text-left"></p>
           </small>
           <hr />
           <p v-text="item.long_des" class="text-justify"></p>
           <hr />
-          <h5 class="font-weight-bolder text-primary text-left" v-text="currency+' '+item.price"></h5>
+          <h5
+            class="font-weight-bolder text-primary text-left"
+            v-text="currency + ' ' + item.price"
+          ></h5>
           <a class="link p-2 remove-to-cart" @click.prevent="substo(item.id)">
-            <el-button icon="el-icon-minus" circle :class="'shadow-sm'"></el-button>
+            <el-button
+              icon="el-icon-minus"
+              circle
+              :class="'shadow-sm'"
+            ></el-button>
           </a>
           <input
             type="number"
@@ -29,13 +44,17 @@
             readonly
           />
           <a class="link p-2 add-to-cart" @click.prevent="addto(item.id)">
-            <el-button icon="el-icon-plus" circle :class="'shadow-sm'"></el-button>
+            <el-button
+              icon="el-icon-plus"
+              circle
+              :class="'shadow-sm'"
+            ></el-button>
             <!-- <span class="fas fa-plus text-muted"></span> -->
           </a>
           <hr />
 
           <router-link
-            :to="{name:'cart'}"
+            :to="{ name: 'cart' }"
             class="btn btn-primary btn-lg col-8 shadow-lg go-to-cart"
           >
             <span class="fas fa-shopping-bag"></span>
@@ -61,6 +80,34 @@ export default {
       cartCount: 0,
       //
       product: [],
+    };
+  },
+  metaInfo() {
+    return {
+      title: `Mi Tienda Movil`,
+      titleTemplate: `%s`,
+      meta: [
+        {
+          name: "description",
+          content: `Esta es mi tienda movil`,
+        },
+        { property: "og:title", content: `%s | Producto en cuestion` },
+        { property: "og:site_name", content: "Mi Tienda Movil" },
+        {
+          property: "og:description",
+          content: `Esta es mi tienda movil OG`,
+        },
+        { property: "og:type", content: "article" },
+        {
+          property: "og:url",
+          content: `${this.metaRuta}`,
+        },
+        {
+          property: "og:image",
+          content: `${this.ruta}/img/products/GOT.jpg`,
+          //   content: `${this.ruta}/img/products/${this.metaImage}`,
+        },
+      ],
     };
   },
   computed: {

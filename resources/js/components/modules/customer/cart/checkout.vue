@@ -10,14 +10,18 @@
       </h5>
     </div>
     <div class="col-12 m-auto p-0 d-flex flex-col flex-sm-row row">
-      <section class="container-md p-0 p-sm-3 col-12 col-sm-6 order-2 order-sm-1">
+      <section
+        class="container-md p-0 p-sm-3 col-12 col-sm-6 order-2 order-sm-1"
+      >
         <div class="col-12 p-0 bg-white h-100">
           <table class="table table-bordered m-0">
             <tr>
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
-                style="width:1%"
-              >Nombre</th>
+                style="width: 1%"
+              >
+                Nombre
+              </th>
               <td>
                 <el-input
                   placeholder="Nombre de Cliente"
@@ -28,13 +32,26 @@
               </td>
             </tr>
             <tr>
-              <th class="bg-secondary font-weight-bolder text-white align-middle">Ciudad</th>
+              <th
+                class="bg-secondary font-weight-bolder text-white align-middle"
+              >
+                Ciudad
+              </th>
               <td>
-                <el-input placeholder="Ciudad" v-model="ciudad" maxlength="20" show-word-limit></el-input>
+                <el-input
+                  placeholder="Ciudad"
+                  v-model="ciudad"
+                  maxlength="20"
+                  show-word-limit
+                ></el-input>
               </td>
             </tr>
             <tr>
-              <th class="bg-secondary font-weight-bolder text-white align-middle">Dirección</th>
+              <th
+                class="bg-secondary font-weight-bolder text-white align-middle"
+              >
+                Dirección
+              </th>
               <td>
                 <el-input
                   placeholder="Dirección"
@@ -45,19 +62,34 @@
               </td>
             </tr>
             <tr>
-              <th class="bg-secondary font-weight-bolder text-white align-middle">Celular</th>
+              <th
+                class="bg-secondary font-weight-bolder text-white align-middle"
+              >
+                Celular
+              </th>
               <td>
-                <el-input placeholder="Teléfono Celular" v-model="celular"></el-input>
+                <el-input
+                  placeholder="Teléfono Celular"
+                  v-model="celular"
+                ></el-input>
               </td>
             </tr>
             <tr>
-              <th class="bg-secondary font-weight-bolder text-white align-middle">Email</th>
+              <th
+                class="bg-secondary font-weight-bolder text-white align-middle"
+              >
+                Email
+              </th>
               <td>
                 <el-input placeholder="Email" v-model="email"></el-input>
               </td>
             </tr>
             <tr>
-              <th class="bg-secondary font-weight-bolder text-white align-middle">Comentarios</th>
+              <th
+                class="bg-secondary font-weight-bolder text-white align-middle"
+              >
+                Comentarios
+              </th>
               <td>
                 <el-input
                   placeholder="Comentarios adicionales"
@@ -70,37 +102,51 @@
             <tr>
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
-              >Recibir Notificación</th>
+              >
+                Recibir Notificación
+              </th>
               <td class="align-middle">
-                <el-switch v-model="notificacion" active-text="Si" inactive-text="No"></el-switch>
+                <el-switch
+                  v-model="notificacion"
+                  active-text="Si"
+                  inactive-text="No"
+                ></el-switch>
               </td>
             </tr>
           </table>
         </div>
       </section>
-      <section class="container-md p-0 p-sm-3 col-12 col-sm-6 pb-3 order-1 order-sm-2 clearfix">
+      <section
+        class="container-md p-0 p-sm-3 col-12 col-sm-6 pb-3 order-1 order-sm-2 clearfix"
+      >
         <div class="col-12 p-0 bg-white h-100">
           <table class="table table-bordered m-0">
             <caption class="pl-3 text-muted">
               <small>**El valor del domicilio no se encuentra incluído</small>
             </caption>
             <tr>
-              <th class="totalize text-black" style="width:1%">Artículos</th>
+              <th class="totalize text-black" style="width: 1%">Artículos</th>
               <td class="text-right">
-                <label class="totalize" for>{{totalItems}} Artículo(s)</label>
+                <label class="totalize" for>{{ totalItems }} Artículo(s)</label>
               </td>
             </tr>
             <tr>
               <th class="totalize text-black">Total</th>
               <td class="text-right">
-                <label class="totalize" for v-text="currency+' '+(totalAmount.toFixed(2))"></label>
+                <label
+                  class="totalize"
+                  for
+                  v-text="currency + ' ' + totalAmount.toFixed(2)"
+                ></label>
               </td>
             </tr>
           </table>
           <button
             class="btn btn-success btn-lg float-right mr-4 mb-4"
             @click.prevent="setOrder"
-          >Pedir</button>
+          >
+            Pedir
+          </button>
         </div>
       </section>
     </div>
@@ -145,6 +191,11 @@ export default {
           if (sessionStorage.getItem("currCustomer")) {
             sessionStorage.removeItem("currCustomer");
           }
+          window.open(
+            "https://wa.me/3184163107?text=Hola, Me gustaría realizar el siguiente pedido: " +
+              response.data.link,
+            "_blank"
+          );
           this.$router.push({
             name: "mipedido",
             params: { serial: response.data.serialize },
