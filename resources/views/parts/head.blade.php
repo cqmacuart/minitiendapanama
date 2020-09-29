@@ -6,6 +6,8 @@
     <title>Laravel</title>
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{asset('css/plantilla.css')}}">
+    {{-- PWA ASSETS --}}
+    @laravelPWA
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Fonts -->
@@ -13,6 +15,4 @@
 
 
     <!-- Styles -->
-    {{-- PWA ASSETS --}}
-    @laravelPWA
 </head>

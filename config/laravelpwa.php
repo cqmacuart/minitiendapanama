@@ -4,7 +4,7 @@ return [
     'name' => 'MobileStore',
     'manifest' => [
         'name' => env('APP_NAME', 'MobileStore'),
-        'short_name' => 'PWA',
+        'short_name' => 'MbS',
         'start_url' => '/',
         'background_color' => '#ffffff',
         'theme_color' => '#000000',
