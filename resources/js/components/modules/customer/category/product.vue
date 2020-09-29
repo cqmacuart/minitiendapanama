@@ -82,33 +82,9 @@ export default {
       product: [],
     };
   },
-  metaInfo() {
-    return {
-      title: `Mi Tienda Movil`,
-      titleTemplate: `%s`,
-      meta: [
-        {
-          name: "description",
-          content: `Esta es mi tienda movil`,
-        },
-        { property: "og:title", content: `%s | Producto en cuestion` },
-        { property: "og:site_name", content: "Mi Tienda Movil" },
-        {
-          property: "og:description",
-          content: `Esta es mi tienda movil OG`,
-        },
-        { property: "og:type", content: "article" },
-        {
-          property: "og:url",
-          content: `${this.metaRuta}`,
-        },
-        {
-          property: "og:image",
-          content: `${this.ruta}/img/products/GOT.jpg`,
-          //   content: `${this.ruta}/img/products/${this.metaImage}`,
-        },
-      ],
-    };
+  metaInfo: {
+    title: "Default App Title",
+    titleTemplate: "%s | vue-meta Example App",
   },
   computed: {
     productFilter() {
