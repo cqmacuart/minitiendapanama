@@ -37,7 +37,8 @@
 <meta property="og:url" content="{{ url('/') }}">
 <meta property="og:title" content="{{$metaInfo['site']['storename']}}">
 <meta property="og:description" content="Mi pequeña tienda">
-<meta property="og:image:width" content="150" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="600" />
 <meta property="og:image" content="{{ url('/img/settings/'.$metaInfo['site']['image']) }}">
 
 <!-- Twitter -->
