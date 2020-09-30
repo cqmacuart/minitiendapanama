@@ -244,36 +244,7 @@ export default {
       perPage: 6,
     };
   },
-  // META INFO
-  //   metaInfo() {
-  //     return {
-  //       title: `My Mobile Store`,
-  //       titleTemplate: `%s`,
-  //       meta: [
-  //         {
-  //           name: "description",
-  //           content: `${this.metaDescription}`,
-  //         },
-  //         { property: "og:title", content: `%s | ${this.metaTitle}` },
-  //         { property: "og:site_name", content: "My Mobile Store" },
-  //         {
-  //           property: "og:description",
-  //           content: `${this.metaDescription}`,
-  //         },
-  //         { property: "og:type", content: "article" },
-  //         {
-  //           property: "og:url",
-  //           content: `${this.metaRuta}`,
-  //         },
-  //         {
-  //           property: "og:image",
-  //           content: `${this.ruta}/img/products/${this.metaImage}`,
-  //           //   content: `${this.ruta}/img/products/${this.metaImage}`,
-  //         },
-  //       ],
-  //     };
-  //   },
-  // META INFO END
+
   watch: {
     id: {
       // the callback will be called immediately after the start of the observation
