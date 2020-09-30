@@ -301,12 +301,12 @@ export default {
         url: this.ruta + "/producto/" + id,
         title: producto.label,
         description: producto.short,
-        quote: this.currency + " " + producto.price,
+        quote: producto.label + ": " + this.currency + "\n " + producto.price,
         media: this.ruta + "/img/products/" + producto.image,
         // hashtags: "vuejs,vite,javascript",
         // twitterUser: "youyuxi",
       };
-      //   console.log(this.sharing);
+      console.log(this.sharing);
     },
     //   Carts Functions >>>>>
     addto(productId) {
