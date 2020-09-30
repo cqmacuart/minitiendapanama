@@ -169,11 +169,20 @@ export default {
       comentario: "",
       notificacion: true,
       ok: false,
+      fillSetting: {
+        storename: "",
+        mobile: "",
+        city: "",
+        country: "",
+        image: "",
+        currency: "",
+      },
     };
   },
   mounted() {
     this.getCartTotalItems();
     this.getCartTotalAmount();
+    this.getAllSettings();
   },
   methods: {
     setOrder: function () {
@@ -192,9 +201,8 @@ export default {
             sessionStorage.removeItem("currCustomer");
           }
           window.open(
-            "https://wa.me/+573184163107?text= Hola, Me gustaría realizar el siguiente pedido: " +
-              response.data.link,
-            "_blank"
+            `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${response.data.link}`,
+            `_blank`
           );
           this.$router.push({
             name: "mipedido",
@@ -219,6 +227,28 @@ export default {
       axios.get("/cart/amount").then((response) => {
         this.totalAmount = response.data;
       });
+    },
+    getAllSettings: function () {
+      this.settings = [];
+      axios
+        .get("/admin/settings")
+        .then((response) => {
+          this.fillSetting.storename = response.data.storename;
+          this.fillSetting.mobile = response.data.mobile;
+          this.fillSetting.image = response.data.image;
+          this.fillSetting.currency = response.data.currency;
+          this.fillSetting.country = response.data.country;
+          this.fillSetting.city = response.data.city;
+        })
+        .catch((error) => {
+          //no estas autenticado
+          if (error.response.status == 401) {
+            // this.app.Toastr.error("Caduco su Sesión");
+            // localStorage.removeItem("user-authenticate");
+            // this.$router.push("/login");
+            console.log(error.response.status);
+          }
+        });
     },
   },
 };
