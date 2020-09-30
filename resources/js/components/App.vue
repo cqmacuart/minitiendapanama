@@ -48,18 +48,6 @@ export default {
       },
     };
   },
-  metaInfo() {
-    return {
-      title: this.fillSetting.storename,
-      meta: [
-        {
-          vmid: "description",
-          name: "description",
-          content: "Productos y servicios hechos a la medida.",
-        },
-      ],
-    };
-  },
   mounted() {
     let obj = { valor: Date.now() };
     if (!sessionStorage.getItem("currCustomer")) {

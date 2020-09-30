@@ -93,40 +93,6 @@ export default {
       productImage: "",
     };
   },
-  metaInfo() {
-    return {
-      title: this.productName
-        ? this.fillSetting.storename + " | " + this.productName
-        : this.fillSetting.storename,
-      meta: [
-        {
-          name: "description",
-          content: `${this.productShort}`,
-        },
-        {
-          property: "og:title",
-          content: this.productName
-            ? this.fillSetting.storename + " | " + this.productName
-            : this.fillSetting.storename,
-        },
-        { property: "og:site_name", content: this.fillSetting.storename },
-        {
-          property: "og:description",
-          content: "descripcion meta",
-        },
-        { property: "og:type", content: "article" },
-        {
-          property: "og:url",
-          content: `${this.ruta}/producto/${this.id}`,
-        },
-        {
-          property: "og:image",
-          content: `${this.ruta}/img/products/${this.productImage}`,
-          //   content: `${this.ruta}/img/products/${this.metaImage}`,
-        },
-      ],
-    };
-  },
   computed: {},
   mounted() {
     this.checkingCartCount();
