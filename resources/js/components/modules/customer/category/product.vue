@@ -71,6 +71,14 @@ export default {
   props: ["ruta", "id", "currency"],
   data() {
     return {
+      fillSetting: {
+        storename: "",
+        mobile: "",
+        city: "",
+        country: "",
+        image: "",
+        currency: "",
+      },
       shoppingCart: [],
       currentCat: [],
       productList: [],
@@ -80,20 +88,50 @@ export default {
       cartCount: 0,
       //
       product: [],
+      productName: "",
+      productShort: "",
+      productImage: "",
     };
   },
-  metaInfo: {
-    title: "Default App Title",
-    titleTemplate: "%s | vue-meta Example App",
+  metaInfo() {
+    return {
+      title: this.productName
+        ? this.fillSetting.storename + " | " + this.productName
+        : this.fillSetting.storename,
+      meta: [
+        {
+          name: "description",
+          content: `${this.productShort}`,
+        },
+        {
+          property: "og:title",
+          content: this.productName
+            ? this.fillSetting.storename + " | " + this.productName
+            : this.fillSetting.storename,
+        },
+        { property: "og:site_name", content: this.fillSetting.storename },
+        {
+          property: "og:description",
+          content: "descripcion meta",
+        },
+        { property: "og:type", content: "article" },
+        {
+          property: "og:url",
+          content: `${this.ruta}/producto/${this.id}`,
+        },
+        {
+          property: "og:image",
+          content: `${this.ruta}/img/products/${this.productImage}`,
+          //   content: `${this.ruta}/img/products/${this.metaImage}`,
+        },
+      ],
+    };
   },
-  computed: {
-    productFilter() {
-      return this.productList;
-    },
-  },
+  computed: {},
   mounted() {
     this.checkingCartCount();
     this.getCurrenProduct();
+    this.getAllSettings();
   },
   methods: {
     getCurrenProduct() {
@@ -101,6 +139,9 @@ export default {
         fetch(`/cart/isincart/${response.data.id}`)
           .then((data) => data.json())
           .then((data) => {
+            this.productName = response.data.nombre;
+            this.productShort = response.data.short_des;
+            this.productImage = response.data.image;
             this.product.push({
               id: response.data.id,
               nombre: response.data.nombre,
@@ -167,17 +208,6 @@ export default {
       });
     },
     //  Carts Functions <<<<<
-    getProducts: function (id) {
-      this.productList = [];
-      axios
-        .get(`/products/filteredByCategory/${this.categoryId}`)
-        .then((response) => {})
-        .catch((error) => {
-          if (error.response.status == 401) {
-            // console.log(error.response.status);
-          }
-        });
-    },
     getCurrentCategory: function () {
       this.categoryId = this.id ? this.id : 1;
       if (this.id) {
@@ -208,6 +238,28 @@ export default {
           });
       }
       this.getProducts(this.categoryId);
+    },
+    getAllSettings: function () {
+      this.settings = [];
+      axios
+        .get("/admin/settings")
+        .then((response) => {
+          this.fillSetting.storename = response.data.storename;
+          this.fillSetting.mobile = response.data.mobile;
+          this.fillSetting.image = response.data.image;
+          this.fillSetting.currency = response.data.currency;
+          this.fillSetting.country = response.data.country;
+          this.fillSetting.city = response.data.city;
+        })
+        .catch((error) => {
+          //no estas autenticado
+          if (error.response.status == 401) {
+            // this.app.Toastr.error("Caduco su Sesión");
+            // localStorage.removeItem("user-authenticate");
+            // this.$router.push("/login");
+            console.log(error.response.status);
+          }
+        });
     },
   },
 };

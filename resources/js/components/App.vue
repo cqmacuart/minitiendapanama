@@ -14,7 +14,10 @@
     <!-- Contenido -->
     <div class="content-wrapper app-content-box">
       <transition name="slide-fade" mode="out-in">
-        <router-view :ruta="ruta" :currency="fillSetting.currency"></router-view>
+        <router-view
+          :ruta="ruta"
+          :currency="fillSetting.currency"
+        ></router-view>
       </transition>
     </div>
     <!-- Footer -->
@@ -43,6 +46,18 @@ export default {
         image: "",
         currency: "",
       },
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.fillSetting.storename,
+      meta: [
+        {
+          vmid: "description",
+          name: "description",
+          content: "Productos y servicios hechos a la medida.",
+        },
+      ],
     };
   },
   mounted() {
