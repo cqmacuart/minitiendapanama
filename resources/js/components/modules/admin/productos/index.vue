@@ -40,7 +40,7 @@
       </div>
     </form>
     <div class="table-responsive pb-5">
-      <template v-if="productList.length">
+      <template v-if="productList.length < 1">
         <table class="categories-table table table-sm table-hover bordered">
           <thead class="table-active">
             <tr>
@@ -172,9 +172,22 @@
         </div>
       </template>
       <template v-else>
-        <div class="alert alert-info">
-          <p>No se han encontrado registros...</p>
-        </div>
+        <table class="categories-table table table-sm table-hover bordered">
+          <thead class="table-active">
+            <tr>
+              <th class="text-center text-nowrap" style="width: 100%">
+                <router-link
+                  :to="{ name: 'admin.productos.create' }"
+                  class="btn btn-success"
+                >
+                  <span class="fas fa-plus"></span>
+
+                  Agregar un Producto Nuevo
+                </router-link>
+              </th>
+            </tr>
+          </thead>
+        </table>
       </template>
     </div>
   </section>

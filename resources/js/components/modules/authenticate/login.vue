@@ -118,6 +118,7 @@ export default {
       if (this.messageError.length) {
         this.error = 1;
       }
+      this.fullscreenLoading = false;
       return this.error;
     },
     loginSuccess() {
