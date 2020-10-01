@@ -27,7 +27,9 @@
     "dependencies": {
         "bootstrap-vue": "^2.17.3",
         "element-ui": "^2.13.2",
+        "vue-currency-input": "^1.22.3",
         "vue-meta": "^2.4.0",
+        "vue-numeral-filter": "^2.0.0",
         "vue-router": "^3.4.4",
         "vue-social-sharing": "^3.0.0-beta.11"
     }

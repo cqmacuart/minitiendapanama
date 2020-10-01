@@ -25,10 +25,9 @@
           <hr />
           <p v-text="item.long_des" class="text-justify"></p>
           <hr />
-          <h5
-            class="font-weight-bolder text-primary text-left"
-            v-text="currency + ' ' + item.price"
-          ></h5>
+          <h5 class="font-weight-bolder text-primary text-left">
+            {{ currency }} {{ item.price | numeral("0,0.00") }}
+          </h5>
           <a class="link p-2 remove-to-cart" @click.prevent="substo(item.id)">
             <el-button
               icon="el-icon-minus"

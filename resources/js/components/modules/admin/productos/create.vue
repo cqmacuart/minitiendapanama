@@ -4,9 +4,22 @@
       <h2 class="m-0 admin-title">Nuevo Producto</h2>
       <hr class="mt-0" />
       <!-- Form -->
-      <section class="col-12 d-flex row flex-column flex-sm-row m-auto px-0 px-sm-2">
+      <section
+        class="col-12 d-flex row flex-column flex-sm-row m-auto px-0 px-sm-2"
+      >
         <div class="col-12 col-md-4">
-          <img src="/img/settings/mobilestore_logo.jpg" alt class="img-fluid" />
+          <img
+            :src="`/img/products/${fillProducts.productImageName}`"
+            alt
+            class="img-fluid"
+            v-if="fillProducts.productImageName"
+          />
+          <img
+            v-else
+            src="/img/settings/mobilestore_logo.jpg"
+            alt
+            class="img-fluid"
+          />
         </div>
         <div class="col-12 col-md-8 px-0 px-sm-2">
           <table class="table table-sm">
@@ -14,8 +27,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle border-top-0"
-                  style="width:1%"
-                >Nombre:</th>
+                  style="width: 1%"
+                >
+                  Nombre:
+                </th>
                 <td class="border-top-0">
                   <input
                     type="text"
@@ -29,7 +44,9 @@
               <tr class="text-left">
                 <th
                   class="d-none d-sm-table-cell align-bottom align-sm-middle text-nowrap"
-                >Descripción Corta:</th>
+                >
+                  Descripción Corta:
+                </th>
                 <td>
                   <input
                     type="text"
@@ -43,7 +60,9 @@
               <tr class="text-left">
                 <th
                   class="d-none d-sm-table-cell align-bottom align-sm-middle text-nowrap"
-                >Descripción Larga:</th>
+                >
+                  Descripción Larga:
+                </th>
                 <td>
                   <textarea
                     name="long_des"
@@ -56,7 +75,9 @@
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Categoría:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Categoría:
+                </th>
                 <td>
                   <select
                     name="category"
@@ -67,16 +88,24 @@
                     <option selected disabled value>
                       <small class="text-muted">Elija una categoría</small>
                     </option>
-                    <option v-for="(cat, index) in catList" :key="index" :value="cat.balue">
+                    <option
+                      v-for="(cat, index) in catList"
+                      :key="index"
+                      :value="cat.value"
+                    >
                       <small class="text-muted" v-text="cat.label"></small>
                     </option>
                   </select>
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Posición:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Posición:
+                </th>
                 <td>
-                  <label for class="form-label d-sm-none text-muted ml-2">Posición:</label>
+                  <label for class="form-label d-sm-none text-muted ml-2"
+                    >Posición:</label
+                  >
                   <el-input-number
                     v-model="fillProducts.productPosition"
                     controls-position="right"
@@ -87,20 +116,27 @@
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Precio:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Precio:
+                </th>
                 <td>
-                  <label for class="form-label d-sm-none text-muted ml-2">Precio:</label>
+                  <label for class="form-label d-sm-none text-muted ml-2"
+                    >Precio:</label
+                  >
                   <input
                     type="text"
                     class="form-control form-control-sm text-right"
                     placeholder="0.00"
                     autofocus
                     v-model="fillProducts.productPrice"
+                    v-currency="{ currency: null }"
                   />
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Estado:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Estado:
+                </th>
                 <td>
                   <select
                     name="status"
@@ -111,14 +147,20 @@
                     <option selected disabled value>
                       <small class="text-muted">Estado</small>
                     </option>
-                    <option v-for="(state, index) in statusList" :key="index" :value="state.value">
+                    <option
+                      v-for="(state, index) in statusList"
+                      :key="index"
+                      :value="state.value"
+                    >
                       <small class="text-muted" v-text="state.label"></small>
                     </option>
                   </select>
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Imagen:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Imagen:
+                </th>
                 <td>
                   <div class="custom-file">
                     <input
@@ -130,13 +172,21 @@
                     <label
                       class="custom-file-label text-left border-0 border-bottom"
                       for="customFile"
-                    >Imagen del Producto</label>
+                      v-text="
+                        fillProducts.productImageName.length
+                          ? fillProducts.productImageName
+                          : 'Imagen del Producto'
+                      "
+                    ></label>
                   </div>
                 </td>
               </tr>
               <tr>
                 <td colspan="2" class="text-right py-3">
-                  <button class="btn btn-sm btn-primary" @click.prevent="setProduct">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click.prevent="setProduct"
+                  >
                     <span class="fas fa-check"></span>
                     Crear
                   </button>
@@ -230,7 +280,9 @@ export default {
           estado_id: this.fillProducts.productStatus,
           category_id: this.fillProducts.productCategory,
           position: this.fillProducts.productPosition,
-          price: this.fillProducts.productPrice,
+          price: this.fillProducts.productPrice
+            .replaceAll(".", "")
+            .replaceAll(",", "."),
           image: this.fillProducts.productImageName,
         };
         axios.post("/products", params).then((response) => {

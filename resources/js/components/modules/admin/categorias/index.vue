@@ -2,7 +2,6 @@
   <section class="container col-12 mt-3">
     <div class="col-12 text-center pb-2">
       <el-select
-        v-loading.fullscreen.lock="fullscreenLoading"
         v-model="catSearch"
         clearable
         filterable

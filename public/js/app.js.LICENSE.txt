@@ -35,6 +35,21 @@
  * Date: 2020-05-04T22:49Z
  */
 
+/*! @preserve
+ * numeral.js
+ * locales : 2.0.6
+ * license : MIT
+ * http://adamwdraper.github.com/Numeral-js/
+ */
+
+/*! @preserve
+ * numeral.js
+ * version : 2.0.6
+ * author : Adam Draper
+ * license : MIT
+ * http://adamwdraper.github.com/Numeral-js/
+ */
+
 /**
  * @license
  * Lodash <https://lodash.com/>
@@ -57,6 +72,12 @@
  * @return {boolean} True if the event is supported.
  * @internal
  * @license Modernizr 3.0.0pre (Custom Build) | MIT
+ */
+
+/**
+ * Vue Currency Input 1.22.3
+ * (c) 2018-2020 Matthias Stiller
+ * @license MIT
  */
 
 /**!

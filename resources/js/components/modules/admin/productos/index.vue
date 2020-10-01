@@ -119,10 +119,11 @@
                 {{ prod.position }}
               </td>
               <td
-                class="text-center text-nowrap align-middle"
+                class="text-right text-nowrap align-middle"
                 style="width: 10%"
               >
-                {{ prod.price }}
+                {{ prod.price | numeral("0,0.00") }}
+                <b>{{ fillSetting.currency }}</b>
               </td>
               <td
                 class="text-center text-nowrap align-middle"
@@ -189,6 +190,9 @@ export default {
         { value: 1, label: "Activo" },
         { value: 2, label: "Inactivo" },
       ],
+      fillSetting: {
+        currency: "",
+      },
       productList: [],
       productvalue: null,
       categoryvalue: null,
@@ -201,6 +205,7 @@ export default {
   mounted() {
     this.getAllProducts();
     this.getAllCategories();
+    this.getAllSettings();
   },
   computed: {
     //   metodos de paginacion
@@ -228,6 +233,23 @@ export default {
     },
   },
   methods: {
+    getAllSettings: function () {
+      this.settings = [];
+      axios
+        .get("/admin/settings")
+        .then((response) => {
+          this.fillSetting.currency = response.data.currency;
+        })
+        .catch((error) => {
+          //no estas autenticado
+          if (error.response.status == 401) {
+            // this.app.Toastr.error("Caduco su Sesión");
+            // localStorage.removeItem("user-authenticate");
+            // this.$router.push("/login");
+            console.log(error.response.status);
+          }
+        });
+    },
     //   Cargar Categorías Guardadas
     getAllProducts: function () {
       this.productList = [];

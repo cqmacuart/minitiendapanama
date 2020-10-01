@@ -60,10 +60,10 @@
                   <p class="card-text" v-text="product.short"></p>
                 </small>
                 <p class="card-text p-0">
-                  <small
-                    class="text-muted"
-                    v-text="currency + ' ' + product.price"
-                  ></small>
+                  <small class="text-muted"
+                    >{{ currency }}
+                    {{ product.price | numeral("0,0.00") }}</small
+                  >
                 </p>
               </div>
               <div class="card-footer bg-transparent text-nowrap">
