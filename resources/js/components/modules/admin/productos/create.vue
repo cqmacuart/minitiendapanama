@@ -167,6 +167,7 @@
                       type="file"
                       class="custom-file-input form-control-sm border-0 border-bottom"
                       id="customFile"
+                      v-loading.fullscreen.lock="fullscreenLoading"
                       @change="getImageFile"
                     />
                     <label
@@ -218,6 +219,7 @@ export default {
       form: new FormData(),
       catList: [],
       statusList: [],
+      fullscreenLoading: false,
     };
   },
   mounted() {
@@ -287,6 +289,10 @@ export default {
         };
         axios.post("/products", params).then((response) => {
           if (response.data) {
+            this.$message({
+              type: "success",
+              message: "Producto Agregado",
+            });
             this.$router.push("/admin/productos");
           }
         });
@@ -297,11 +303,13 @@ export default {
       this.saveImageFile();
     },
     saveImageFile() {
+      this.fullscreenLoading = true;
       this.form.append("file", this.fillProducts.productImage);
       const config = { headers: { "Content-Type": "multipart/form-data" } };
       let url = "/products/saveFile";
       axios.post(url, this.form, config).then((response) => {
         this.fillProducts.productImageName = response.data;
+        this.fullscreenLoading = false;
       });
     },
   },

@@ -39,13 +39,12 @@
           <thead class="table-active">
             <tr>
               <th class="text-center text-nowrap" style="width: 1%">
-                <router-link :to="{ name: 'admin.categorias.create' }">
-                  <el-button
-                    type="warning"
-                    icon="el-icon-plus"
-                    size="mini"
-                    circle
-                  ></el-button>
+                <router-link
+                  :to="{ name: 'admin.categorias.create' }"
+                  class="border btn btn-warning shadow-sm"
+                  style="border-radius: 50px"
+                >
+                  <span class="fas fa-plus"></span>
                 </router-link>
               </th>
               <th class="text-center text-nowrap" style="width: 20%">Banner</th>
@@ -181,7 +180,6 @@
                   class="btn btn-success"
                 >
                   <span class="fas fa-plus"></span>
-
                   Agregar una Categoría Nueva
                 </router-link>
               </th>

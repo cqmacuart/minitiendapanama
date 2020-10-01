@@ -4,7 +4,9 @@
       <h2 class="m-0 admin-title">Modificar Categoría</h2>
       <hr class="mt-0" />
       <!-- Form -->
-      <section class="col-12 d-flex row flex-column flex-sm-row m-auto px-0 px-sm-2">
+      <section
+        class="col-12 d-flex row flex-column flex-sm-row m-auto px-0 px-sm-2"
+      >
         <div class="col-12 col-md-4 text-center">
           <img
             :src="`/img/categories/${fillCategory.categoryImageName}`"
@@ -19,8 +21,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle border-top-0"
-                  style="width:1%"
-                >Nombre:</th>
+                  style="width: 1%"
+                >
+                  Nombre:
+                </th>
                 <td class="border-top-0">
                   <input
                     type="text"
@@ -32,7 +36,9 @@
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Descripción:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Descripción:
+                </th>
                 <td>
                   <textarea
                     name="descripcion"
@@ -45,9 +51,13 @@
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Posición:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Posición:
+                </th>
                 <td>
-                  <label for class="form-label d-sm-none text-muted ml-2">Posición:</label>
+                  <label for class="form-label d-sm-none text-muted ml-2"
+                    >Posición:</label
+                  >
                   <el-input-number
                     v-model="fillCategory.categoryPosition"
                     controls-position="right"
@@ -58,7 +68,9 @@
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Tipo:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Tipo:
+                </th>
                 <td>
                   <select
                     name="type"
@@ -69,14 +81,20 @@
                     <option selected disabled value>
                       <small class="text-muted">Tipo de Categoría</small>
                     </option>
-                    <option v-for="(type, index) in typeList" :key="index" :value="type.value">
+                    <option
+                      v-for="(type, index) in typeList"
+                      :key="index"
+                      :value="type.value"
+                    >
                       <small class="text-muted" v-text="type.label"></small>
                     </option>
                   </select>
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Estado:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Estado:
+                </th>
                 <td>
                   <select
                     name="status"
@@ -87,14 +105,20 @@
                     <option selected disabled value>
                       <small class="text-muted">Estado de Categoría</small>
                     </option>
-                    <option v-for="(state, index) in statusList" :key="index" :value="state.value">
+                    <option
+                      v-for="(state, index) in statusList"
+                      :key="index"
+                      :value="state.value"
+                    >
                       <small class="text-muted" v-text="state.label"></small>
                     </option>
                   </select>
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Padre:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Padre:
+                </th>
                 <td>
                   <select
                     name="parent"
@@ -105,14 +129,20 @@
                     <option selected disabled value>
                       <small class="text-muted">Categoría padre</small>
                     </option>
-                    <option v-for="(cat, index) in catList" :key="index" :value="cat.value">
+                    <option
+                      v-for="(cat, index) in catList"
+                      :key="index"
+                      :value="cat.value"
+                    >
                       <small class="text-muted" v-text="cat.label"></small>
                     </option>
                   </select>
                 </td>
               </tr>
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Imagen:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Imagen:
+                </th>
                 <td>
                   <div class="custom-file">
                     <input
@@ -120,19 +150,27 @@
                       class="custom-file-input form-control-sm border-0 border-bottom"
                       name="customFile"
                       id="customFile"
+                      v-loading.fullscreen.lock="fullscreenLoading"
                       @change="getImageFile"
                     />
                     <label
                       class="custom-file-label text-left border-0 border-bottom"
                       for="customFile"
-                      v-text="fillCategory.categoryImageName"
+                      v-text="
+                        fillCategory.categoryImageName.length
+                          ? fillCategory.categoryImageName
+                          : 'Elija una imagen'
+                      "
                     ></label>
                   </div>
                 </td>
               </tr>
               <tr>
                 <td colspan="2" class="text-right py-3">
-                  <button class="btn btn-sm btn-primary" @click.prevent="setCategory">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click.prevent="setCategory"
+                  >
                     <span class="fas fa-check"></span>
                     Actualizar
                   </button>
@@ -165,6 +203,7 @@ export default {
       catList: [],
       typeList: [],
       statusList: [],
+      fullscreenLoading: false,
     };
   },
   mounted() {
@@ -265,11 +304,13 @@ export default {
       this.saveImageFile();
     },
     saveImageFile() {
+      this.fullscreenLoading = true;
       this.form.append("file", this.fillCategory.categoryImage);
       const config = { headers: { "Content-Type": "multipart/form-data" } };
       let url = "/categories/saveFile";
       axios.post(url, this.form, config).then((response) => {
         this.fillCategory.categoryImageName = response.data;
+        this.fullscreenLoading = false;
       });
     },
     getEditCategory: function () {

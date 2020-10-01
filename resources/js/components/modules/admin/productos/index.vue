@@ -40,18 +40,17 @@
       </div>
     </form>
     <div class="table-responsive pb-5">
-      <template v-if="productList.length < 1">
+      <template v-if="productList.length">
         <table class="categories-table table table-sm table-hover bordered">
           <thead class="table-active">
             <tr>
               <th class="text-center text-nowrap" style="width: 1%">
-                <router-link :to="{ name: 'admin.productos.create' }">
-                  <el-button
-                    type="warning"
-                    icon="el-icon-plus"
-                    size="mini"
-                    circle
-                  ></el-button>
+                <router-link
+                  :to="{ name: 'admin.productos.create' }"
+                  class="border btn btn-warning shadow-sm"
+                  style="border-radius: 50px"
+                >
+                  <span class="fas fa-plus"></span>
                 </router-link>
               </th>
               <th class="text-center text-nowrap" style="width: 20%">Imagen</th>
@@ -181,7 +180,6 @@
                   class="btn btn-success"
                 >
                   <span class="fas fa-plus"></span>
-
                   Agregar un Producto Nuevo
                 </router-link>
               </th>

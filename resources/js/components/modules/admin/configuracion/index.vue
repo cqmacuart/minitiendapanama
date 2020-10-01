@@ -4,7 +4,9 @@
       <h2 class="m-0 admin-title">Configuración</h2>
       <hr class="mt-0" />
       <!-- Form -->
-      <section class="col-12 d-flex row flex-column flex-sm-row m-auto px-0 px-sm-2">
+      <section
+        class="col-12 d-flex row flex-column flex-sm-row m-auto px-0 px-sm-2"
+      >
         <div class="col-12 col-md-4">
           <img
             :src="`/img/settings/${fillSetting.image}`"
@@ -22,8 +24,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle border-top-0"
-                  style="width:1%"
-                >Nombre:</th>
+                  style="width: 1%"
+                >
+                  Nombre:
+                </th>
                 <td class="border-top-0">
                   <input
                     type="text"
@@ -37,8 +41,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
-                  style="width:1%"
-                >País:</th>
+                  style="width: 1%"
+                >
+                  País:
+                </th>
                 <td class>
                   <input
                     type="text"
@@ -51,8 +57,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
-                  style="width:1%"
-                >Ciudad:</th>
+                  style="width: 1%"
+                >
+                  Ciudad:
+                </th>
                 <td class>
                   <input
                     type="text"
@@ -65,8 +73,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
-                  style="width:1%"
-                >Dirección:</th>
+                  style="width: 1%"
+                >
+                  Dirección:
+                </th>
                 <td class>
                   <input
                     type="text"
@@ -79,8 +89,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
-                  style="width:1%"
-                >Teléfono:</th>
+                  style="width: 1%"
+                >
+                  Teléfono:
+                </th>
                 <td class>
                   <input
                     type="text"
@@ -93,8 +105,10 @@
               <tr>
                 <th
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
-                  style="width:1%"
-                >Moneda:</th>
+                  style="width: 1%"
+                >
+                  Moneda:
+                </th>
                 <td class>
                   <input
                     type="text"
@@ -106,7 +120,9 @@
               </tr>
 
               <tr class="text-left">
-                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">Imagen:</th>
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Imagen:
+                </th>
                 <td>
                   <div class="custom-file">
                     <input
@@ -114,19 +130,27 @@
                       class="custom-file-input form-control-sm border-0 border-bottom"
                       name="customFile"
                       id="customFile"
+                      v-loading.fullscreen.lock="fullscreenLoading"
                       @change="getImageFile"
                     />
                     <label
                       class="custom-file-label text-left border-0 border-bottom"
                       for="customFile"
-                      v-text="fillSetting.image"
+                      v-text="
+                        fillSetting.image.length
+                          ? fillSetting.image
+                          : 'Logo del Sistema'
+                      "
                     ></label>
                   </div>
                 </td>
               </tr>
               <tr>
                 <td colspan="2" class="text-right py-3">
-                  <button class="btn btn-sm btn-primary" @click.prevent="setSettings">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click.prevent="setSettings"
+                  >
                     <span class="fas fa-check"></span>
                     Actualizar
                   </button>
@@ -157,6 +181,7 @@ export default {
       },
       form: new FormData(),
       settings: [],
+      fullscreenLoading: false,
     };
   },
   mounted() {
@@ -202,6 +227,10 @@ export default {
         .put(`/admin/settings/${this.fillSetting.storeid}`, params)
         .then((response) => {
           if (response.data) {
+            this.$message({
+              type: "info",
+              message: "Sistema Actualizado",
+            });
             this.$router.push("/admin");
           }
         });
@@ -211,11 +240,13 @@ export default {
       this.saveImageFile();
     },
     saveImageFile() {
+      this.fullscreenLoading = true;
       this.form.append("file", this.fillSetting.image);
       const config = { headers: { "Content-Type": "multipart/form-data" } };
       let url = "/admin/settings/saveFile";
       axios.post(url, this.form, config).then((response) => {
         this.fillSetting.image = response.data;
+        this.fullscreenLoading = false;
       });
     },
   },
