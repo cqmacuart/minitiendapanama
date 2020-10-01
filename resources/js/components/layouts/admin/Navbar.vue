@@ -3,7 +3,7 @@
     <nav class="navbar bg-white p-0 border-bottom">
       <div class="col-12 p-0 text-center justify-content-center">
         <div class="h3 m-0">
-          <h1 for class="m-0 admin-title">{{titleTag}}</h1>
+          <h1 for class="m-0 admin-title">{{ titleTag }}</h1>
         </div>
         <div class="btn-group my-1">
           <router-link
@@ -18,11 +18,11 @@
             @click.native="setPageTitle"
             class="btn btn-sm"
             :class="bfunction.class"
-            v-for="(bfunction) in bFunctions"
+            v-for="bfunction in bFunctions"
             :key="bfunction.id"
             :to="`/admin/${bfunction.enlace}`"
           >
-            <small>{{bfunction.label}}</small>
+            <small>{{ bfunction.label }}</small>
           </router-link>
         </div>
       </div>

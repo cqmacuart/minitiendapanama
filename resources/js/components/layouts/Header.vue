@@ -1,13 +1,19 @@
 <template>
   <div>
-    <div class="d-none bg-light col-12 d-sm-flex justify-content-around px-0 border-bottom">
+    <div
+      class="d-none bg-light col-12 d-sm-flex justify-content-around px-0 border-bottom"
+    >
       <label for class="m-1">
         <span class="fab fa-whatsapp"></span>
-        <a href="#" class="badge badge-success">{{mobile}}</a>
+        <a href="#" class="badge badge-success">{{ mobile }}</a>
       </label>
+      <label for="" class="m-1"
+        ><a :href="`${ruta}/admin`" class="text-dark"
+          ><span class="fas fa-mobile-alt"></span></a
+      ></label>
       <label for class="m-1">
         <span class="fas fa-map-marker-alt"></span>
-        {{city}},{{country}}
+        {{ city }},{{ country }}
       </label>
     </div>
     <nav class="navbar bg-white p-0 d-flex flex-column flex-sm-row">
@@ -28,7 +34,7 @@
             <div class="searchbar">
               <input
                 class="search_input"
-                :class="{search_input_active:toogleSearch}"
+                :class="{ search_input_active: toogleSearch }"
                 type="text"
                 name
                 placeholder="Buscar Producto..."
@@ -37,7 +43,7 @@
               <a
                 href="#"
                 class="search_icon"
-                :class="{search_icon_active:toogleSearch}"
+                :class="{ search_icon_active: toogleSearch }"
                 @click.prevent="toogleSearchBar"
               >
                 <i class="fas fa-search"></i>

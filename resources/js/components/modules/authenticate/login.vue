@@ -8,7 +8,7 @@
             <el-input
               placeholder="Usuario"
               v-model="fillLogin.user"
-              @keypress.enter="login"
+              @keypress.native.enter="login"
             >
               <i slot="suffix" class="el-input__icon el-icon-user"></i>
             </el-input>
@@ -18,7 +18,7 @@
               placeholder="Contraseña"
               v-model="fillLogin.password"
               show-password
-              @keypress.enter="login"
+              @keypress.native.enter="login"
             >
               <i slot="suffix" class="el-input__icon el-icon-lock"></i>
             </el-input>
@@ -46,12 +46,14 @@
           </button>
         </div>
       </div>
+      <a href="/"><small>Volver a inicio</small></a>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ["ruta"],
   data() {
     return {
       fillLogin: {

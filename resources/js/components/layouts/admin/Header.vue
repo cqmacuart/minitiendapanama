@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div class="bg-light col-12 text-right px-0 border-bottom">
+    <div
+      class="bg-light col-12 d-flex justify-content-between px-2 py-1 px-0 border-bottom"
+    >
+      <a class="mr-5" href="/">
+        <span class="fas fa-eye"></span>
+        Ver Sitio
+      </a>
       <a
         href
         class="btn-sm btn-warning"
