@@ -34,8 +34,8 @@ class OrdersController extends Controller
         //
         $query = DB::table('vw_orders');
         $orders = $query->orderBy('id', 'ASC')
-            // ->where("status", $filtro)
-            // ->orWhere("pedido", "LIKE", '%' . $filtro)
+            ->where("status", $filtro)
+            ->orWhere("pedido", "LIKE", '%' . $filtro)
             ->get();
         return response()->json($orders, 200);
     }
@@ -184,5 +184,11 @@ class OrdersController extends Controller
     public function destroy($id)
     {
         //
+        $orders = Order::findOrFail($id);
+        OrderDetail::where("order_id", $id)->delete();
+        Customer::where('order_pedido', $orders->pedido)->delete();
+        $orders->delete();
+        return response()->json($orders, 200);
+        // return redirect('/admin/categories');
     }
 }

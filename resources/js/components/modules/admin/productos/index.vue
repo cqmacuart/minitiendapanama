@@ -329,19 +329,13 @@ export default {
         .then(() => {
           axios.delete(`/products/${id}`).then((response) => {
             if (response) {
-              this.$message({
-                type: "success",
-                message: "Producto eliminado",
-              });
+              this.$toastr.success("Producto eliminado");
               this.getAllProducts();
             }
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "Eliminación cancelada",
-          });
+          this.$toastr.info("Eliminación cancelada");
         });
     },
     onSubmit() {

@@ -22,11 +22,15 @@ import VueMeta from "vue-meta";
 import VueSocialSharing from "vue-social-sharing";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
 import VueCurrencyInput from "vue-currency-input";
+import VueToastr2 from "vue-toastr-2";
+import "vue-toastr-2/dist/vue-toastr-2.min.css";
 
+window.toastr = require("toastr");
 window.Vue.use(VueMeta);
 window.Vue.use(VueSocialSharing);
 window.Vue.use(vueNumeralFilterInstaller);
 window.Vue.use(VueCurrencyInput);
+window.Vue.use(VueToastr2);
 
 router.beforeEach((to, from, next) => {
     if (to.path == "/admin") {

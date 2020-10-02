@@ -110,6 +110,7 @@
                     v-model="fillProducts.productPosition"
                     controls-position="right"
                     :min="1"
+                    :max="max"
                     size="mini"
                     :class="'col-12 p-0'"
                   ></el-input-number>
@@ -212,19 +213,22 @@ export default {
         productLong: "",
         productCategory: "",
         productPosition: "",
-        productPrice: "",
-        productStatus: "",
+        productPrice: 0,
+        productStatus: 1,
         productImageName: "",
       },
       form: new FormData(),
       catList: [],
       statusList: [],
       fullscreenLoading: false,
+      errors: [],
+      max: 0,
     };
   },
   mounted() {
     this.getCategoryStatus();
     this.getAllCategories();
+    this.getAllProducts();
   },
   methods: {
     //   CONSTRUCTORES >>>
@@ -274,27 +278,46 @@ export default {
     },
     // CONSTRUCTORES <<<
     setProduct: function () {
-      if (this.fillProducts.productImage) {
-        const params = {
-          nombre: this.fillProducts.productName,
-          short_des: this.fillProducts.productShort,
-          long_des: this.fillProducts.productLong,
-          estado_id: this.fillProducts.productStatus,
-          category_id: this.fillProducts.productCategory,
-          position: this.fillProducts.productPosition,
-          price: this.fillProducts.productPrice
-            .replaceAll(".", "")
-            .replaceAll(",", "."),
-          image: this.fillProducts.productImageName,
-        };
-        axios.post("/products", params).then((response) => {
-          if (response.data) {
-            this.$message({
-              type: "success",
-              message: "Producto Agregado",
-            });
-            this.$router.push("/admin/productos");
-          }
+      if (this.validate()) {
+        if (this.fillProducts.productImage) {
+          const params = {
+            nombre: this.fillProducts.productName,
+            short_des: this.fillProducts.productShort,
+            long_des: this.fillProducts.productLong,
+            estado_id: this.fillProducts.productStatus,
+            category_id: this.fillProducts.productCategory,
+            position: this.fillProducts.productPosition,
+            price: this.fillProducts.productPrice
+              .replaceAll(".", "")
+              .replaceAll(",", "."),
+            image: this.fillProducts.productImageName,
+          };
+          axios.post("/products", params).then((response) => {
+            if (response.data) {
+              this.$toastr.success("El producto se ha creado exitosamente");
+              this.$router.push("/admin/productos");
+            }
+          });
+        }
+      } else {
+        this.errors.forEach((element) => {
+          this.$toastr.error(element.error, "!Oops", {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-left",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "5000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          });
         });
       }
     },
@@ -311,6 +334,41 @@ export default {
         this.fillProducts.productImageName = response.data;
         this.fullscreenLoading = false;
       });
+    },
+    getAllProducts: function () {
+      let url = `/products`;
+      axios
+        .get(url)
+        .then((response) => {
+          this.fillProducts.productPosition = response.data.length + 1;
+          this.max = response.data.length + 1;
+        })
+        .catch((error) => {
+          if (error.response.status == 401) {
+            console.log("Ha ocurrido un error");
+          }
+        });
+    },
+    validate() {
+      this.errors = [];
+      let check = true;
+      if (this.fillProducts.productName.length == 0) {
+        this.errors.push({ error: "El nombre del producto es requerido." });
+        check = false;
+      }
+      if (this.fillProducts.productShort.length == 0) {
+        this.errors.push({ error: "La Descripción del producto es requerido" });
+        check = false;
+      }
+      if (this.fillProducts.productCategory.length == 0) {
+        this.errors.push({ error: "La categoría del producto es requerida" });
+        check = false;
+      }
+      if (this.fillProducts.productImageName.length == 0) {
+        this.errors.push({ error: "La imagen del producto es requerida" });
+        check = false;
+      }
+      return check;
     },
   },
 };

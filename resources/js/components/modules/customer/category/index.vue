@@ -131,6 +131,13 @@
       </nav>
     </div>
     <!-- Bolsa esquina derecha -->
+    <div class="text-left pr-3">
+      <div class="d-inline-block home-button">
+        <router-link to="/" class="m-0 p-0">
+          <span class="fas fa-home text-white fa-2x"></span>
+        </router-link>
+      </div>
+    </div>
     <div class="text-right pr-3">
       <div class="d-inline-block fa-4x bag-icon-box">
         <router-link :to="{ name: 'cart' }">
@@ -464,6 +471,15 @@ export default {
   position: fixed;
   bottom: 10px;
   z-index: 20;
+}
+.home-button {
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 20px;
+  position: fixed;
+  bottom: 30px;
+  z-index: 20;
+  background-color: black;
 }
 .card-icons {
   position: absolute;

@@ -50,8 +50,8 @@ class ProductsController extends Controller
     public function filteredByCategory($id)
     {
         //
-        $products = Product::where('category_id', $id)->where('estado_id', 1)->orderBy('position', 'asc')->get();
-        return $products;
+        $products = Product::where('category_id', $id)->where('estado_id', 1)->orderBy('position', 'ASC')->get();
+        return response()->json($products, 200);
     }
 
     public function filteredBySearch($filter)
@@ -62,9 +62,9 @@ class ProductsController extends Controller
             ->orWhere('short_des', 'LIKE', '%' . $filter . '%')
             ->orWhere('long_des', 'LIKE', '%' . $filter . '%')
             ->where('estado_id', 1)
-            ->orderBy('position', 'asc')
+            ->orderBy('position', 'ASC')
             ->get();
-        return $products;
+        return response()->json($products, 200);
     }
 
     public function filtered($product, $category, $status)

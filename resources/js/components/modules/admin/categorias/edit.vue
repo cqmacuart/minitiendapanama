@@ -204,6 +204,7 @@ export default {
       typeList: [],
       statusList: [],
       fullscreenLoading: false,
+      errors: [],
     };
   },
   mounted() {
@@ -282,22 +283,43 @@ export default {
     },
     // CONSTRUCTORES <<<
     setCategory: function () {
-      //   if (this.fillCategory.categoryImage) {
-      const params = {
-        nombre: this.fillCategory.categoryName,
-        descripcion: this.fillCategory.categoryDescription,
-        position: this.fillCategory.categoryPosition,
-        estado_id: this.fillCategory.categoryStatus,
-        tipo_id: this.fillCategory.categoryType,
-        parent_id: this.fillCategory.categoryParent,
-        image: this.fillCategory.categoryImageName,
-      };
-      axios.put(`/categories/${this.id}`, params).then((response) => {
-        if (response.data) {
-          this.$router.push("/admin/categorias");
-        }
-      });
-      //   }
+      if (this.validate()) {
+        const params = {
+          nombre: this.fillCategory.categoryName,
+          descripcion: this.fillCategory.categoryDescription,
+          position: this.fillCategory.categoryPosition,
+          estado_id: this.fillCategory.categoryStatus,
+          tipo_id: this.fillCategory.categoryType,
+          parent_id: this.fillCategory.categoryParent,
+          image: this.fillCategory.categoryImageName,
+        };
+        axios.put(`/categories/${this.id}`, params).then((response) => {
+          if (response.data) {
+            this.$toastr.info("La categoría se ha actualizado exitosamente");
+            this.$router.push("/admin/categorias");
+          }
+        });
+      } else {
+        this.errors.forEach((element) => {
+          this.$toastr.error(element.error, "!Oops", {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-left",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "5000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          });
+        });
+      }
     },
     getImageFile: function (e) {
       this.fillCategory.categoryImage = e.target.files[0];
@@ -331,6 +353,15 @@ export default {
           this.fillCategory.categoryParent = response.data.parent_id;
           this.fillCategory.categoryImageName = response.data.image;
         });
+    },
+    validate() {
+      this.errors = [];
+      let check = true;
+      if (this.fillCategory.categoryName.length == 0) {
+        this.errors.push({ error: "El nombre de la categoría es requerido." });
+        check = false;
+      }
+      return check;
     },
   },
 };

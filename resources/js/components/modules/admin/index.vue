@@ -3,9 +3,11 @@
     <div class="col-12 d-flex flex-wrap">
       <div class="col-12 col-sm-6 col-md-4 mt-2">
         <div class="card h-100">
-          <div class="card-header text-center py-5">
-            <span class="fas fa-sitemap fa-5x" style="color: orange"></span>
-          </div>
+          <router-link :to="{ name: 'admin.categorias' }">
+            <div class="card-header text-center py-5">
+              <span class="fas fa-sitemap fa-5x" style="color: orange"></span>
+            </div>
+          </router-link>
           <div class="card-body p-3">
             <h2 class="card-title admin-title m-0">Categorías</h2>
           </div>
@@ -27,9 +29,11 @@
       </div>
       <div class="col-12 col-sm-6 col-md-4 mt-2">
         <div class="card h-100">
-          <div class="card-header text-center py-5">
-            <span class="fas fa-apple-alt fa-5x" style="color: olive"></span>
-          </div>
+          <router-link :to="{ name: 'admin.productos' }">
+            <div class="card-header text-center py-5">
+              <span class="fas fa-apple-alt fa-5x" style="color: olive"></span>
+            </div>
+          </router-link>
           <div class="card-body p-3">
             <h2 class="card-title admin-title m-0">Productos</h2>
           </div>
@@ -51,9 +55,11 @@
       </div>
       <div class="col-12 col-sm-6 col-md-4 mt-2">
         <div class="card h-100">
-          <div class="card-header text-center py-5">
-            <span class="fas fa-truck fa-5x"></span>
-          </div>
+          <router-link :to="{ name: 'admin.pedidos' }">
+            <div class="card-header text-center py-5">
+              <span class="fas fa-truck fa-5x"></span>
+            </div>
+          </router-link>
           <div class="card-body p-3">
             <h2 class="card-title admin-title m-0">Pedidos</h2>
           </div>

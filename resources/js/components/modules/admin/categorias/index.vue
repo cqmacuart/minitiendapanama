@@ -299,19 +299,13 @@ export default {
         .then(() => {
           axios.delete(`/categories/${id}`).then((response) => {
             if (response) {
-              this.$message({
-                type: "success",
-                message: "Categoría eliminada",
-              });
+              this.$toastr.success("Categoría eliminada");
               this.getAllCategories();
             }
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "Eliminación cancelada",
-          });
+          this.$toastr.info("Eliminación cancelada");
         });
     },
     // Metodos de paginación

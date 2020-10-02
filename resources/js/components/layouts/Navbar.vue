@@ -3,11 +3,11 @@
     <nav class="navbar bg-white p-0 border-bottom">
       <div class="col-12 p-0">
         <ul class="navigation p-0 m-0">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link py-1" :to="'/'">
               <span class="fas fa-home"></span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item" v-for="cat in catList" :key="cat.id">
             <router-link
               class="nav-link py-1"
@@ -44,7 +44,8 @@ export default {
               label: element.nombre,
             });
           });
-          this.catList.shift();
+          this.catList;
+          //   this.catList.shift();
         })
         .catch((error) => {
           //no estas autenticado

@@ -10,9 +10,7 @@
       </h5>
     </div>
     <div class="col-12 m-auto p-0 d-flex flex-col flex-sm-row row">
-      <section
-        class="container-md p-0 p-sm-3 col-12 col-sm-6 order-2 order-sm-1"
-      >
+      <section class="container-md p-0 p-sm-3 col-12 col-sm-6">
         <div class="col-12 p-0 bg-white h-100">
           <table class="table table-bordered m-0">
             <tr>
@@ -117,7 +115,7 @@
         </div>
       </section>
       <section
-        class="container-md p-0 p-sm-3 col-12 col-sm-6 pb-3 order-1 order-sm-2 clearfix"
+        class="container-md p-0 p-sm-3 col-12 col-sm-6 pb-3 clearfix mt-2 mt-sm-0"
       >
         <div class="col-12 p-0 bg-white h-100">
           <table class="table table-bordered m-0">
@@ -133,11 +131,9 @@
             <tr>
               <th class="totalize text-black">Total</th>
               <td class="text-right">
-                <label
-                  class="totalize"
-                  for
-                  v-text="currency + ' ' + totalAmount.toFixed(2)"
-                ></label>
+                <label class="totalize" for
+                  >{{ currency }} {{ totalAmount | numeral("0,0.00") }}</label
+                >
               </td>
             </tr>
           </table>

@@ -73,6 +73,11 @@
                   class="badge badge-default"
                   v-text="order.estado"
                 ></label>
+                <label
+                  v-if="order.status == 6"
+                  class="badge badge-danger"
+                  v-text="order.estado"
+                ></label>
               </div>
               <div>
                 <p class="text-muted m-0">
@@ -115,6 +120,13 @@
                   >Ver</el-button
                 >
               </a>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                circle
+                @click="deleteOrder(order.value)"
+              ></el-button>
               <a
                 :href="order.link"
                 target="_blank"
@@ -358,10 +370,35 @@ export default {
         case 5:
           return "badge-default";
           break;
+        case 6:
+          return "badge-danger";
+          break;
         default:
           return "badge-default";
           break;
       }
+    },
+    deleteOrder: function (id) {
+      this.$confirm(
+        "Esta a punto de eliminar esta orden. ¿Desea continuar?",
+        "Mensaje",
+        {
+          confirmButtonText: "Si",
+          cancelButtonText: "No",
+          type: "error",
+        }
+      )
+        .then(() => {
+          axios.delete(`/orders/${id}`).then((response) => {
+            if (response) {
+              this.$toastr.success("Orden eliminada");
+              this.getAllOrders();
+            }
+          });
+        })
+        .catch(() => {
+          this.$toastr.success("Eliminación cancelada");
+        });
     },
     // Metodos de paginación
     nextPage() {

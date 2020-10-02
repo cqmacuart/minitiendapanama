@@ -200,8 +200,8 @@ export default {
         categoryDescription: "",
         categoryPosition: "",
         categoryType: "",
-        categoryStatus: "",
-        categoryParent: "",
+        categoryStatus: 1,
+        categoryParent: 1,
         categoryImageName: "",
       },
       form: new FormData(),
@@ -209,6 +209,7 @@ export default {
       typeList: [],
       statusList: [],
       fullscreenLoading: false,
+      errors: [],
     };
   },
   mounted() {
@@ -286,20 +287,43 @@ export default {
     },
     // CONSTRUCTORES <<<
     setCategory: function () {
-      if (this.fillCategory.categoryImage) {
-        const params = {
-          nombre: this.fillCategory.categoryName,
-          descripcion: this.fillCategory.categoryDescription,
-          position: this.fillCategory.categoryPosition,
-          estado_id: this.fillCategory.categoryStatus,
-          tipo_id: this.fillCategory.categoryType,
-          parent_id: this.fillCategory.categoryParent,
-          image: this.fillCategory.categoryImageName,
-        };
-        axios.post("/categories", params).then((response) => {
-          if (response.data) {
-            this.$router.push("/admin/categorias");
-          }
+      if (this.validate()) {
+        if (this.fillCategory.categoryImage) {
+          const params = {
+            nombre: this.fillCategory.categoryName,
+            descripcion: this.fillCategory.categoryDescription,
+            position: this.fillCategory.categoryPosition,
+            estado_id: this.fillCategory.categoryStatus,
+            tipo_id: this.fillCategory.categoryType,
+            parent_id: this.fillCategory.categoryParent,
+            image: this.fillCategory.categoryImageName,
+          };
+          axios.post("/categories", params).then((response) => {
+            if (response.data) {
+              this.$toastr.success("La categoría se ha creado exitosamente");
+              this.$router.push("/admin/categorias");
+            }
+          });
+        }
+      } else {
+        this.errors.forEach((element) => {
+          this.$toastr.error(element.error, "!Oops", {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-left",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "5000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          });
         });
       }
     },
@@ -316,6 +340,31 @@ export default {
         this.fillCategory.categoryImageName = response.data;
         this.fullscreenLoading = false;
       });
+    },
+    validate() {
+      this.errors = [];
+      let check = true;
+      if (this.fillCategory.categoryName.length == 0) {
+        this.errors.push({ error: "El nombre de la categoría es requerido." });
+        check = false;
+      }
+      if (this.fillCategory.categoryPosition == 0) {
+        this.errors.push({ error: "La posición de la categoría es requerido" });
+        check = false;
+      }
+      if (this.fillCategory.categoryType.length == 0) {
+        this.errors.push({ error: "El tipo de la categoría es requerido" });
+        check = false;
+      }
+      if (this.fillCategory.categoryStatus.length == 0) {
+        this.errors.push({ error: "El estado de la categoría es requerido" });
+        check = false;
+      }
+      if (this.fillCategory.categoryImageName.length == 0) {
+        this.errors.push({ error: "La imagen de la categoría es requerido" });
+        check = false;
+      }
+      return check;
     },
   },
 };

@@ -182,6 +182,7 @@ export default {
       form: new FormData(),
       settings: [],
       fullscreenLoading: false,
+      errors: [],
     };
   },
   mounted() {
@@ -214,26 +215,45 @@ export default {
     },
     // CONSTRUCTORES <<<
     setSettings: function () {
-      const params = {
-        storename: this.fillSetting.storename,
-        mobile: this.fillSetting.mobile,
-        location: this.fillSetting.location,
-        image: this.fillSetting.image,
-        currency: this.fillSetting.currency,
-        country: this.fillSetting.country,
-        city: this.fillSetting.city,
-      };
-      axios
-        .put(`/admin/settings/${this.fillSetting.storeid}`, params)
-        .then((response) => {
-          if (response.data) {
-            this.$message({
-              type: "info",
-              message: "Sistema Actualizado",
-            });
-            this.$router.push("/admin");
-          }
+      if (this.validate()) {
+        const params = {
+          storename: this.fillSetting.storename,
+          mobile: this.fillSetting.mobile,
+          location: this.fillSetting.location,
+          image: this.fillSetting.image,
+          currency: this.fillSetting.currency,
+          country: this.fillSetting.country,
+          city: this.fillSetting.city,
+        };
+        axios
+          .put(`/admin/settings/${this.fillSetting.storeid}`, params)
+          .then((response) => {
+            if (response.data) {
+              this.$toastr.success("El sistema se ha actualizado");
+              this.$router.push("/admin");
+            }
+          });
+      } else {
+        this.errors.forEach((element) => {
+          this.$toastr.error(element.error, "!Oops", {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-left",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "5000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          });
         });
+      }
     },
     getImageFile: function (e) {
       this.fillSetting.image = e.target.files[0];
@@ -248,6 +268,44 @@ export default {
         this.fillSetting.image = response.data;
         this.fullscreenLoading = false;
       });
+    },
+    validate() {
+      let pattern = new RegExp(/\+[0-9]*/);
+      this.errors = [];
+      let check = true;
+      if (this.fillSetting.storename.length == 0) {
+        this.errors.push({ error: "El nombre de la tienda es requerido." });
+        check = false;
+      }
+      if (this.fillSetting.country.length == 0) {
+        this.errors.push({ error: "El país es requerido." });
+        check = false;
+      }
+      if (this.fillSetting.city.length == 0) {
+        this.errors.push({ error: "La ciudad es requerida." });
+        check = false;
+      }
+      if (this.fillSetting.location.length == 0) {
+        this.errors.push({ error: "La dirección es requerida." });
+        check = false;
+      }
+      if (this.fillSetting.mobile.length == 0) {
+        this.errors.push({ error: "El teléfono móvil es requerido." });
+        check = false;
+      }
+      if (!pattern.test(this.fillSetting.mobile)) {
+        this.errors.push({ error: "El número de teléfono no es válido." });
+        check = false;
+      }
+      if (this.fillSetting.currency.length == 0) {
+        this.errors.push({ error: "La moneda es requerida." });
+        check = false;
+      }
+      if (this.fillSetting.image.length == 0) {
+        this.errors.push({ error: "El logo de la tienda es necesario." });
+        check = false;
+      }
+      return check;
     },
   },
 };

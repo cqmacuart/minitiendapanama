@@ -34,6 +34,7 @@ class CategoriesController extends Controller
     {
         //
         $categories = Category::where('estado_id', 1)->orderBy('position', 'ASC')->get();
+        // $categories = Category::where('estado_id', 1)->orderBy('position', 'ASC')->get();
         foreach ($categories as $category) {
             $optionsc[$category->id] = $category->nombre;
         }
