@@ -23,14 +23,14 @@ class ProductsController extends Controller
     public function index()
     {
         //
-        $products = Product::addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
+        $products = Product::orderBy('category_id')->orderBy('position')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
         return $products;
     }
 
     public function pageIndex()
     {
         //
-        $products = Product::addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
+        $products = Product::orderBy('category_id')->orderBy('position')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
         return $products;
     }
 

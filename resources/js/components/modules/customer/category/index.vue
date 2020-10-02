@@ -267,7 +267,9 @@ export default {
     resultadosPaginados() {
       let inicio = this.pageNumber * this.perPage,
         fin = inicio + this.perPage;
-      return this.productList.slice(inicio, fin);
+      return this.productList.slice(inicio, fin).sort(function (a, b) {
+        return a.position - b.position;
+      });
     },
     paginas() {
       let a = this.productList.length,
@@ -379,6 +381,7 @@ export default {
                   label: element.nombre,
                   short: element.short_des,
                   image: element.image,
+                  position: element.position,
                   price: element.price,
                   flag: data.is,
                   qty: data.qty,
