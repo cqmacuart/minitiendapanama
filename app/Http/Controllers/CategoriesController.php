@@ -23,7 +23,7 @@ class CategoriesController extends Controller
     public function index()
     {
         //
-        $categories = Category::all();
+        $categories = Category::orderBy('position', 'ASC')->get();
         foreach ($categories as $category) {
             $optionsc[$category->id] = $category->nombre;
         }
@@ -33,7 +33,7 @@ class CategoriesController extends Controller
     public function pageIndex()
     {
         //
-        $categories = Category::where('estado_id', 1)->get();
+        $categories = Category::where('estado_id', 1)->orderBy('position', 'ASC')->get();
         foreach ($categories as $category) {
             $optionsc[$category->id] = $category->nombre;
         }
