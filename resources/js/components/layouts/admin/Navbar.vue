@@ -50,7 +50,7 @@ export default {
         { enlace: "pedidos", label: "Pedidos", class: "btn-outline-secondary" },
         {
           enlace: "configuracion",
-          label: "Settings",
+          label: "Ajustes",
           class: "btn-outline-secondary",
         },
       ],

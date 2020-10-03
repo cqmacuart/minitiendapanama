@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="customStyle">
     <section class="col-12 p-0 m-0 text-center">
       <img
         :src="`/img/categories/${categoryImage}`"
@@ -8,8 +8,11 @@
         v-if="categoryImage"
       />
     </section>
-    <div class="col-12 pt-2 pb-1 text-center">
-      <h5 class="font-weight-bolder customer-title" v-text="categoryName"></h5>
+    <div class="col-12 pt-2 pb-1 text-center px-0">
+      <h5
+        class="font-weight-bolder customer-title custom-category-style"
+        v-text="categoryName"
+      ></h5>
     </div>
     <section class="container-md p-0 p-sm-3 col-12 d-flex flex-wrap">
       <div
@@ -32,7 +35,9 @@
               </a>
             </div>
             <div v-if="product.flag" class="col-12 p-2 p-lg-3 mt-4 mt-lg-2">
-              <span class="fas fa-shopping-bag fa-2x text-danger"></span>
+              <span
+                class="fas fa-shopping-bag fa-2x custom-addicon-style"
+              ></span>
             </div>
           </div>
           <div class="row no-gutters h-100">
@@ -60,7 +65,7 @@
                   <p class="card-text" v-text="product.short"></p>
                 </small>
                 <p class="card-text p-0">
-                  <small class="text-muted"
+                  <small class="text-muted custom-price-style"
                     >{{ currency }}
                     {{ product.price | numeral("0,0.00") }}</small
                   >
@@ -132,25 +137,16 @@
     </div>
     <!-- Bolsa esquina derecha -->
     <div class="text-left pr-3">
-      <div class="d-inline-block home-button">
-        <router-link to="/" class="m-0 p-0">
+      <div class="d-inline-block home-button custom-hm-styles">
+        <a :href="'/'" class="m-0 p-0">
           <span class="fas fa-home text-white fa-2x"></span>
-        </router-link>
+        </a>
       </div>
     </div>
     <div class="text-right pr-3">
       <div class="d-inline-block fa-4x bag-icon-box">
         <router-link :to="{ name: 'cart' }">
-          <span
-            class="fa-layers fa-fw"
-            style="
-              background: magenta;
-              overflow: visible;
-              max-width: 55px;
-              max-height: 55px;
-              border-radius: 50px;
-            "
-          >
+          <span class="fa-layers fa-fw custom-sb-styles">
             <span class="fas fa-shopping-bag text-white p-2"></span>
             <span
               class="fa-layers-counter fa-layers-bottom-left bg-primary border"
@@ -249,9 +245,23 @@ export default {
       //   Paginación
       pageNumber: 0,
       perPage: 6,
+      //   COLORES
+      fillColors: {
+        //   footer
+        sbBgColor: "",
+        sbIcColor: "",
+        sbScColor: "",
+        sbTxColor: "",
+        hmBgColor: "",
+        hmTxColor: "",
+        ctBgColor: "",
+        ctTxColor: "",
+        pPrColor: "",
+        pIcColor: "",
+      },
+      isColors: null,
     };
   },
-
   watch: {
     id: {
       // the callback will be called immediately after the start of the observation
@@ -290,11 +300,74 @@ export default {
       }
       return pageArray;
     },
+    // COLORES
+    customStyle() {
+      //   sb = SHOPPING BAG
+      // hm = HOME
+      return {
+        "--bg-sb-color": this.fillColors.sbBgColor
+          ? this.fillColors.sbBgColor
+          : "magenta",
+        "--icon-sb-color": this.fillColors.sbIcColor
+          ? this.fillColors.sbIcColor
+          : "#FFFFFF",
+        "--second-sb-color": this.fillColors.sbScColor
+          ? this.fillColors.sbScColor
+          : "#3490DC",
+        "--text-sb-color": this.fillColors.sbTxColor
+          ? this.fillColors.sbTxColor
+          : "#FFFFFF",
+        "--bg-hm-color": this.fillColors.hmBgColor
+          ? this.fillColors.hmBgColor
+          : "#000000",
+        "--text-hm-color": this.fillColors.hmTxColor
+          ? this.fillColors.hmTxColor
+          : "#FFFFFF",
+        "--bg-ct-color": this.fillColors.ctBgColor
+          ? this.fillColors.ctBgColor
+          : "#FFFFFF",
+        "--text-ct-color": this.fillColors.ctTxColor
+          ? this.fillColors.ctTxColor
+          : "magenta",
+        "--text-p-color": this.fillColors.pPrColor
+          ? this.fillColors.pPrColor
+          : "gray",
+        "--icon-p-color": this.fillColors.pIcColor
+          ? this.fillColors.pIcColor
+          : "red",
+      };
+    },
   },
   mounted() {
     this.checkingCartCount();
+    this.getColorCount();
   },
   methods: {
+    //   ESTILOS
+    getColorCount: function () {
+      axios.get("/colors/count").then((response) => {
+        this.isColors = response.data;
+        if (this.isColors > 0) {
+          this.getColorSettings();
+        }
+      });
+    },
+    getColorSettings: function () {
+      axios.get("/colors").then((response) => {
+        response.data.forEach((element) => {
+          this.fillColors.sbBgColor = element.sbBgColor;
+          this.fillColors.sbIcColor = element.sbIcColor;
+          this.fillColors.sbScColor = element.sbScColor;
+          this.fillColors.sbTxColor = element.sbTxColor;
+          this.fillColors.hmBgColor = element.hmBgColor;
+          this.fillColors.hmTxColor = element.hmTxColor;
+          this.fillColors.ctBgColor = element.ctBgColor;
+          this.fillColors.ctTxColor = element.ctTxColor;
+          this.fillColors.pPrColor = element.pPrColor;
+          this.fillColors.pIcColor = element.pIcColor;
+        });
+      });
+    },
     //   Shared Info
     setShareInfo(id) {
       const producto = this.productList.find(
@@ -455,125 +528,36 @@ export default {
 </script>
 
 <style>
-.el-dialog__body {
-  padding: 10px;
+.custom-sb-styles {
+  background: var(--bg-sb-color) !important;
+  overflow: visible;
+  max-width: 55px;
+  max-height: 55px;
+  border-radius: 50px;
 }
-.product-card {
-  transition: all 0.3s ease-out;
+.custom-sb-styles .fa-shopping-bag {
+  color: var(--icon-sb-color) !important;
 }
-.product-card:hover {
-  transform: scale(1.1, 1.1);
+.custom-sb-styles .fa-layers-bottom-left {
+  background-color: var(--second-sb-color) !important;
+  border-color: var(--text-sb-color) !important;
+  color: var(--text-sb-color) !important;
 }
-.customer-title {
-  color: magenta;
+.custom-hm-styles {
+  background-color: var(--bg-hm-color) !important;
+  color: var(--text-hm-color) !important;
 }
-.bag-icon-box {
-  position: fixed;
-  bottom: 10px;
-  z-index: 20;
+.custom-hm-styles .fa-home {
+  color: var(--text-hm-color) !important;
 }
-.home-button {
-  margin-left: 10px;
-  padding: 5px;
-  border-radius: 20px;
-  position: fixed;
-  bottom: 30px;
-  z-index: 20;
-  background-color: black;
+.custom-category-style {
+  background-color: var(--bg-ct-color) !important;
+  color: var(--text-ct-color) !important;
 }
-.card-icons {
-  position: absolute;
-  right: 0;
-  z-index: 9;
-
-  background: rgba(255, 255, 255, 0);
-  background: -moz-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  background: -webkit-gradient(
-    left top,
-    right top,
-    color-stop(0%, rgba(255, 255, 255, 0)),
-    color-stop(20%, rgba(255, 255, 255, 1)),
-    color-stop(100%, rgba(255, 255, 255, 1))
-  );
-  background: -webkit-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  background: -o-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  background: -ms-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=1 );
+.custom-price-style {
+  color: var(--text-p-color) !important;
 }
-.card-image {
-  max-height: 80px !important;
-}
-.quantity {
-  max-width: 50px;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.remove-to-cart,
-.add-to-cart {
-  cursor: pointer;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-@media (min-width: 1200px) {
-  .bag-icon-box {
-    right: calc(((100% - 1200px) / 2) + 140px);
-  }
-}
-@media (max-width: 1200px) {
-  .bag-icon-box {
-    right: calc(((100% - 1200px) / 2) + 140px);
-  }
-}
-@media (max-width: 992px) {
-  .bag-icon-box {
-    right: 25px;
-  }
-}
-@media (max-width: 767px) {
-  .card-icons {
-    bottom: 0;
-  }
-}
-@media (max-width: 575px) {
-  .product-card:hover {
-    transform: scale(0.95);
-  }
-  .card-icons {
-    top: 0;
-  }
+.custom-addicon-style {
+  color: var(--icon-p-color) !important;
 }
 </style>

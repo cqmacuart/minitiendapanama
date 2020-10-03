@@ -23,14 +23,14 @@ class ProductsController extends Controller
     public function index()
     {
         //
-        $products = Product::orderBy('category_id')->orderBy('position')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
+        $products = Product::orderBy('position')->orderBy('category_id')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
         return $products;
     }
 
     public function pageIndex()
     {
         //
-        $products = Product::orderBy('category_id')->orderBy('position')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
+        $products = Product::orderBy('position')->orderBy('category_id')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
         return $products;
     }
 
@@ -50,7 +50,7 @@ class ProductsController extends Controller
     public function filteredByCategory($id)
     {
         //
-        $products = Product::where('category_id', $id)->where('estado_id', 1)->orderBy('position', 'ASC')->get();
+        $products = Product::orderBy('position', 'ASC')->where('category_id', $id)->where('estado_id', 1)->get();
         return response()->json($products, 200);
     }
 

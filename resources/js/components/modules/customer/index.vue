@@ -231,16 +231,4 @@ export default {
 </script>
 
 <style>
-.remove-item {
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  top: 3px;
-}
-.totalize {
-  font-family: "Arial Black", Helvetica, sans-serif;
-}
-.card-product:hover {
-  background-color: #ffffd9;
-}
 </style>

@@ -72,8 +72,6 @@ export default {
           //no estas autenticado
           if (error.response.status == 401) {
             // this.app.Toastr.error("Caduco su Sesión");
-            // localStorage.removeItem("user-authenticate");
-            // this.$router.push("/login");
             console.log(error.response.status);
           }
         });
@@ -90,3 +88,5 @@ main {
   padding-bottom: 250px;
 }
 </style>
+
+

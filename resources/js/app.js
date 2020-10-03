@@ -10,8 +10,9 @@ window.Vue = require("vue");
 
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import locale from "element-ui/lib/locale/lang/es";
 
-window.Vue.use(ElementUI);
+window.Vue.use(ElementUI, { locale });
 
 Vue.component("App", require("./components/App.vue").default);
 Vue.component("Admin", require("./components/Admin.vue").default);

@@ -52,6 +52,9 @@ Route::resource('/orderStates', 'OrderStatesController');
 Route::resource('/admin/settings', 'SettingController');
 Route::post('/admin/settings/saveFile', 'SettingController@saveFileImage');
 
+// Colors routes
+Route::get('/colors/count', 'ColorsController@count');
+Route::resource('/colors', 'ColorsController');
 
 // Cart routes
 Route::get('/cart/step', 'CartController@index')->name('cart');

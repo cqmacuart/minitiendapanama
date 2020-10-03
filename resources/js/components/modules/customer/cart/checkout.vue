@@ -1,12 +1,12 @@
 <template>
-  <div v-if="ok">
+  <div v-if="ok" :style="customStyle">
     <!-- <section class="col-12 p-0 m-0 text-center">
       <img :src="`/img/categories/${categoryImage}`" alt class="img-fluid" v-if="categoryImage" />
     </section>-->
     <div class="col-12 pt-2 pb-1 text-center border-bottom">
-      <h5 class="font-weight-bolder customer-title">
+      <h5 class="font-weight-bolder customer-title custom-checkout-style">
         Confirmar Pedido
-        <span class="fas fa-check-circle fa-2x"></span>
+        <span class="fas fa-check-circle fa-2x custom-checkout-style"></span>
       </h5>
     </div>
     <div class="col-12 m-auto p-0 d-flex flex-col flex-sm-row row">
@@ -131,7 +131,7 @@
             <tr>
               <th class="totalize text-black">Total</th>
               <td class="text-right">
-                <label class="totalize" for
+                <label class="totalize custom-price-style" for
                   >{{ currency }} {{ totalAmount | numeral("0,0.00") }}</label
                 >
               </td>
@@ -173,14 +173,60 @@ export default {
         image: "",
         currency: "",
       },
+      fillColors: {
+        ctBgColor: "",
+        ctTxColor: "",
+        pPrColor: "",
+        pIcColor: "",
+      },
+      isColors: null,
     };
   },
   mounted() {
     this.getCartTotalItems();
     this.getCartTotalAmount();
     this.getAllSettings();
+    this.getColorCount();
+  },
+  computed: {
+    customStyle() {
+      //   sb = SHOPPING BAG
+      // hm = HOME
+      return {
+        "--bg-ct-color": this.fillColors.ctBgColor
+          ? this.fillColors.ctBgColor
+          : "#FFFFFF",
+        "--text-ct-color": this.fillColors.ctTxColor
+          ? this.fillColors.ctTxColor
+          : "magenta",
+        "--text-p-color": this.fillColors.pPrColor
+          ? this.fillColors.pPrColor
+          : "gray",
+        "--icon-p-color": this.fillColors.pIcColor
+          ? this.fillColors.pIcColor
+          : "red",
+      };
+    },
   },
   methods: {
+    getColorCount: function () {
+      axios.get("/colors/count").then((response) => {
+        this.isColors = response.data;
+        if (this.isColors > 0) {
+          this.getColorSettings();
+        }
+      });
+    },
+    getColorSettings: function () {
+      axios.get("/colors").then((response) => {
+        response.data.forEach((element) => {
+          this.fillColors.ctBgColor = element.ctBgColor;
+          this.fillColors.ctTxColor = element.ctTxColor;
+          this.fillColors.pPrColor = element.pPrColor;
+          this.fillColors.pIcColor = element.pIcColor;
+        });
+      });
+    },
     setOrder: function () {
       const params = {
         nombre: this.nombre,
@@ -251,13 +297,4 @@ export default {
 </script>
 
 <style>
-.remove-item {
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  top: 3px;
-}
-.totalize {
-  font-family: "Arial Black", Helvetica, sans-serif;
-}
 </style>

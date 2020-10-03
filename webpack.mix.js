@@ -13,11 +13,13 @@ const mix = require("laravel-mix");
 
 mix.styles(
     [
-        "resources/vendor/css/config.css"
+        "resources/vendor/css/config.css",
+        "resources/vendor/css/page.css"
         // "resources/vendor/assets/fontawesome/css/all.css"
     ],
     "public/css/plantilla.css"
 )
+    .sass("resources/sass/app.scss", "public/css")
     .js("resources/js/app.js", "public/js")
     .scripts(
         [
