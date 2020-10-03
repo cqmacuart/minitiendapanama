@@ -380,7 +380,7 @@ export default {
       this.metaProduct = "id";
       this.shareName = producto.label;
       this.sharing = {
-        url: this.ruta + "/producto/" + id,
+        url: this.ruta + "/producto/" + id + "/",
         title: producto.label,
         description: producto.short,
         quote: producto.label + ": " + this.currency + "\n " + producto.price,
