@@ -8,9 +8,9 @@
         v-if="categoryImage"
       />
     </section>
-    <div class="col-12 pt-2 pb-1 text-center px-0">
+    <div class="col-12 pt-0 pb-1 text-center px-0">
       <h5
-        class="font-weight-bolder customer-title custom-category-style"
+        class="font-weight-bolder customer-title custom-category-style py-2"
         v-text="categoryName"
       ></h5>
     </div>

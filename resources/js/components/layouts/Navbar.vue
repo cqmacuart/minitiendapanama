@@ -45,8 +45,8 @@ export default {
           ? this.fillColors.nvTxColor
           : "#000000",
         "--border-item-color": this.fillColors.nvBrColor
-          ? this.fillColors.nvBrColor
-          : "magenta",
+          ? `2px solid ${this.fillColors.nvBrColor}`
+          : "2px solid magenta",
       };
     },
   },
@@ -106,7 +106,7 @@ export default {
 }
 .custom-item-style > a {
   color: var(--text-item-color) !important;
-  font-weight: 0.8rem;
+  font-weight: 900;
   font-size: 0.8rem;
   font-family: "Arial Black", Helvetica, sans-serif;
 }
