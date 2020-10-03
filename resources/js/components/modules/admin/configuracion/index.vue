@@ -411,7 +411,7 @@
                     <div class="card">
                       <div class="card-body p-1">
                         <div
-                          class="d-flex justify-content-between align-items-center border-bottom"
+                          class="d-flex justify-content-between align-items-center"
                         >
                           <label for="">Color de fondo: </label>
                           <el-color-picker
@@ -426,7 +426,7 @@
                     <div class="card">
                       <div class="card-body p-1">
                         <div
-                          class="d-flex justify-content-between align-items-center border-bottom"
+                          class="d-flex justify-content-between align-items-center"
                         >
                           <label for="">Color de Texto: </label>
                           <el-color-picker
@@ -449,7 +449,7 @@
                     <div class="card">
                       <div class="card-body p-1">
                         <div
-                          class="d-flex justify-content-between align-items-center border-bottom"
+                          class="d-flex justify-content-between align-items-center"
                         >
                           <label for="">Color de fondo: </label>
                           <el-color-picker
@@ -464,7 +464,7 @@
                     <div class="card">
                       <div class="card-body p-1">
                         <div
-                          class="d-flex justify-content-between align-items-center border-bottom"
+                          class="d-flex justify-content-between align-items-center"
                         >
                           <label for="">Color de Texto: </label>
                           <el-color-picker
@@ -487,7 +487,7 @@
                     <div class="card">
                       <div class="card-body p-1">
                         <div
-                          class="d-flex justify-content-between align-items-center border-bottom"
+                          class="d-flex justify-content-between align-items-center"
                         >
                           <label for="">Color de Precio: </label>
                           <el-color-picker
@@ -502,7 +502,7 @@
                     <div class="card">
                       <div class="card-body p-1">
                         <div
-                          class="d-flex justify-content-between align-items-center border-bottom"
+                          class="d-flex justify-content-between align-items-center"
                         >
                           <label for="">Color de Añadido: </label>
                           <el-color-picker
@@ -521,6 +521,7 @@
                   class="btn btn-sm"
                   :class="isColors > 0 ? ' btn-primary' : ' btn-success'"
                   @click.prevent="setColors"
+                  v-loading.fullscreen.lock="fullscreenLoading"
                 >
                   <span class="fas fa-check"></span>
                   <span v-text="isColors > 0 ? 'Establecer' : 'Guardar'"></span>
@@ -746,6 +747,7 @@ export default {
     },
     handleClick(tab, event) {},
     setColors: function () {
+      this.fullscreenLoading = true;
       const params = {
         hBgColor: this.fillColors.hBgColor,
         hTxColor: this.fillColors.hTxColor,
@@ -773,6 +775,7 @@ export default {
           .then((response) => {
             if (response.data) {
               this.$toastr.info("El producto se ha actualizado exitosamente");
+              this.fullscreenLoading = false;
             }
           });
       } else {
@@ -780,6 +783,7 @@ export default {
           if (response.data) {
             this.$toastr.success("Colores guardados");
             this.getColorCount();
+            this.fullscreenLoading = false;
           }
         });
       }
