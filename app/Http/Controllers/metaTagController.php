@@ -27,7 +27,7 @@ class metaTagController extends Controller
 
             // Obtener información del sitio
             $sitio = Setting::first();
-            $info = ['product' => $producto, 'site' => $sitio];
+            $info = ['product' => $producto, 'site' => $sitio, 'color' => $color];
             return ($info);
         } else {
             $sitio = Setting::first();
