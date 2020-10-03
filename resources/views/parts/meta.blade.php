@@ -1,5 +1,7 @@
 <?php use \App\Http\Controllers\metaTagController; $metaInfo = metaTagController::metaBuilder(url()->current())?>
-@if (sizeof($metaInfo)>1)
+<title>{{$metaInfo['site']['storename']}}</title>
+<meta name="theme-color" content="{{$metaInfo['color']['hBgColor']}}"/>
+@if (sizeof($metaInfo)>2)
 {{--  --}}
 <meta property="og:title" content="{{$metaInfo['site']['storename'].' | '.$metaInfo['product']['nombre']}}">
 <meta property="og:site_name" content="{{$metaInfo['site']['storename']}}">
@@ -47,5 +49,5 @@
 <meta property="twitter:title" content="{{$metaInfo['site']['storename']}}">
 <meta property="twitter:description" content="Mi pequeña tienda">
 <meta property="twitter:image" content="{{ url('/img/settings/'.$metaInfo['site']['image']) }}">
-    
+
 @endif
