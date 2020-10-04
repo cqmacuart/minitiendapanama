@@ -247,24 +247,27 @@ export default {
         };
         axios.post("/orders", params).then((response) => {
           if (response.status == 200) {
-            if (sessionStorage.getItem("currCustomer")) {
-              sessionStorage.removeItem("currCustomer");
-            }
-            const mailparams = {
-              pedido: response.data.pedido,
-              enlace: response.data.link,
-            };
-            axios.post("/sendingmail/nuevo", mailparams).then((response) => {
-              this.$router.push({
-                name: "mipedido",
-                params: { serial: response.data.serialize },
-              });
-              this.fullscreenLoading = false;
-            });
+            //salvar el token
             window.open(
               `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${response.data.link}`,
               `_blank`
             );
+            let token = response.data.serialize;
+            const mailparams = {
+              pedido: response.data.pedido,
+              enlace: response.data.link,
+            };
+            //establecer parametros de envío de MAIL
+            axios.post("/sendingmail/nuevo", mailparams).then((response) => {
+              if (sessionStorage.getItem("currCustomer")) {
+                sessionStorage.removeItem("currCustomer");
+              }
+              this.$router.push({
+                name: "mipedido",
+                params: { serial: token },
+              });
+              this.fullscreenLoading = false;
+            });
           }
         });
       } else {
