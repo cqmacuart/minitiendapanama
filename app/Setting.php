@@ -13,6 +13,7 @@ class Setting extends Model
         "city",
         "country",
         "location",
+        "email",
         "image",
         "currency",
     ];

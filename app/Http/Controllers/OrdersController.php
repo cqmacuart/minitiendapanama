@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Customer;
 use App\Order;
 use App\OrderDetail;
@@ -11,6 +12,10 @@ use App\OrderState;
 
 class OrdersController extends Controller
 {
+
+    public $customerEmail;
+    public $customerName;
+
     // public function __construct()
     // {
     //     $this->middleware("EsAdmin");
@@ -172,6 +177,28 @@ class OrdersController extends Controller
         $orden = Order::findOrFail($id);
         $orden->orderstate_id = $request->estado;
         $orden->update();
+
+        // enviar mensaje si la orden tiene notificación activa
+        $customer = Customer::where("order_pedido", $orden->pedido)->get();
+        if ($customer[0]->notificacion) { //si está activo, enviar notificacion
+            $this->customerEmail = $customer[0]->email;
+            $this->customerName = $customer[0]->nombre;
+            $info = [
+                "pedido" => $orden->pedido,
+                "enlace" => $orden->link,
+            ];
+            $datos = [
+                "titulo" => "Su pedido ha cambiado de estado.",
+                "contenido" => $info
+            ];
+            Mail::send(
+                "emails.estado",
+                $datos,
+                function ($mensaje) {
+                    $mensaje->to($this->customerEmail, $this->customerName)->subject("ESTADO DE SU PEDIDO !!!");
+                }
+            );
+        }
         return response()->json($orden, 200);
     }
 

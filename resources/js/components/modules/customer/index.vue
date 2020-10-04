@@ -66,21 +66,18 @@
                   </small>
                   <p class="card-text p-0">
                     <small class="text-muted"
-                      >{{ product.quantity }}x{{
-                        currency + " " + product.price
-                      }}</small
-                    >
+                      >{{ product.quantity }}x {{ currency }}
+                      {{ product.price | numeral("0,0.00") }}
+                    </small>
                   </p>
                 </div>
                 <div class="card-footer py-1 px-3">
                   <p
                     class="card-text text-primary text-right font-weight-bolder totalize"
-                    v-text="
-                      currency +
-                      ' ' +
-                      (product.quantity * product.price).toFixed(2)
-                    "
-                  ></p>
+                  >
+                    {{ currency }}
+                    {{ (product.quantity * product.price) | numeral("0,0.00") }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -164,11 +161,10 @@
                 <label for class="m-0 py-2">Total</label>
               </th>
               <td class="text-right">
-                <label
-                  class="totalize m-0 py-2"
-                  v-if="orderHeader.length > 0"
-                  v-text="currency + ' ' + orderHeader[0].amount"
-                ></label>
+                <label class="totalize m-0 py-2" v-if="orderHeader.length > 0">
+                  {{ currency }}
+                  {{ orderHeader[0].amount | numeral("0,0.00") }}</label
+                >
               </td>
             </tr>
           </table>

@@ -79,7 +79,11 @@
                 Email
               </th>
               <td>
-                <el-input placeholder="Email" v-model="email"></el-input>
+                <el-input
+                  placeholder="Email"
+                  v-model="email"
+                  type="email"
+                ></el-input>
               </td>
             </tr>
             <tr>
@@ -140,6 +144,7 @@
           <button
             class="btn btn-success btn-lg float-right mr-4 mb-4"
             @click.prevent="setOrder"
+            v-loading.fullscreen.lock="fullscreenLoading"
           >
             Pedir
           </button>
@@ -173,6 +178,7 @@ export default {
         image: "",
         currency: "",
       },
+      fullscreenLoading: false,
       fillColors: {
         ctBgColor: "",
         ctTxColor: "",
@@ -228,30 +234,61 @@ export default {
       });
     },
     setOrder: function () {
-      const params = {
-        nombre: this.nombre,
-        ciudad: this.ciudad,
-        direccion: this.direccion,
-        celular: this.celular,
-        email: this.email,
-        comentario: this.comentario,
-        notificacion: this.notificacion,
-      };
-      axios.post("/orders", params).then((response) => {
-        if (response.status == 200) {
-          if (sessionStorage.getItem("currCustomer")) {
-            sessionStorage.removeItem("currCustomer");
+      this.fullscreenLoading = true;
+      if (this.validate()) {
+        const params = {
+          nombre: this.nombre,
+          ciudad: this.ciudad,
+          direccion: this.direccion,
+          celular: this.celular,
+          email: this.email,
+          comentario: this.comentario,
+          notificacion: this.notificacion,
+        };
+        axios.post("/orders", params).then((response) => {
+          if (response.status == 200) {
+            if (sessionStorage.getItem("currCustomer")) {
+              sessionStorage.removeItem("currCustomer");
+            }
+            const mailparams = {
+              pedido: response.data.pedido,
+              enlace: response.data.link,
+            };
+            axios.post("/sendingmail/nuevo", mailparams).then((response) => {
+              this.$router.push({
+                name: "mipedido",
+                params: { serial: response.data.serialize },
+              });
+              this.fullscreenLoading = false;
+            });
+            window.open(
+              `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${response.data.link}`,
+              `_blank`
+            );
           }
-          window.open(
-            `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${response.data.link}`,
-            `_blank`
-          );
-          this.$router.push({
-            name: "mipedido",
-            params: { serial: response.data.serialize },
+        });
+      } else {
+        this.fullscreenLoading = false;
+        this.errors.forEach((element) => {
+          this.$toastr.error(element.error, "!Oops", {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-left",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "3000",
+            extendedTimeOut: "3000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
           });
-        }
-      });
+        });
+      }
     },
     getCartTotalItems: function () {
       this.totalItems = 0;
@@ -291,6 +328,36 @@ export default {
             console.log(error.response.status);
           }
         });
+    },
+    validate() {
+      let pattern = new RegExp(/^[^a-zA-Z\W][0-9]*\d$/);
+      this.errors = [];
+      let check = true;
+      if (this.nombre.length == 0) {
+        this.errors.push({ error: "El nombre es un campo requerido." });
+        check = false;
+      }
+      if (this.ciudad.length == 0) {
+        this.errors.push({ error: "La ciudad es un campo requerido" });
+        check = false;
+      }
+      if (this.direccion.length == 0) {
+        this.errors.push({ error: "La dirección es un campo requerido" });
+        check = false;
+      }
+      if (this.celular.length == 0) {
+        this.errors.push({ error: "El celular es un campo requerido" });
+        check = false;
+      }
+      if (!pattern.test(this.celular)) {
+        this.errors.push({ error: "El número de celular no es válido" });
+        check = false;
+      }
+      if (this.email.length == 0) {
+        this.errors.push({ error: "El correo es un campo requerido" });
+        check = false;
+      }
+      return check;
     },
   },
 };

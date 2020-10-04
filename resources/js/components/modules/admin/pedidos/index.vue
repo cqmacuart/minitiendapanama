@@ -186,7 +186,7 @@
     <el-dialog
       title="Estados de Pedido"
       :visible.sync="dialogVisible"
-      width="30%"
+      :class="'col-12 col-sm-6 col-md-4 m-auto'"
     >
       <div>
         <div
@@ -211,12 +211,14 @@
               v-text="estado.label"
             ></label>
           </div>
+          <hr class="my-1" />
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button
           type="primary"
           @click="(dialogVisible = false), setNewState(currentOrder)"
+          v-loading.fullscreen.lock="fullscreenLoading"
           >Confirm</el-button
         >
       </span>
@@ -240,6 +242,7 @@ export default {
       //   Paginación
       pageNumber: 0,
       perPage: 6,
+      fullscreenLoading: false,
     };
   },
   mounted() {
@@ -273,6 +276,7 @@ export default {
   },
   methods: {
     setNewState(id) {
+      this.fullscreenLoading = true;
       const params = {
         estado: this.currentStatus,
       };
@@ -282,6 +286,7 @@ export default {
           //   console.log(response.data);
           location.reload();
         }
+        this.fullscreenLoading = false;
       });
     },
     //   Cargar Categorías Guardadas
@@ -389,11 +394,13 @@ export default {
         }
       )
         .then(() => {
+          this.fullscreenLoading = true;
           axios.delete(`/orders/${id}`).then((response) => {
             if (response) {
               this.$toastr.success("Orden eliminada");
               this.getAllOrders();
             }
+            this.fullscreenLoading = false;
           });
         })
         .catch(() => {
@@ -419,6 +426,9 @@ export default {
 
 <style>
 .el-radio {
+  width: 100%;
+}
+.el-dialog {
   width: 100%;
 }
 .buscarpedido {

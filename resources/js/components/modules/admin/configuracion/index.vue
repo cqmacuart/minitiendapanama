@@ -93,6 +93,22 @@
                       class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
                       style="width: 1%"
                     >
+                      Email:
+                    </th>
+                    <td class>
+                      <input
+                        type="email"
+                        class="form-control form-control-sm border-0"
+                        placeholder="administracion@example.com"
+                        v-model="fillSetting.email"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
+                      style="width: 1%"
+                    >
                       Teléfono:
                     </th>
                     <td class>
@@ -544,6 +560,7 @@ export default {
         storeid: "",
         storename: "",
         mobile: "",
+        email: "",
         city: "",
         country: "",
         location: "",
@@ -606,6 +623,7 @@ export default {
           this.fillSetting.currency = response.data.currency;
           this.fillSetting.country = response.data.country;
           this.fillSetting.city = response.data.city;
+          this.fillSetting.email = response.data.email;
         })
         .catch((error) => {
           //no estas autenticado
@@ -654,6 +672,7 @@ export default {
     },
     setSettings: function () {
       if (this.validate()) {
+        this.fullscreenLoading = true;
         const params = {
           storename: this.fillSetting.storename,
           mobile: this.fillSetting.mobile,
@@ -662,11 +681,13 @@ export default {
           currency: this.fillSetting.currency,
           country: this.fillSetting.country,
           city: this.fillSetting.city,
+          email: this.fillSetting.email,
         };
         axios
           .put(`/admin/settings/${this.fillSetting.storeid}`, params)
           .then((response) => {
             if (response.data) {
+              this.fullscreenLoading = false;
               this.$toastr.success("El sistema se ha actualizado");
               this.$router.push("/admin");
             }

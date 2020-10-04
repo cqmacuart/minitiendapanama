@@ -17,6 +17,9 @@ Route::get('/offline', function () {
     return view('vendor/laravelpwa/offline');
 });
 
+// offline routes
+Route::post('/sendingmail/nuevo', "SendMailController@nuevoPedido");
+
 // categories routes
 Route::get('/categories/info', 'CategoriesController@info');
 Route::post('/categories/saveFile', 'CategoriesController@saveFileImage');
