@@ -255,7 +255,7 @@ class ProductsController extends Controller
         if ($productos) {
             //crear arreglo de información que irá al csv
             foreach ($productos as $value) {
-                $csvProductsArray[] = [$value->id, htmlentities($value->nombre), htmlentities($value->short_des), "in stock", 100, "new", $value->price . " " . $ajustes->currency, "'" . URL::to("/") . '/producto/' . $value->id . "/'", "'" . URL::to("/") . "/img/products/" . rawurlencode($value->image) . "/'", "no-brand"];
+                $csvProductsArray[] = [$value->id, htmlentities($value->nombre), htmlentities($value->short_des), "in stock", 100, "new", $value->price . " " . $ajustes->currency, URL::to("/") . '/producto/' . $value->id . "/", URL::to("/") . "/img/products/" . rawurlencode($value->image) . "/", "no-brand"];
             }
             //ARCHIVO DELIMITADO POR PUNTO Y COMA (;)
             //variables básicas: Titulo del archivo para FB
