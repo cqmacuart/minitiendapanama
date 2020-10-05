@@ -1,5 +1,5 @@
 <template>
-  <div :style="customStyle">
+  <div :style="customStyle" id="categoryBox">
     <section class="col-12 p-0 m-0 text-center">
       <img
         :src="`/img/categories/${categoryImage}`"
@@ -7,6 +7,9 @@
         class="img-fluid"
         v-if="categoryImage"
       />
+      <div v-else class="p-3">
+        <span class="fas fa-5x fa-spin fa-spinner"></span>
+      </div>
     </section>
     <div class="col-12 pt-0 pb-1 text-center px-0">
       <h5
@@ -351,6 +354,7 @@ export default {
           this.getColorSettings();
         }
       });
+      return true;
     },
     getColorSettings: function () {
       axios.get("/colors").then((response) => {

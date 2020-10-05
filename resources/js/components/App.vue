@@ -1,5 +1,8 @@
 <template>
-  <main class="container shadow p-0 bg-white">
+  <main
+    class="container shadow p-0 bg-white"
+    v-loading.fullscreen.lock="fullscreenLoading"
+  >
     <!-- Header -->
     <Header
       :ruta="ruta"
@@ -46,6 +49,7 @@ export default {
         image: "",
         currency: "",
       },
+      fullscreenLoading: true,
     };
   },
   mounted() {
@@ -54,6 +58,12 @@ export default {
       sessionStorage.setItem("currCustomer", obj);
     }
     this.getAllSettings();
+    window.addEventListener("load", function (event) {
+      this.fullscreenLoading = false;
+    });
+    setTimeout(() => {
+      this.fullscreenLoading = false;
+    }, 3000);
   },
   methods: {
     getAllSettings: function () {

@@ -250,12 +250,12 @@ class ProductsController extends Controller
         $productos = Product::all();
         $ajustes = \App\Setting::first();
         //Añadir primera fila de encabezados al arreglo
-        $encabezados = ["id", "title", "description", "availability", "inventory", "condition", "price", "link", "image", "brand"];
+        $encabezados = ["id", "title", "description", "availability", "inventory", "condition", "price", "link", "image_link", "brand"];
         $csvProductsArray[] = $encabezados;
         if ($productos) {
             //crear arreglo de información que irá al csv
             foreach ($productos as $value) {
-                $csvProductsArray[] = [$value->id, htmlentities($value->nombre), htmlentities($value->short_des), "in stock", 100, "new", $value->price . " " . $ajustes->currency, URL::to("/") . '/producto/' . $value->id . "/", URL::to("/") . "/img/products/" . rawurlencode($value->image) . "/", "no-brand"];
+                $csvProductsArray[] = [$value->id, ucfirst(htmlentities($value->nombre)), ucfirst(htmlentities($value->short_des)), "in stock", 100, "new", $value->price . " " . $ajustes->currency, URL::to("/") . '/producto/' . $value->id . "/", URL::to("/") . "/img/products/" . rawurlencode($value->image), "no-brand"];
             }
             //ARCHIVO DELIMITADO POR PUNTO Y COMA (;)
             //variables básicas: Titulo del archivo para FB

@@ -131,9 +131,34 @@
                       <input
                         type="text"
                         class="form-control form-control-sm border-0"
-                        placeholder="USD - EUR - AUS - CAN..."
+                        placeholder="USD - EUR - AUS - CAN (SEGUN ISO 4217)"
                         v-model="fillSetting.currency"
                       />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle"
+                      style="width: 1%"
+                    >
+                      FB Business:
+                    </th>
+                    <td class="align-bottom text-nowrap overflow-hidden">
+                      <button
+                        class="btn btn-sm btn-outline-dark mr-1"
+                        v-clipboard:copy="message"
+                        v-clipboard:success="onCopy"
+                      >
+                        <span class="fas fa-copy"></span>
+                      </button>
+                      <label
+                        for=""
+                        class="form-label text-muted m-0"
+                        style="max-width: 300px"
+                        >{{
+                          ruta
+                        }}/files/fb_business/facebook_business_product_csv.csv</label
+                      >
                     </td>
                   </tr>
 
@@ -554,6 +579,7 @@
 
 <script>
 export default {
+  props: ["ruta"],
   data() {
     return {
       fillSetting: {
@@ -603,6 +629,7 @@ export default {
         pIcColor: "",
       },
       isColors: null,
+      message: `${this.ruta}/files/fb_business/facebook_business_product_csv.csv`,
     };
   },
   mounted() {
@@ -610,6 +637,9 @@ export default {
     this.getColorCount();
   },
   methods: {
+    onCopy: function () {
+      this.$toastr.info("Copiado en el portapapeles");
+    },
     getAllSettings: function () {
       this.settings = [];
       axios

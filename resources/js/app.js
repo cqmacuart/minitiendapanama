@@ -25,6 +25,7 @@ import vueNumeralFilterInstaller from "vue-numeral-filter";
 import VueCurrencyInput from "vue-currency-input";
 import VueToastr2 from "vue-toastr-2";
 import "vue-toastr-2/dist/vue-toastr-2.min.css";
+import VueClipboard from "vue-clipboard2";
 
 window.toastr = require("toastr");
 window.Vue.use(VueMeta);
@@ -32,6 +33,7 @@ window.Vue.use(VueSocialSharing);
 window.Vue.use(vueNumeralFilterInstaller);
 window.Vue.use(VueCurrencyInput);
 window.Vue.use(VueToastr2);
+window.Vue.use(VueClipboard);
 
 router.beforeEach((to, from, next) => {
     if (to.path == "/admin") {
