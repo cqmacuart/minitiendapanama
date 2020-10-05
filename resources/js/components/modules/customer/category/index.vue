@@ -1,5 +1,9 @@
 <template>
-  <div :style="customStyle" id="categoryBox">
+  <div
+    :style="customStyle"
+    id="categoryBox"
+    v-loading.fullscreen.lock="fullscreenLoading"
+  >
     <section class="col-12 p-0 m-0 text-center">
       <img
         :src="`/img/categories/${categoryImage}`"
@@ -263,6 +267,7 @@ export default {
         pIcColor: "",
       },
       isColors: null,
+      fullscreenLoading: true,
     };
   },
   watch: {
@@ -509,6 +514,7 @@ export default {
           });
       }
       this.getProducts(this.categoryId);
+      this.fullscreenLoading = false;
     },
     handleClose() {
       this.dialogVisible = false;
