@@ -31,7 +31,12 @@ class ProductsController extends Controller
     public function pageIndex()
     {
         //
-        $products = Product::orderBy('position')->orderBy('category_id')->addSelect(['categoryname' => Category::select('nombre')->whereColumn('category_id', 'categories.id')])->get();
+        $products = Product::orderBy('position')
+            ->orderBy('category_id')
+            ->addSelect(
+                ['categoryname' => Category::select('nombre')
+                    ->whereColumn('category_id', 'categories.id')]
+            )->get();
         return $products;
     }
 
@@ -51,7 +56,19 @@ class ProductsController extends Controller
     public function filteredByCategory($id)
     {
         //
-        $products = Product::orderBy('position', 'ASC')->where('category_id', $id)->where('estado_id', 1)->get();
+        if ($id > 0) {
+            $products = Product::orderBy('position', 'ASC')
+                ->where('category_id', $id)
+                ->where('estado_id', 1)
+                ->get();
+        } else {
+            $firstEnableCat = Category::first()->where("estado_id", 1)->orderBy("position", "ASC")->get();
+            $products = Product::where('products.estado_id', 1)
+                ->where("category_id", $firstEnableCat[0]->id)
+                ->orderBy('products.position', 'ASC')
+                ->get();
+        }
+
         return response()->json($products, 200);
     }
 
@@ -179,6 +196,14 @@ class ProductsController extends Controller
         if (!$request->ajax()) return redirect('/admin');
         //
         $entrada = $request->all();
+        if ($entrada["quantity"] == 0) {
+            $entrada["estado_id"] = 2;
+        } else {
+            $entrada["estado_id"] = 1;
+        }
+
+        $totalProducts = Product::count();
+        $this->swapPosition($totalProducts + 1, $entrada["position"]);
         if (Product::create($entrada)) {
             $this->builtFBCSV();
             return response()->json($entrada, 200);
@@ -225,6 +250,15 @@ class ProductsController extends Controller
         //
         $producto = Product::findOrFail($id);
         $entrada = $request->all();
+        if ($entrada["estado_id"] == 1) {
+            if ($entrada["quantity"] == 0) {
+                $entrada["estado_id"] = 2;
+            } else {
+                $entrada["estado_id"] = 1;
+            }
+        }
+        //swap position
+        $this->swapPosition($producto->position, $entrada["position"]);
         $producto->update($entrada);
         $this->builtFBCSV();
         return response()->json($producto, 200);
@@ -242,12 +276,29 @@ class ProductsController extends Controller
         $producto = Product::findOrFail($id);
         $producto->delete();
         $this->builtFBCSV();
+
+        //posición borrada
+        $posicion = $producto->position;
+        //cantidad a tomar productos
+        $cantidad = Product::count();
+
+        //contar productos desde posición eliminada
+        $productos = Product::orderBy("position", "ASC")->offset($posicion)->limit($cantidad)->get();
+        foreach ($productos as $value) {
+            Product::where('position', $value->position)->update(["position" => ($value->position - 1)]);
+        }
         return response()->json($producto, 200);
+    }
+
+    public function swapPosition($lastPosition, $swapPosition)
+    {
+        //get Product with current position to swapp
+        Product::where('position', $swapPosition)->update(["position" => $lastPosition]);
     }
 
     public function builtFBCSV()
     {
-        $productos = Product::all();
+        $productos = Product::where("estado_id", 1)->get();
         $ajustes = \App\Setting::first();
         //Añadir primera fila de encabezados al arreglo
         $encabezados = ["id", "title", "description", "availability", "inventory", "condition", "price", "link", "image_link", "brand"];
@@ -255,7 +306,7 @@ class ProductsController extends Controller
         if ($productos) {
             //crear arreglo de información que irá al csv
             foreach ($productos as $value) {
-                $csvProductsArray[] = [$value->id, ucfirst(htmlentities($value->nombre)), ucfirst(htmlentities($value->short_des)), "in stock", 100, "new", $value->price . " " . $ajustes->currency, URL::to("/") . '/producto/' . $value->id . "/", URL::to("/") . "/img/products/" . rawurlencode($value->image), "no-brand"];
+                $csvProductsArray[] = [$value->id, ucfirst(htmlentities($value->nombre)), ucfirst(htmlentities($value->short_des)), "in stock", $value->quantity, "new", $value->price . " " . $ajustes->currency, URL::to("/") . '/producto/' . $value->id . "/", URL::to("/") . "/img/products/" . rawurlencode($value->image), "no-brand"];
             }
             //ARCHIVO DELIMITADO POR PUNTO Y COMA (;)
             //variables básicas: Titulo del archivo para FB

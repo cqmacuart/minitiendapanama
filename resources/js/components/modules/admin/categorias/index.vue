@@ -200,7 +200,7 @@ export default {
       catSearch: "",
       //   Paginación
       pageNumber: 0,
-      perPage: 5,
+      perPage: 8,
     };
   },
   mounted() {

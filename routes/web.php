@@ -54,6 +54,7 @@ Route::resource('/orderStates', 'OrderStatesController');
 //Settings Routes
 Route::resource('/admin/settings', 'SettingController');
 Route::post('/admin/settings/saveFile', 'SettingController@saveFileImage');
+Route::post('/admin/settings/saveResponsiveFile', 'SettingController@saveResponsive');
 
 // Colors routes
 Route::get('/colors/count', 'ColorsController@count');

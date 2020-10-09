@@ -50,7 +50,7 @@
                   ></textarea>
                 </td>
               </tr>
-              <tr class="text-left">
+              <tr class="text-left" v-if="fillCategory.categoryId > 1">
                 <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
                   Posición:
                 </th>
@@ -61,7 +61,8 @@
                   <el-input-number
                     v-model="fillCategory.categoryPosition"
                     controls-position="right"
-                    :min="1"
+                    :min="2"
+                    :max="max"
                     size="mini"
                     :class="'col-12 p0'"
                   ></el-input-number>
@@ -167,6 +168,13 @@
               </tr>
               <tr>
                 <td colspan="2" class="text-right py-3">
+                  <router-link
+                    :to="{ name: 'admin.categorias' }"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <span class="fas fa-arrow-left"></span>
+                    Atras
+                  </router-link>
                   <button
                     class="btn btn-sm btn-primary"
                     @click.prevent="setCategory"
@@ -191,6 +199,7 @@ export default {
   data() {
     return {
       fillCategory: {
+        categoryId: "",
         categoryName: "",
         categoryDescription: "",
         categoryPosition: "",
@@ -205,6 +214,7 @@ export default {
       statusList: [],
       fullscreenLoading: false,
       errors: [],
+      max: 9999999,
     };
   },
   mounted() {
@@ -264,6 +274,7 @@ export default {
       axios
         .get("/categories")
         .then((response) => {
+          this.max = response.data.length;
           response.data.forEach((element) => {
             this.catList.push({
               value: element.id,
@@ -345,6 +356,7 @@ export default {
           },
         })
         .then((response) => {
+          this.fillCategory.categoryId = response.data.id;
           this.fillCategory.categoryName = response.data.nombre;
           this.fillCategory.categoryDescription = response.data.descripcion;
           this.fillCategory.categoryPosition = response.data.position;

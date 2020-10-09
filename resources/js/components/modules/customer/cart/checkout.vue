@@ -141,13 +141,21 @@
               </td>
             </tr>
           </table>
-          <button
+          <!-- <button
             class="btn btn-success btn-lg float-right mr-4 mb-4"
             @click.prevent="setOrder"
             v-loading.fullscreen.lock="fullscreenLoading"
           >
             Pedir
-          </button>
+          </button> -->
+
+          <a
+            :href="`https://secure.paguelofacil.com/LinkDeamon.cfm?CCLW=887FD17C0B3A9BB7D31AB539F17384837CC718BD08747A281D53124E53E167FBDBD56FD6B4B2A585A17D7EE00EED582424FCE4E515570D58E612EDE32F13ECF7&CMTN=1040.00&CDSC=Nro-de-orden-102258&RETURN_URL=${ruta}`"
+          >
+            <img
+              src="https://paguelofacil.com/src/Frontend/Themes/Paguelofacil/Core/Layout/images/es/PayButton.png"
+            />
+          </a>
         </div>
       </section>
     </div>

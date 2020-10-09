@@ -23,6 +23,7 @@
                   class="d-none d-sm-table-cell text-nowrap text-left align-bottom align-sm-middle border-top-0"
                   style="width: 1%"
                 >
+                  <b>(<span class="text-danger">*</span>)</b>
                   Nombre:
                 </th>
                 <td class="border-top-0">
@@ -39,6 +40,7 @@
                 <th
                   class="d-none d-sm-table-cell align-bottom align-sm-middle text-nowrap"
                 >
+                  <b>(<span class="text-danger">*</span>)</b>
                   Descripción Corta:
                 </th>
                 <td>
@@ -70,6 +72,7 @@
               </tr>
               <tr class="text-left">
                 <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  <b>(<span class="text-danger">*</span>)</b>
                   Categoría:
                 </th>
                 <td>
@@ -130,6 +133,28 @@
               </tr>
               <tr class="text-left">
                 <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  Inventario:
+                </th>
+                <td>
+                  <label for class="form-label d-sm-none text-muted ml-2"
+                    >Inventario:</label
+                  >
+                  <el-input-number
+                    v-model="fillProducts.productQuantity"
+                    :min="0"
+                    @blur="
+                      fillProducts.productQuantity === undefined
+                        ? fillProducts.productQuantity
+                        : 0
+                    "
+                    placeholder="Producto en Inventario"
+                    size="mini"
+                    :class="'col-12 p-0'"
+                  ></el-input-number>
+                </td>
+              </tr>
+              <tr class="text-left">
+                <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
                   Estado:
                 </th>
                 <td>
@@ -154,6 +179,7 @@
               </tr>
               <tr class="text-left">
                 <th class="d-none d-sm-table-cell align-bottom align-sm-middle">
+                  <b>(<span class="text-danger">*</span>)</b>
                   Imagen:
                 </th>
                 <td>
@@ -175,6 +201,13 @@
               </tr>
               <tr>
                 <td colspan="2" class="text-right py-3">
+                  <router-link
+                    :to="{ name: 'admin.productos' }"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <span class="fas fa-arrow-left"></span>
+                    Atras
+                  </router-link>
                   <button
                     class="btn btn-sm btn-primary"
                     @click.prevent="setProduct"
@@ -205,6 +238,7 @@ export default {
         productCategory: "",
         productPosition: "",
         productPrice: "",
+        productQuantity: "",
         productStatus: "",
         productImageName: "",
       },
@@ -213,7 +247,7 @@ export default {
       statusList: [],
       fullscreenLoading: false,
       errors: [],
-      max: 0,
+      max: 9999999,
     };
   },
   mounted() {
@@ -229,7 +263,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          this.max = response.data.length + 1;
+          this.max = response.data.length;
         })
         .catch((error) => {
           if (error.response.status == 401) {
@@ -291,6 +325,7 @@ export default {
           estado_id: this.fillProducts.productStatus,
           category_id: this.fillProducts.productCategory,
           position: this.fillProducts.productPosition,
+          quantity: this.fillProducts.productQuantity,
           price: this.fillProducts.productPrice
             .replaceAll(".", "")
             .replaceAll(",", "."),
@@ -353,6 +388,7 @@ export default {
           this.fillProducts.productLong = response.data.long_des;
           this.fillProducts.productCategory = response.data.category_id;
           this.fillProducts.productPosition = response.data.position;
+          this.fillProducts.productQuantity = response.data.quantity;
           this.fillProducts.productPrice = response.data.price.replace(
             ".",
             ","

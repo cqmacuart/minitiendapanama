@@ -104,6 +104,8 @@ class CategoriesController extends Controller
         if (!$request->ajax()) return redirect('/admin');
         $entrada = $request->all();
 
+        $totalCats = Category::count();
+        $this->swapPosition($totalCats + 1, $entrada["position"]);
         if (Category::create($entrada)) {
             return response()->json($entrada, 200);
         } else {
@@ -149,8 +151,15 @@ class CategoriesController extends Controller
     {
         $category = Category::findOrFail($id);
         $entrada = $request->all();
+        $this->swapPosition($category->position, $entrada["position"]);
         $category->update($entrada);
         return response()->json($category, 200);
+    }
+
+    public function swapPosition($lastPosition, $swapPosition)
+    {
+        //get Product with current position to swapp
+        Category::where('position', $swapPosition)->update(["position" => $lastPosition]);
     }
 
     /**
@@ -165,7 +174,18 @@ class CategoriesController extends Controller
         Product::where("category_id", $id)->update(["category_id" => 1]);
         $category = Category::findOrFail($id);
         $category->delete();
+
+
+        //posición borrada
+        $posicion = $category->position;
+        //cantidad a tomar productos
+        $cantidad = Category::count();
+
+        //contar productos desde posición eliminada
+        $categorias = Category::orderBy("position", "ASC")->offset($posicion - 1)->limit($cantidad)->get();
+        foreach ($categorias as $value) {
+            Category::where('position', $value->position)->update(["position" => ($value->position - 1)]);
+        }
         return response()->json($category, 200);
-        // return redirect('/admin/categories');
     }
 }

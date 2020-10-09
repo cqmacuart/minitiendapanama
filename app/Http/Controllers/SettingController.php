@@ -22,7 +22,6 @@ class SettingController extends Controller
     {
         //
         $settings = Setting::findOrFail(1);
-
         return response()->json($settings, 200);
     }
 
@@ -34,16 +33,23 @@ class SettingController extends Controller
 
     public function saveFileImage(Request $request)
     {
-        // $file = $request->file;
-        // $fileName = $file->getClientOriginalName();
-        // $serverName = $random . '_' . $file->getClientOriginalName();
-
         if ($archivo = $request->file("file")) {
             $nombre = $archivo->getClientOriginalName();
             $archivo->move('img/settings', $nombre);
         }
         return $nombre;
     }
+
+    public function saveResponsive(Request $request)
+    {
+        if ($archivo = $request->file("file")) {
+            $archivo->move('images/icons/', $request->text);
+            return response()->json(200);
+        } else {
+            return response()->json(204);
+        }
+    }
+
     public function create()
     {
         //
@@ -113,7 +119,7 @@ class SettingController extends Controller
 
     public function builtFBCSV()
     {
-        $productos = \App\Product::all();
+        $productos = \App\Product::where("estado_id", 1)->get();
         $ajustes = Setting::first();
         //Añadir primera fila de encabezados al arreglo
         $encabezados = ["id", "title", "description", "availability", "inventory", "condition", "price", "link", "image_link", "brand"];

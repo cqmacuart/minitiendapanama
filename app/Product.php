@@ -11,6 +11,7 @@ class Product extends Model
         "nombre",
         "short_des",
         "long_des",
+        "quantity",
         "estado_id",
         "category_id",
         "position",

@@ -485,7 +485,7 @@ export default {
         });
     },
     getCurrentCategory: function () {
-      this.categoryId = this.id ? this.id : 1;
+      this.categoryId = this.id ? this.id : -1;
       if (this.id) {
         axios
           .get(`/categories/${this.categoryId}`)
@@ -501,7 +501,7 @@ export default {
           });
       } else {
         axios
-          .get("/categories")
+          .get("/categories/page")
           .then((response) => {
             this.currentCat = response.data;
             this.categoryName = response.data[0].nombre;

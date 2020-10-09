@@ -68,6 +68,7 @@
                     v-model="fillCategory.categoryPosition"
                     controls-position="right"
                     :min="1"
+                    :max="max"
                     size="mini"
                     :class="'col-12 p0'"
                   ></el-input-number>
@@ -173,6 +174,13 @@
               </tr>
               <tr>
                 <td colspan="2" class="text-right py-3">
+                  <router-link
+                    :to="{ name: 'admin.categorias' }"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <span class="fas fa-arrow-left"></span>
+                    Atras
+                  </router-link>
                   <button
                     class="btn btn-sm btn-primary"
                     @click.prevent="setCategory"
@@ -210,6 +218,7 @@ export default {
       statusList: [],
       fullscreenLoading: false,
       errors: [],
+      max: 0,
     };
   },
   mounted() {
@@ -268,6 +277,8 @@ export default {
       axios
         .get("/categories")
         .then((response) => {
+          this.fillCategory.categoryPosition = response.data.length + 1;
+          this.max = response.data.length + 1;
           response.data.forEach((element) => {
             this.catList.push({
               value: element.id,

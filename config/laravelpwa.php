@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'name' => 'MobileStore',
+    'name' => env('APP_NAME', 'MobileStore'),
     'manifest' => [
         'name' => env('APP_NAME', 'MobileStore'),
-        'short_name' => 'MbS',
+        'short_name' => env('APP_SHORT', 'mst'),
         'start_url' => '/',
-        'background_color' => '#ffffff',
-        'theme_color' => '#000000',
+        'background_color' => env('APP_BGC', '#ffffff'),
+        'theme_color' => env('APP_COLOR', '#000000'),
         'display' => 'standalone',
         'orientation' => 'any',
-        'status_bar' => 'black',
+        'status_bar' => env('APP_COLOR', '#000000'),
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',
