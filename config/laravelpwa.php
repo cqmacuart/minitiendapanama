@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'name' => env('APP_NAME', 'MobileStore'),
+    'name' => env('APP_NAME', 'MiTiendaPwa'),
     'manifest' => [
-        'name' => env('APP_NAME', 'MobileStore'),
-        'short_name' => env('APP_SHORT', 'mst'),
+        'name' => env('APP_NAME', 'MiTiendaPwa'),
+        'short_name' => env('APP_SHORT', 'mtp'), //inamovible
         'start_url' => '/',
-        'background_color' => env('APP_BGC', '#ffffff'),
-        'theme_color' => env('APP_COLOR', '#000000'),
+        'background_color' => env('APP_BGC', '#ffffff'), //inamovible
+        'theme_color' => '#000000', //editable
         'display' => 'standalone',
         'orientation' => 'any',
-        'status_bar' => env('APP_COLOR', '#000000'),
+        'status_bar' => '#000000', //inamovible
         'icons' => [
             '72x72' => [
                 'path' => '/images/icons/icon-72x72.png',

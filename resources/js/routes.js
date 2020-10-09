@@ -58,6 +58,17 @@ export default new Router({
                 requiresAuth: true
             }
         },
+        // Epayco Response
+        {
+            path: "/epayco/res/:ref_payco?",
+            name: "epayco.response",
+            props: true,
+            component: require("./components/modules/payment/epayco/response")
+                .default,
+            meta: {
+                requiresAuth: true
+            }
+        },
         // Login Page
         {
             path: "/admin/login",

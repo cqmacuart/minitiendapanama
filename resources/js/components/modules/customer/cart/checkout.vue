@@ -149,13 +149,22 @@
             Pedir
           </button> -->
 
-          <a
-            :href="`https://secure.paguelofacil.com/LinkDeamon.cfm?CCLW=887FD17C0B3A9BB7D31AB539F17384837CC718BD08747A281D53124E53E167FBDBD56FD6B4B2A585A17D7EE00EED582424FCE4E515570D58E612EDE32F13ECF7&CMTN=1040.00&CDSC=Nro-de-orden-102258&RETURN_URL=${ruta}`"
-          >
-            <img
-              src="https://paguelofacil.com/src/Frontend/Themes/Paguelofacil/Core/Layout/images/es/PayButton.png"
-            />
-          </a>
+          <form>
+            <script
+              type="application/javascript"
+              src="https://checkout.epayco.co/checkout.js"
+              class="epayco-button"
+              data-epayco-key="1eb75dc01d7b1d15386c17d09b176baa"
+              :data-epayco-amount="totalAmount"
+              data-epayco-name="Vestido Mujer Primavera"
+              data-epayco-description="Vestido Mujer Primavera"
+              data-epayco-currency="cop"
+              data-epayco-country="co"
+              data-epayco-test="true"
+              data-epayco-external="true"
+              :data-epayco-response="`${ruta}/epayco/res`"
+            ></script>
+          </form>
         </div>
       </section>
     </div>
