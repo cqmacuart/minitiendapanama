@@ -123,10 +123,10 @@ export default new Router({
         },
         // Admin Productos
         {
-            path: "/admin/productos/:producto?/:categoria?/:estado?",
-            name: "admin.productos",
+            path: "/admin/productos/edit/:id",
+            name: "admin.productos.edit",
             props: true,
-            component: require("./components/modules/admin/productos/index")
+            component: require("./components/modules/admin/productos/edit")
                 .default,
             meta: {
                 requiresAuthAdmin: true
@@ -142,10 +142,10 @@ export default new Router({
             }
         },
         {
-            path: "/admin/productos/:id",
-            name: "admin.productos.edit",
+            path: "/admin/productos/:producto?/:categoria?/:estado?",
+            name: "admin.productos",
             props: true,
-            component: require("./components/modules/admin/productos/edit")
+            component: require("./components/modules/admin/productos/index")
                 .default,
             meta: {
                 requiresAuthAdmin: true

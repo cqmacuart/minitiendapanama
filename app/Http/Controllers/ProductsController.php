@@ -298,7 +298,7 @@ class ProductsController extends Controller
 
     public function builtFBCSV()
     {
-        $productos = Product::all();
+        $productos = Product::where("estado_id", 1)->get();
         $ajustes = \App\Setting::first();
         //Añadir primera fila de encabezados al arreglo
         $encabezados = ["id", "title", "description", "availability", "inventory", "condition", "price", "link", "image_link", "brand"];

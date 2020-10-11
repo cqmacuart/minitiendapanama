@@ -208,7 +208,10 @@
                     <span class="fas fa-arrow-left"></span>
                     Atras
                   </router-link>
-                  <button class="btn btn-sm btn-primary" @click="setProduct">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click.prevent="setProduct"
+                  >
                     <span class="fas fa-check"></span>
                     Actualizar
                   </button>
