@@ -76,7 +76,7 @@ export default {
               this.$router.push({ name: "admin.login" });
             });
           } else {
-            console.log("correo no existe");
+            this.$toastr.info("Ese correo electrónico no se encuentra registrado.");
           }
         });
     },
