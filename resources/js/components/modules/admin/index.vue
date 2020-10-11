@@ -102,19 +102,16 @@ export default {
     getCategoryInfo() {
       axios.get("/categories/info").then((response) => {
         this.categoryInfo = response.data;
-        // console.log(this.categoryInfo);
       });
     },
     getProductInfo() {
       axios.get("/products/info").then((response) => {
         this.productInfo = response.data;
-        // console.log(this.productInfo);
       });
     },
     getOrderInfo() {
       axios.get("/orders/info").then((response) => {
         this.orderInfo = response.data;
-        // console.log(this.orderInfo);
       });
     },
     //   Cargar Categorías Guardadas

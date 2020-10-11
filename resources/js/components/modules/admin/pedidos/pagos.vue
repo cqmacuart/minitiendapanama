@@ -228,7 +228,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status == 401) {
-            console.log(error.response.status);
+            this.$toastr.error("Error " + error.response.status);
           }
         });
     },

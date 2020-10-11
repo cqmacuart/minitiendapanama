@@ -397,7 +397,6 @@ export default {
         // hashtags: "vuejs,vite,javascript",
         // twitterUser: "youyuxi",
       };
-      console.log(this.sharing);
     },
     //   Carts Functions >>>>>
     addto(productId) {
@@ -480,7 +479,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status == 401) {
-            // console.log(error.response.status);
+            this.$toastr.error("Error " + error.response.status);
           }
         });
     },
@@ -496,7 +495,7 @@ export default {
           })
           .catch((error) => {
             if (error.response.status == 401) {
-              //   console.log(error.response.status);
+
             }
           });
       } else {
@@ -509,7 +508,7 @@ export default {
           })
           .catch((error) => {
             if (error.response.status == 401) {
-              //   console.log(error.response.status);
+
             }
           });
       }

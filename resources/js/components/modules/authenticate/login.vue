@@ -85,7 +85,6 @@ export default {
           password: this.fillLogin.password,
         })
         .then((response) => {
-          //   console.log(response.data);
           if (response.data.code == 401) {
             this.loginFailed();
           }

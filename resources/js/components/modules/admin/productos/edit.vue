@@ -267,7 +267,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status == 401) {
-            console.log("Ha ocurrido un error");
+            this.$toastr.error("Error " + error.response.status);
           }
         });
     },

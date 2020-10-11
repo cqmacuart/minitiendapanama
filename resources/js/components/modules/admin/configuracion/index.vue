@@ -1275,9 +1275,6 @@ export default {
         .catch((error) => {
           //no estas autenticado
           if (error.response.status == 401) {
-            // this.app.Toastr.error("Caduco su Sesión");
-            // localStorage.removeItem("user-authenticate");
-            // this.$router.push("/login");
             this.$toastr.error("Error " + error.response.status);
           }
         });
@@ -1496,7 +1493,6 @@ export default {
     },
     getEpayco() {
       axios.get(`/admin/epayco`).then((response) => {
-        console.log(response);
         if (response.status == 200) {
           this.epayco_params.epayco_param_1 = response.data[1].value;
           this.epayco_params.epayco_param_2 = response.data[2].value;

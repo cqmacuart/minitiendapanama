@@ -281,10 +281,7 @@ export default {
         .catch((error) => {
           //no estas autenticado
           if (error.response.status == 401) {
-            // this.app.Toastr.error("Caduco su Sesión");
-            // localStorage.removeItem("user-authenticate");
-            // this.$router.push("/login");
-            console.log(error.response.status);
+            this.$toastr.error("Error " + error.response.status);
           }
         });
     },
@@ -303,10 +300,7 @@ export default {
         .catch((error) => {
           //no estas autenticado
           if (error.response.status == 401) {
-            // this.app.Toastr.error("Caduco su Sesión");
-            // localStorage.removeItem("user-authenticate");
-            // this.$router.push("/login");
-            console.log(error.response.status);
+            this.$toastr.error("Error " + error.response.status);
           }
         });
     },
@@ -380,7 +374,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status == 401) {
-            console.log("Ha ocurrido un error");
+            this.$toastr.error("Error " + error.response.status);
           }
         });
     },
