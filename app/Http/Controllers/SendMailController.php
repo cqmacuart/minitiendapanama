@@ -55,4 +55,20 @@ class SendMailController extends Controller
             return response()->json(204);
         }
     }
+
+    public function remember(Request $request)
+    {
+        $this->correo = $request->correo;
+        $info = [
+            "mensaje" => "Se ha generado una nueva contraseña para que pueda ingresar al sistema. Se recomienda cambiarla luego de ingresar.",
+            "pass" => $request->pass,
+        ];
+        $datos = [
+            "titulo" => "Estimado usuario",
+            "contenido" => $info
+        ];
+        Mail::send("emails.remember", $datos, function ($mensaje) {
+            $mensaje->to($this->correo)->subject("NUEVA CONTRASEÑA !!!");
+        });
+    }
 }

@@ -13,14 +13,24 @@
           alt="LOGO"
           v-if="fillSetting.image"
         />
-        <img v-else :src="ruta+'/img/mobilestore_logo.jpg'" width="50px" alt="MobileStore" />
-        <a class="navbar-brand" href="/admin/login">{{fillSetting.storename}}</a>
+        <img
+          v-else
+          :src="ruta + '/img/mobilestore_logo.jpg'"
+          width="50px"
+          :alt="`${fillSetting.storename}`"
+        />
+        <a class="navbar-brand" href="/admin/login">{{
+          fillSetting.storename
+        }}</a>
       </div>
     </nav>
     <!-- Contenido -->
     <div class="content-wrapper app-content-box">
       <transition name="slide-fade" mode="out-in">
-        <router-view :ruta="ruta" :currency="fillSetting.currency"></router-view>
+        <router-view
+          :ruta="ruta"
+          :currency="fillSetting.currency"
+        ></router-view>
       </transition>
     </div>
     <!-- Footer -->

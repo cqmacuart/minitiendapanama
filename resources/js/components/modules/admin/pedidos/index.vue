@@ -105,6 +105,10 @@
                   <span v-text="order.dataClient[0].comentario"></span>
                 </p>
                 <p class="text-muted m-0">
+                  <span class="font-weight-bolder">Transacción:</span>
+                  <span v-text="order.transaccion"></span>
+                </p>
+                <p class="text-muted m-0">
                   <span class="font-weight-bolder"
                     >¿Acepta que le notifiquen?:</span
                   >
@@ -308,6 +312,7 @@ export default {
               number: element.pedido,
               link: element.link,
               estado: element.estado,
+              transaccion: element.transaccion,
               dataClient: [
                 {
                   nombre: element.nombre,

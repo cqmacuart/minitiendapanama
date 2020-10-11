@@ -19,6 +19,7 @@ Route::get('/offline', function () {
 
 // offline routes
 Route::post('/sendingmail/nuevo', "SendMailController@nuevoPedido");
+Route::post('/sendingmail/remember', "SendMailController@remember");
 
 // categories routes
 Route::get('/categories/info', 'CategoriesController@info');
@@ -51,14 +52,24 @@ Route::resource('/status', 'StatusController');
 // OrderStatus routes
 Route::resource('/orderStates', 'OrderStatesController');
 
+// //Transacciones Routes
+Route::resource('/admin/pagos', 'TransactionController');
+Route::get('/admin/pagos/filtered/{filter}', 'TransactionController@filter');
+
 //Settings Routes
-Route::resource('/admin/settings', 'SettingController');
 Route::post('/admin/settings/saveFile', 'SettingController@saveFileImage');
 Route::post('/admin/settings/saveResponsiveFile', 'SettingController@saveResponsive');
+Route::resource('/admin/settings', 'SettingController');
+
 
 // Colors routes
 Route::get('/colors/count', 'ColorsController@count');
 Route::resource('/colors', 'ColorsController');
+
+// Users routes
+Route::get('/admin/users/remember', 'UsersController@remember');
+Route::resource('/admin/users', 'UsersController');
+
 
 // Cart routes
 Route::get('/cart/step', 'CartController@index')->name('cart');
@@ -73,8 +84,11 @@ Route::get('/cart/isincart/{id}', 'CartController@isInCart')->name('cart.incart'
 Route::post('/authenticate/login', 'Auth\LoginController@login');
 Route::post('/authenticate/logout', 'Auth\LoginController@logout');
 
-// Auth::routes();
-// Route::get('/home', 'HomeController@index')->name('home');
+
+
+// PASARELAS DE PAGO
+// EPAYCO
+Route::resource('/admin/epayco', 'EpaycoController');
 
 Route::get('/admin/{option?}', function () {
     return view('admin');

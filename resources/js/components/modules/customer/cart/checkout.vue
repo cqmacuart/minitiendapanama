@@ -1,8 +1,13 @@
 <template>
   <div v-if="ok" :style="customStyle">
     <!-- <section class="col-12 p-0 m-0 text-center">
-      <img :src="`/img/categories/${categoryImage}`" alt class="img-fluid" v-if="categoryImage" />
-    </section>-->
+      <img
+        :src="`/img/categories/${categoryImage}`"
+        alt
+        class="img-fluid"
+        v-if="categoryImage"
+      />
+    </section> -->
     <div class="col-12 pt-2 pb-1 text-center border-bottom">
       <h5 class="font-weight-bolder customer-title custom-checkout-style">
         Confirmar Pedido
@@ -13,11 +18,19 @@
       <section class="container-md p-0 p-sm-3 col-12 col-sm-6">
         <div class="col-12 p-0 bg-white h-100">
           <table class="table table-bordered m-0">
+            <caption>
+              <small
+                >Complete los campos obligatorios (<span class="text-danger"
+                  >*</span
+                >) para realizar su pedido.</small
+              >
+            </caption>
             <tr>
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
                 style="width: 1%"
               >
+                <span>*</span>
                 Nombre
               </th>
               <td>
@@ -33,6 +46,7 @@
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
               >
+                <span>*</span>
                 Ciudad
               </th>
               <td>
@@ -48,6 +62,7 @@
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
               >
+                <span>*</span>
                 Dirección
               </th>
               <td>
@@ -63,6 +78,7 @@
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
               >
+                <span>*</span>
                 Celular
               </th>
               <td>
@@ -76,6 +92,7 @@
               <th
                 class="bg-secondary font-weight-bolder text-white align-middle"
               >
+                <span>*</span>
                 Email
               </th>
               <td>
@@ -94,7 +111,7 @@
               </th>
               <td>
                 <el-input
-                  placeholder="Comentarios adicionales"
+                  placeholder="Comentarios adicionales (opcional)"
                   v-model="comentario"
                   maxlength="120"
                   show-word-limit
@@ -129,7 +146,9 @@
             <tr>
               <th class="totalize text-black" style="width: 1%">Artículos</th>
               <td class="text-right">
-                <label class="totalize" for>{{ totalItems }} Artículo(s)</label>
+                <router-link :to="{ name: 'cart' }" class="totalize"
+                  >{{ totalItems }} Artículo(s)</router-link
+                >
               </td>
             </tr>
             <tr>
@@ -149,22 +168,27 @@
             Pedir
           </button> -->
 
-          <form>
-            <script
-              type="application/javascript"
-              src="https://checkout.epayco.co/checkout.js"
-              class="epayco-button"
-              data-epayco-key="1eb75dc01d7b1d15386c17d09b176baa"
-              :data-epayco-amount="totalAmount"
-              data-epayco-name="Vestido Mujer Primavera"
-              data-epayco-description="Vestido Mujer Primavera"
-              data-epayco-currency="cop"
-              data-epayco-country="co"
-              data-epayco-test="true"
-              data-epayco-external="true"
-              :data-epayco-response="`${ruta}/epayco/res`"
-            ></script>
-          </form>
+          <div
+            v-if="epayco_params.epayco_existed && epayco_params.epayco_param_5"
+          >
+            <div v-if="validate()">
+              <div class="text-right">
+                <img
+                  src="/img/payment/epayco/epayco.png"
+                  @click="epaycoform()"
+                  style="cursor: pointer"
+                />
+              </div>
+            </div>
+            <div v-else class="text-right">
+              <img src="/img/payment/epayco/epayco_gris.png" />
+            </div>
+          </div>
+          <div v-else>
+            <small class="text-danger"
+              >No hay ningun medio habilitado para efectuar pagos</small
+            >
+          </div>
         </div>
       </section>
     </div>
@@ -203,6 +227,16 @@ export default {
         pIcColor: "",
       },
       isColors: null,
+      //   Pasarelas de pago
+      epayco_params: {
+        epayco_param_1: "",
+        epayco_param_2: "",
+        epayco_param_3: "",
+        epayco_param_4: "",
+        epayco_param_5: false,
+        epayco_existed: false,
+        epayco_test: false,
+      },
     };
   },
   mounted() {
@@ -210,8 +244,14 @@ export default {
     this.getCartTotalAmount();
     this.getAllSettings();
     this.getColorCount();
+    this.getEpayco();
   },
   computed: {
+    csrf() {
+      return document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    },
     customStyle() {
       //   sb = SHOPPING BAG
       // hm = HOME
@@ -250,66 +290,7 @@ export default {
         });
       });
     },
-    setOrder: function () {
-      this.fullscreenLoading = true;
-      if (this.validate()) {
-        const params = {
-          nombre: this.nombre,
-          ciudad: this.ciudad,
-          direccion: this.direccion,
-          celular: this.celular,
-          email: this.email,
-          comentario: this.comentario,
-          notificacion: this.notificacion,
-        };
-        axios.post("/orders", params).then((response) => {
-          if (response.status == 200) {
-            //salvar el token
-            window.open(
-              `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${response.data.link}`,
-              `_blank`
-            );
-            let token = response.data.serialize;
-            const mailparams = {
-              pedido: response.data.pedido,
-              enlace: response.data.link,
-            };
-            //establecer parametros de envío de MAIL
-            axios.post("/sendingmail/nuevo", mailparams).then((response) => {
-              if (sessionStorage.getItem("currCustomer")) {
-                sessionStorage.removeItem("currCustomer");
-              }
-              this.$router.push({
-                name: "mipedido",
-                params: { serial: token },
-              });
-              this.fullscreenLoading = false;
-            });
-          }
-        });
-      } else {
-        this.fullscreenLoading = false;
-        this.errors.forEach((element) => {
-          this.$toastr.error(element.error, "!Oops", {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-left",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "3000",
-            extendedTimeOut: "3000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut",
-          });
-        });
-      }
-    },
+
     getCartTotalItems: function () {
       this.totalItems = 0;
       axios.get(`/cartCount`).then((response) => {
@@ -342,15 +323,15 @@ export default {
         .catch((error) => {
           //no estas autenticado
           if (error.response.status == 401) {
-            // this.app.Toastr.error("Caduco su Sesión");
-            // localStorage.removeItem("user-authenticate");
-            // this.$router.push("/login");
             console.log(error.response.status);
           }
         });
     },
     validate() {
       let pattern = new RegExp(/^[^a-zA-Z\W][0-9]*\d$/);
+      let mailPattern = new RegExp(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      );
       this.errors = [];
       let check = true;
       if (this.nombre.length == 0) {
@@ -377,7 +358,68 @@ export default {
         this.errors.push({ error: "El correo es un campo requerido" });
         check = false;
       }
+      if (!mailPattern.test(this.email)) {
+        this.errors.push({
+          error: "El formato del correo electrónico no es válido",
+        });
+        check = false;
+      }
       return check;
+    },
+    epaycoform() {
+      var handler = ePayco.checkout.configure({
+        key: `${this.epayco_params.epayco_param_3}`,
+        test: this.epayco_params.epayco_test,
+      });
+
+      var data = {
+        //Parametros compra (obligatorio)
+        name: this.fillSetting.storename,
+        description: `Pedido en ${this.fillSetting.storename}`,
+        currency: `${this.fillSetting.currency}`,
+        amount: this.totalAmount,
+        tax_base: "0",
+        tax: "0",
+        country: "co",
+        lang: "es",
+
+        //Onpage="false" - Standard="true"
+        external: "false",
+
+        //Atributos opcionales
+        extra1: `${this.nombre}`,
+        extra2: `${this.ciudad}`,
+        extra3: `${this.direccion}`,
+        extra4: `${this.celular}`,
+        extra5: `${this.email}`,
+        extra6: `${this.comentario}`,
+        extra7: `${this.notificacion}`,
+        response: `${this.ruta}/epayco/response`,
+
+        //Atributos cliente
+        name_billing: `${this.nombre}`,
+        email_billing: `${this.email}`,
+        address_billing: `${this.direccion}`,
+        mobilephone_billing: `${this.celular}`,
+      };
+      handler.open(data);
+    },
+    getEpayco() {
+      axios.get(`/admin/epayco`).then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          this.epayco_params.epayco_param_1 = response.data[1].value;
+          this.epayco_params.epayco_param_2 = response.data[2].value;
+          this.epayco_params.epayco_param_3 = response.data[3].value;
+          this.epayco_params.epayco_param_4 = response.data[4].value;
+          this.epayco_params.epayco_param_5 =
+            response.data[0].value == 1 ? true : false;
+          this.epayco_params.epayco_test =
+            response.data[5].value == 1 ? false : true;
+          this.epayco_params.epayco_existed = true;
+        }
+      });
+      this.fullscreenLoading = false;
     },
   },
 };

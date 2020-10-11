@@ -9,10 +9,10 @@ use App\Role;
 class UsersController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware("EsAdmin");
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware("EsAdmin");
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -21,9 +21,22 @@ class UsersController extends Controller
     public function index()
     {
         //
-        $users = User::all();
-        $setting = \App\Setting::findOrFail(1);
-        return view("admin.users.index", compact('users', "setting"));
+        $users = User::addSelect(['role' => Role::select('nombre')->whereColumn('role_id', 'roles.id')])->get();
+
+        return response()->json($users, 200);
+    }
+
+    // verificar que correo existe para recuperación de contraseña
+    public function remember(Request $request)
+    {
+        $usuario = User::where("email", $request->correo)->count();
+        if ($usuario > 0) {
+            $nuevopass = substr(md5(rand()), 0, 5);
+            User::first()->where("email", $request->correo)->update(["password" => bcrypt($nuevopass)]);
+            return response()->json($nuevopass, 200);
+        } else {
+            return response()->json([], 204);
+        }
     }
 
     /**
@@ -57,6 +70,8 @@ class UsersController extends Controller
         return redirect('/admin/users');
     }
 
+
+
     /**
      * Display the specified resource.
      *
@@ -78,12 +93,7 @@ class UsersController extends Controller
     {
         //
         $user = User::findOrFail($id);
-        $setting = \App\Setting::findOrFail(1);
-        $roles = Role::all();
-        foreach ($roles as $rol) {
-            $options[$rol->id] = $rol->nombre;
-        }
-        return view('/admin/users/edit', compact("user", "options", 'setting'));
+        return response()->json($user, 200);
     }
 
     /**
@@ -98,8 +108,9 @@ class UsersController extends Controller
         //
         $user = User::findOrFail($id);
         $entrada = $request->all();
+        $entrada["password"] = bcrypt($request->password);
         $user->update($entrada);
-        return redirect('/admin/users');
+        return response()->json($user, 200);
     }
 
     /**

@@ -60,7 +60,7 @@ export default new Router({
         },
         // Epayco Response
         {
-            path: "/epayco/res/:ref_payco?",
+            path: "/epayco/response/:ref_payco?",
             name: "epayco.response",
             props: true,
             component: require("./components/modules/payment/epayco/response")
@@ -74,6 +74,12 @@ export default new Router({
             path: "/admin/login",
             name: "admin.login",
             component: require("./components/modules/authenticate/login")
+                .default
+        },
+        {
+            path: "/admin/remember",
+            name: "admin.remember",
+            component: require("./components/modules/authenticate/remember")
                 .default
         },
         // Admin Page
@@ -155,6 +161,16 @@ export default new Router({
                 requiresAuthAdmin: true
             }
         },
+        // Admin Pedidos
+        {
+            path: "/admin/transacciones",
+            name: "admin.transacciones",
+            component: require("./components/modules/admin/pedidos/pagos")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
         // Admin Settings
         {
             path: "/admin/configuracion",
@@ -164,7 +180,27 @@ export default new Router({
             meta: {
                 requiresAuthAdmin: true
             }
-        }
+        },
+        // Admin Usuarios
+        {
+            path: "/admin/usuarios",
+            name: "admin.usuarios",
+            component: require("./components/modules/admin/usuario/index")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
+        {
+            path: "/admin/usuarios/:id",
+            name: "admin.usuarios.edit",
+            props: true,
+            component: require("./components/modules/admin/usuario/edit")
+                .default,
+            meta: {
+                requiresAuthAdmin: true
+            }
+        },
     ],
     mode: "history",
     linkExactActiveClass: "item-active"

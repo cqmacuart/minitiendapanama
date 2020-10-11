@@ -49,8 +49,18 @@ export default {
         },
         { enlace: "pedidos", label: "Pedidos", class: "btn-outline-secondary" },
         {
+          enlace: "transacciones",
+          label: "Pagos",
+          class: "btn-outline-secondary",
+        },
+        {
           enlace: "configuracion",
           label: "Ajustes",
+          class: "btn-outline-secondary",
+        },
+        {
+          enlace: "usuarios",
+          label: "Usuarios",
           class: "btn-outline-secondary",
         },
       ],

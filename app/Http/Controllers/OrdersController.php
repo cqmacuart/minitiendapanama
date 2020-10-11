@@ -96,14 +96,26 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        $peticion = $request->all();
+
+        // Datos de Cliente.
+        $customerData = [
+            "order_pedido" => NULL,
+            "nombre" => $peticion["nombre"],
+            "ciudad" => $peticion["ciudad"],
+            "direccion" => $peticion["direccion"],
+            "celular" => $peticion["celular"],
+            "email" => $peticion["email"],
+            "comentario" => $peticion["comentario"],
+            "notificacion" => NULL,
+        ];
+
         $count = Order::all();
         $sequence = str_pad(count($count) + 1, 10, '0', STR_PAD_LEFT);
         $pedido = 'ORD' . $sequence;
-        $customer = $request->all();
-        $customer['order_pedido'] = $pedido;
-        $customer["notificacion"] = $customer["notificacion"] ? 1 : 0;
-        Customer::create($customer);
+        $customerData['order_pedido'] = $pedido;
+        $customerData["notificacion"] = $peticion["notificacion"] ? 1 : 0;
+        Customer::create($customerData);
         $ordercustomer = Customer::where('order_pedido', $pedido)->get();
         $unique = uniqid();
         $order = [
@@ -112,6 +124,7 @@ class OrdersController extends Controller
             "orderstate_id" => 1,
             "amount" => \Cart::getTotal(),
             "link" => url('/mipedido') . '/' . $unique,
+            "transaccion" => $peticion["referencia"],
             "serialize" => $unique
         ];
         // var_dump($order["pedido"]);
@@ -132,8 +145,29 @@ class OrdersController extends Controller
             // dd($details);
             OrderDetail::create($details);
         }
-
         \Cart::clear();
+
+        // ESTABLECER TRANSACCION DE LA ORDEN
+        $transanccionData = [
+            "id_transaccion" => $peticion["referencia"],
+            "tipo" => $peticion["type_payment"],
+            "status" => $peticion["cod_transaction_state"],
+            "error" => $peticion["errorcode"],
+            "respuesta_text" => $peticion["motivo"],
+            "customer_id" => $ordercustomer[0]->id,
+            "customer_name" => $ordercustomer[0]->nombre,
+            "cliente" => $peticion["cust_id_cliente"],
+            "factura" => $peticion["id_factura"],
+            "franquicia" => $peticion["franchise"],
+            "banco" => $peticion["banco"],
+            "tarjeta" => $peticion["cardnumber"],
+            "moneda" => $peticion["moneda"],
+            "monto" => $peticion["total"],
+            "ip" => $peticion["customer_ip"],
+            "fecha_transaccion" => $peticion["fecha"],
+        ];
+
+        \App\Transaction::create($transanccionData);
         // \Cart::session(auth()->id())->clear();
         return response()->json($order, 200);
     }

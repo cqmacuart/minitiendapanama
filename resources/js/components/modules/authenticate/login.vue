@@ -38,11 +38,18 @@
         </div>
         <div class="card-footer">
           <button
-            class="btn btn-primary float-right"
+            class="btn btn-primary btn-sm ml-3 float-right"
             @click.prevent="login"
             v-loading.fullscreen.lock="fullscreenLoading"
           >
             Login
+          </button>
+          <button
+            class="btn btn-danger btn-sm ml-3 float-right text-nowrap"
+            @click.prevent="remember"
+            v-loading.fullscreen.lock="fullscreenLoading"
+          >
+            Olvidé la contraseña
           </button>
         </div>
       </div>
@@ -125,6 +132,10 @@ export default {
       this.$router.push({ name: "admin.home" });
       location.reload();
       //   window.location.href = "admin";
+    },
+    remember() {
+      this.fullscreenLoading = true;
+      this.$router.push({ name: "admin.remember" });
     },
   },
 };
