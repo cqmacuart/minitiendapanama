@@ -145,7 +145,7 @@ class OrdersController extends Controller
             // dd($details);
             OrderDetail::create($details);
         }
-        \Cart::clear();
+
 
         // ESTABLECER TRANSACCION DE LA ORDEN
         $transanccionData = [
@@ -168,7 +168,8 @@ class OrdersController extends Controller
         ];
 
         \App\Transaction::create($transanccionData);
-        // \Cart::session(auth()->id())->clear();
+        \Cart::clear();
+        \Cart::session(auth()->id())->clear();
         return response()->json($order, 200);
     }
 

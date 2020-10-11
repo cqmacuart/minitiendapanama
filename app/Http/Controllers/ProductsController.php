@@ -283,7 +283,7 @@ class ProductsController extends Controller
         $cantidad = Product::count();
 
         //contar productos desde posición eliminada
-        $productos = Product::orderBy("position", "ASC")->offset($posicion)->limit($cantidad)->get();
+        $productos = Product::orderBy("position", "ASC")->offset($posicion - 1)->limit($cantidad)->get();
         foreach ($productos as $value) {
             Product::where('position', $value->position)->update(["position" => ($value->position - 1)]);
         }

@@ -101,7 +101,7 @@
                   />
                 </div>
               </td>
-              <td class="align-middle">
+              <td class="align-middle text-wrap">
                 <!-- <span class="fas fa-eye"></span> -->
                 {{ prod.label }}
               </td>
