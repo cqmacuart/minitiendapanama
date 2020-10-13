@@ -15,7 +15,7 @@
         />
         <img
           v-else
-          :src="ruta + '/img/mobilestore_logo.jpg'"
+          :src="ruta + '/img/settings/mobilestore_logo.jpg'"
           width="50px"
           :alt="`${fillSetting.storename}`"
         />

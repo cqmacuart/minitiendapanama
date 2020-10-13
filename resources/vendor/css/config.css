@@ -67,9 +67,9 @@ main {
     text-decoration: none;
 }
 
-/* .admin-title {
+.admin-title {
     font-family: "Sacramento";
-} */
+}
 
 /* templates transition effects */
 .slide-fade-enter {
