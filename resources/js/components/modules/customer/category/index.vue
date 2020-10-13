@@ -400,6 +400,7 @@ export default {
     },
     //   Carts Functions >>>>>
     addto(productId) {
+      this.fullscreenLoading = true;
       let me = this;
       axios.get(`/addToCart/${productId}`).then((response) => {
         this.cartCount = response.data.count;
@@ -407,17 +408,21 @@ export default {
         const producto = this.productList.find(
           (producto) => producto.value == response.data.id
         );
-        if (producto) {
-          this.productList.map(function (x, y) {
-            if (producto.value == x.value) {
-              me.productList[y].flag = true;
-              me.productList[y].qty = me.productList[y].qty + 1;
-            }
-          });
+        if (response.status == 200) {
+          if (producto) {
+            this.productList.map(function (x, y) {
+              if (producto.value == x.value) {
+                me.productList[y].flag = true;
+                me.productList[y].qty = me.productList[y].qty + 1;
+              }
+            });
+          }
         }
+        this.fullscreenLoading = false;
       });
     },
     substo(productId) {
+      this.fullscreenLoading = true;
       let me = this;
       axios.get(`/subsToCart/${productId}`).then((response) => {
         this.cartCount = response.data.count;
@@ -433,6 +438,7 @@ export default {
             }
           });
         }
+        this.fullscreenLoading = false;
       });
     },
     chekingCartProducts(id, qty) {
@@ -495,7 +501,6 @@ export default {
           })
           .catch((error) => {
             if (error.response.status == 401) {
-
             }
           });
       } else {
@@ -508,7 +513,6 @@ export default {
           })
           .catch((error) => {
             if (error.response.status == 401) {
-
             }
           });
       }

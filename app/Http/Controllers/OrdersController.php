@@ -9,6 +9,7 @@ use App\Customer;
 use App\Order;
 use App\OrderDetail;
 use App\OrderState;
+use App\Product;
 
 class OrdersController extends Controller
 {
@@ -143,9 +144,16 @@ class OrdersController extends Controller
             $details["unit_price"] = $item->price;
             $details["total_price"] = \Cart::get($item->id)->getPriceSum();
             // dd($details);
+            $producto = Product::findOrFail($item->id);
+            if ($producto->quantity - $item->quantity <= 0) {
+                $producto->update(["estado_id" => 2]);
+            }
+            $producto->decrement("quantity", $item->quantity);
             OrderDetail::create($details);
         }
 
+        \Cart::clear();
+        // \Cart::session(auth()->id())->clear();
 
         // ESTABLECER TRANSACCION DE LA ORDEN
         $transanccionData = [
@@ -168,8 +176,6 @@ class OrdersController extends Controller
         ];
 
         \App\Transaction::create($transanccionData);
-        \Cart::clear();
-        \Cart::session(auth()->id())->clear();
         return response()->json($order, 200);
     }
 

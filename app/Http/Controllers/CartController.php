@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Product;
 
 class CartController extends Controller
 {
@@ -24,9 +25,23 @@ class CartController extends Controller
         $item = \Cart::get($productId);
 
         if ($item) { //si el item existe, actualizamos cantidad para sumar 1
-            \Cart::update($productId, array(
-                'quantity' => 1, // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
-            ));
+            //obtener cantidad actual del producto
+            $currentPdt = Product::findOrFail($productId);
+            $currentQty = $currentPdt->quantity;
+
+            //get cart product
+            $item = \Cart::get($productId);
+            //si la cantidad no excede el inventario entonces proceder
+
+            if (($item->quantity + 1) <= $currentQty) {
+                \Cart::update($productId, array(
+                    'quantity' => 1, // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
+                ));
+            } else {
+                $items = \Cart::getTotalQuantity();
+                // Cart::session($userId)->clear();
+                return response()->json(["count" => $items, "id" => $productId], 202);
+            }
         } else { //Si el producto no existe en el carro añadimos el producto
             //Buscar el producto requerido
             $product = \App\Product::findOrFail($productId);

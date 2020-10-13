@@ -11,9 +11,9 @@
         Pedido {{ orderHeader[0].pedido }}
         <!-- <span class="fab fa-opencart fa-2x"></span> -->
       </h5>
-      <router-link to="/" class="link">
+      <a href="/">
         <h5 class="text-center">Volver al inicio.</h5>
-      </router-link>
+      </a>
       <div
         v-if="orderHeader.length > 0"
         class="col-12 p-0 text-center text-muted"
@@ -204,7 +204,6 @@ export default {
         if (response.status == 200) {
           this.orderHeader = response.data.order;
           this.orderCustomer = response.data.customer;
-          //
           //   Por cada detalle buscar su producto
           response.data.details.forEach((element) => {
             this.getProduct(element.product_id, element.quantity);
