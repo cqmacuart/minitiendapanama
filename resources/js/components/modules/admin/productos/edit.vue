@@ -125,7 +125,6 @@
                     type="text"
                     class="form-control form-control-sm text-right"
                     placeholder="0.00"
-                    autofocus
                     v-model="fillProducts.productPrice"
                     v-currency="{ currency: null }"
                   />

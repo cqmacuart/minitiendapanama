@@ -201,7 +201,11 @@ class ProductsController extends Controller
         } else {
             $entrada["estado_id"] = 1;
         }
-        $entrada["price"] = str_replace(",", ".", str_replace(".", "", $entrada["price"]));
+        if (strpos($entrada["price"], ",") > strpos($entrada["price"], ".")) {
+            $entrada["price"] = str_replace(",", ".", str_replace(".", "", $entrada["price"]));
+        } else {
+            $entrada["price"] = str_replace(",", "", $entrada["price"]);
+        }
 
         $totalProducts = Product::count();
         $this->swapPosition($totalProducts + 1, $entrada["position"]);
@@ -258,7 +262,11 @@ class ProductsController extends Controller
                 $entrada["estado_id"] = 1;
             }
         }
-        $entrada["price"] = str_replace(",", ".", str_replace(".", "", $entrada["price"]));
+        if (strpos($entrada["price"], ",") > strpos($entrada["price"], ".")) {
+            $entrada["price"] = str_replace(",", ".", str_replace(".", "", $entrada["price"]));
+        } else {
+            $entrada["price"] = str_replace(",", "", $entrada["price"]);
+        }
         //swap position
         $this->swapPosition($producto->position, $entrada["position"]);
         $producto->update($entrada);
