@@ -402,14 +402,6 @@ export default {
         address_billing: `${this.direccion}`,
         mobilephone_billing: `${this.celular}`,
       };
-      epayco.token
-        .create(data)
-        .then(function (token) {
-          handler.open(data);
-        })
-        .catch(function (err) {
-          console.log("err: " + err);
-        });
     },
     getEpayco() {
       axios.get(`/admin/epayco`).then((response) => {
