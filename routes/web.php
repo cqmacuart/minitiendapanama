@@ -88,6 +88,8 @@ Route::post('/authenticate/logout', 'Auth\LoginController@logout');
 
 // PASARELAS DE PAGO
 // EPAYCO
+Route::post("/epayco/apiresponse/{opt?}", 'EpaycoController@postReceive');
+Route::get("/epayco/apiresponse/{opt?}", 'EpaycoController@postReceive');
 Route::resource('/admin/epayco', 'EpaycoController');
 
 Route::get('/admin/{option?}', function () {

@@ -394,7 +394,7 @@ export default {
         extra5: `${this.email}`,
         extra6: `${this.comentario}`,
         extra7: `${this.notificacion}`,
-        response: `${this.ruta}/epayco/response`,
+        response: `${this.ruta}/epayco/apiresponse/`,
 
         //Atributos cliente
         name_billing: `${this.nombre}`,
@@ -402,7 +402,14 @@ export default {
         address_billing: `${this.direccion}`,
         mobilephone_billing: `${this.celular}`,
       };
-      handler.open(data);
+      epayco.token
+        .create(data)
+        .then(function (token) {
+          handler.open(data);
+        })
+        .catch(function (err) {
+          console.log("err: " + err);
+        });
     },
     getEpayco() {
       axios.get(`/admin/epayco`).then((response) => {

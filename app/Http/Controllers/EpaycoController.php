@@ -23,6 +23,11 @@ class EpaycoController extends Controller
         }
     }
 
+    public function postReceive(Request $request)
+    {
+        return redirect('/epayco/response/?ref_payco=' . $request->ref_payco);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
