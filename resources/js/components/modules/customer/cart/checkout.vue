@@ -394,7 +394,7 @@ export default {
         extra5: `${this.email}`,
         extra6: `${this.comentario}`,
         extra7: `${this.notificacion}`,
-        response: `${this.ruta}/epayco/apiresponse/`,
+        response: `${this.ruta}/epayco/response`,
 
         //Atributos cliente
         name_billing: `${this.nombre}`,
@@ -402,6 +402,7 @@ export default {
         address_billing: `${this.direccion}`,
         mobilephone_billing: `${this.celular}`,
       };
+      handler.open(data);
     },
     getEpayco() {
       axios.get(`/admin/epayco`).then((response) => {
