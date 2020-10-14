@@ -384,7 +384,7 @@ export default {
         lang: "es",
 
         //Onpage="false" - Standard="true"
-        external: "false",
+        external: "true",
 
         //Atributos opcionales
         extra1: `${this.nombre}`,
@@ -394,7 +394,7 @@ export default {
         extra5: `${this.email}`,
         extra6: `${this.comentario}`,
         extra7: `${this.notificacion}`,
-        response: `${this.ruta}/epayco/response`,
+        response: `${this.ruta}/epayco/apiresponse`,
 
         //Atributos cliente
         name_billing: `${this.nombre}`,
