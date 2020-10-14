@@ -127,14 +127,14 @@
                   <label for class="form-label d-sm-none text-muted ml-2"
                     >Precio:</label
                   >
-                  <input
-                    type="text"
+                  <vue-numeric
                     class="form-control form-control-sm text-right"
-                    placeholder="0.00"
-                    autofocus
+                    :precision="2"
+                    separator="."
+                    placeholder="0,00"
                     v-model="fillProducts.productPrice"
-                    v-currency="{ currency: null }"
-                  />
+                    :empty-value="'0,00'"
+                  ></vue-numeric>
                 </td>
               </tr>
               <tr class="text-left">
