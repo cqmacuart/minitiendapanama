@@ -326,9 +326,7 @@ export default {
           category_id: this.fillProducts.productCategory,
           position: this.fillProducts.productPosition,
           quantity: this.fillProducts.productQuantity,
-          price: this.fillProducts.productPrice
-            .replaceAll(".", "")
-            .replaceAll(",", "."),
+          price: this.fillProducts.productPrice,
           image: this.fillProducts.productImageName,
         };
         axios.put(`/products/${this.id}`, params).then((response) => {
