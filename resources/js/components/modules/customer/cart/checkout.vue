@@ -384,7 +384,7 @@ export default {
         lang: "es",
 
         //Onpage="false" - Standard="true"
-        external: "true",
+        external: "false",
 
         //Atributos opcionales
         extra1: `${this.nombre}`,

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Configuracion;
-use League\CommonMark\Util\Configuration;
 
 class EpaycoController extends Controller
 {
