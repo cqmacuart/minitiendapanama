@@ -1507,6 +1507,7 @@ export default {
     // PASARELAS DE PAGO Y CONFIGURACIONES
     //COD
     setCod() {
+      this.fullscreenLoading = true;
       const params = {
         cod_param_1: this.cod_params.cod_param_1,
       };
@@ -1528,6 +1529,7 @@ export default {
     },
     // EPAYCO
     setEpayco() {
+      this.fullscreenLoading = true;
       const params = {
         epayco_param_1: this.epayco_params.epayco_param_1,
         epayco_param_2: this.epayco_params.epayco_param_2,
