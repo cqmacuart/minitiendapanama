@@ -213,7 +213,7 @@
                           />
                           <img src="/img/payment/cod/cash.png" v-else />
                           <el-switch
-                            style="display: block"
+                            style="display: block; visibility: hidden"
                             v-model="cod_params.cod_choose"
                             active-color="#13ce66"
                             inactive-color="#ff4949"
