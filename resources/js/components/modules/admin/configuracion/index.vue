@@ -1061,6 +1061,30 @@
               <!-- CABECERA -->
               <section class="mb-4">
                 <div>
+                  <img :src="`${ruta}/img/payment/cod/cod.png`" alt="COD" />
+                  <hr />
+                </div>
+                <div class="d-flex flex-wrap flex-column flex-sm-row">
+                  <div class="col-12 col-sm-6 text-left pt-2 pt-sm-1">
+                    <el-switch
+                      v-model="cod_params.cod_param_1"
+                      active-color="#13ce66"
+                      inactive-color="#ff0000"
+                      active-text="Habilitar"
+                      inactive-text="Deshabilitar"
+                      :class="'mt-2'"
+                      @change="setCod"
+                    >
+                    </el-switch>
+                  </div>
+                </div>
+              </section>
+              <hr class="border-dark" />
+            </div>
+            <div class="col-12 px-0 px-sm-2">
+              <!-- CABECERA -->
+              <section class="mb-4">
+                <div>
                   <img
                     :src="`${ruta}/img/payment/epayco/epayco_logo.png`"
                     alt="epayco"
@@ -1237,6 +1261,10 @@ export default {
       isColors: null,
       message: `${this.ruta}/files/fb_business/facebook_business_product_csv.csv`,
       //   payment Methods
+      //COD
+      cod_params: {
+        cod_param_1: false,
+      },
       //EPAYCO
       epayco_params: {
         epayco_param_1: "",
@@ -1251,7 +1279,9 @@ export default {
   mounted() {
     this.getAllSettings();
     this.getColorCount();
+    //PASARELAS DE PAGO
     this.getEpayco();
+    this.getCod();
   },
   methods: {
     onCopy: function () {
@@ -1475,6 +1505,28 @@ export default {
       }
     },
     // PASARELAS DE PAGO Y CONFIGURACIONES
+    //COD
+    setCod() {
+      const params = {
+        cod_param_1: this.cod_params.cod_param_1,
+      };
+      axios.post(`/admin/cod`, params).then((response) => {
+        if (response.data) {
+          this.$toastr.info("Hecho!!");
+          this.fullscreenLoading = false;
+        }
+      });
+    },
+    getCod() {
+      axios.get(`/admin/cod`).then((response) => {
+        if (response.status == 200) {
+          this.cod_params.cod_param_1 =
+            response.data[0].value == 1 ? true : false;
+        }
+      });
+      this.fullscreenLoading = false;
+    },
+    // EPAYCO
     setEpayco() {
       const params = {
         epayco_param_1: this.epayco_params.epayco_param_1,

@@ -7,11 +7,11 @@
       ></h5>
       <small
         class="text-muted py-2"
-        v-text="`Referencia de pago: ${ref_payco}`"
+        v-text="`Referencia de pago: ${cod_ref}`"
       ></small>
     </div>
     <div class="table-responsive col-10 col-sm-8 col-md-6 m-auto">
-      <table class="table">
+      <table class="table" v-if="orderHeader.length > 0">
         <caption>
           Será redireccionado en
           <span v-text="time"></span>
@@ -19,32 +19,28 @@
         </caption>
         <tr>
           <th class="text-nowrap text-left" style="width: 1%">Referencia</th>
-          <td class="text-right">{{ referencia }}</td>
+          <td class="text-right">{{ orderHeader[0].pedido }}</td>
         </tr>
         <tr>
           <th class="text-nowrap text-left" style="width: 1%">Fecha</th>
-          <td class="text-right">{{ fecha }}</td>
+          <td class="text-right">
+            {{ new Date().getDate() }} - {{ new Date().getMonth() + 1 }} -
+            {{ new Date().getFullYear() }}
+          </td>
         </tr>
         <tr>
           <th class="text-nowrap text-left" style="width: 1%">Respuesta</th>
-          <td class="text-right">{{ respuesta }}</td>
+          <td class="text-right">01</td>
         </tr>
         <tr>
           <th class="text-nowrap text-left" style="width: 1%">Motivo</th>
-          <td class="text-right">{{ motivo }}</td>
-        </tr>
-        <tr>
-          <th class="text-nowrap text-left" style="width: 1%">Banco</th>
-          <td class="text-right">{{ banco }}</td>
-        </tr>
-        <tr>
-          <th class="text-nowrap text-left" style="width: 1%">Recibo</th>
-          <td class="text-right">{{ recibo }}</td>
+          <td class="text-right">Pedido por Pago Contra Entrega</td>
         </tr>
         <tr>
           <th class="text-nowrap text-left" style="width: 1%">Total</th>
           <td class="text-right">
-            {{ total | numeral("0,0.00") }} {{ moneda }}
+            {{ orderHeader[0].amount | numeral("0,0.00") }}
+            {{ fillSetting.currency }}
           </td>
         </tr>
       </table>
@@ -58,7 +54,7 @@
 
 <script>
 export default {
-  props: ["ruta"],
+  props: ["ruta", "cod_ref"],
   data() {
     return {
       //datos de usuario
@@ -83,26 +79,6 @@ export default {
         pPrColor: "",
         pIcColor: "",
       },
-      ref_payco: "",
-      //   DATOS DE RESPUESTA
-      referencia: "", //x_transaction_id
-      fecha: "",
-      respuesta: "",
-      motivo: "",
-      banco: "",
-      recibo: "",
-      total: "",
-      moneda: "",
-
-      //   ARREGLO BASE DE DATOS
-      type_payment: null,
-      cod_transaction_state: null,
-      errorcode: null,
-      cust_id_cliente: null,
-      id_factura: null,
-      franchise: null,
-      cardnumber: null,
-      customer_ip: null,
       fillSetting: {
         storename: "",
         mobile: "",
@@ -111,6 +87,8 @@ export default {
         image: "",
         currency: "",
       },
+      orderHeader: [],
+      orderCustomer: [],
       time: 15,
     };
   },
@@ -155,44 +133,52 @@ export default {
   mounted() {
     this.getColorCount();
     this.getPayInfo();
+    this.getAllSettings();
   },
   methods: {
-    getPayInfo() {
-      this.ref_payco = this.$route.query.ref_payco;
-      fetch(
-        `https://secure.epayco.co/validation/v1/reference/${this.ref_payco}`
-      )
-        .then((data) => data.json())
+    getAllSettings: function () {
+      this.settings = [];
+      axios
+        .get("/admin/settings")
         .then((response) => {
-          this.nombre = response.data.x_extra1;
-          this.ciudad = response.data.x_extra2;
-          this.direccion = response.data.x_extra3;
-          this.celular = response.data.x_extra4;
-          this.email = response.data.x_extra5;
-          this.comentario = response.data.x_extra6;
-          this.notificacion = response.data.x_extra7 == "true" ? true : false;
-          //   DATOS DE TRANSACCION
-          this.referencia = response.data.x_ref_payco;
-          this.fecha = response.data.x_transaction_date;
-          this.respuesta = response.data.x_respuesta;
-          this.motivo = response.data.x_response_reason_text;
-          this.banco = response.data.x_bank_name;
-          this.recibo = response.data.x_ref_payco;
-          this.total = response.data.x_amount;
-          this.moneda = response.data.x_currency_code;
-          //Datos adicionales de transaccion
-          this.type_payment = response.data.x_type_payment;
-          this.cod_transaction_state = response.data.x_cod_transaction_state;
-          this.errorcode = response.data.x_errorcode;
-          this.cust_id_cliente = response.data.x_cust_id_cliente;
-          this.id_factura = response.data.x_id_factura;
-          this.franchise = response.data.x_franchise;
-          this.cardnumber = response.data.x_cardnumber;
-          this.customer_ip = response.data.x_customer_ip;
+          this.fillSetting.storename = response.data.storename;
+          this.fillSetting.mobile = response.data.mobile;
+          this.fillSetting.image = response.data.image;
+          this.fillSetting.currency = response.data.currency;
+          this.fillSetting.country = response.data.country;
+          this.fillSetting.city = response.data.city;
         })
-        .then(() => {
-          this.setOrder();
+        .catch((error) => {
+          //no estas autenticado
+          if (error.response.status == 401) {
+            this.$toastr.error("Error " + error.response.status);
+          }
         });
+    },
+    getPayInfo() {
+      axios.get(`/miorden/${this.cod_ref}`).then((response) => {
+        if (response.status == 200) {
+          this.orderHeader = response.data.order;
+          this.orderCustomer = response.data.customer;
+          console.log(this.orderHeader);
+          console.log(this.orderCustomer);
+          window.open(
+            `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${this.orderHeader[0].link}`,
+            `_blank`
+          );
+          setInterval(() => {
+            this.time--;
+          }, 1000);
+          setTimeout(() => {
+            this.$router.push({
+              name: "mipedido",
+              params: { serial: this.cod_ref },
+            });
+          }, 15000);
+        } else {
+          this.error = "El token de la orden es incorrecto o no existe";
+        }
+      });
     },
     //   ESTILOS
     getColorCount: function () {
@@ -219,68 +205,8 @@ export default {
           this.fillColors.pIcColor = element.pIcColor;
         });
       });
+
       this.fullscreenLoading = false;
-    },
-    setOrder: function () {
-      this.fullscreenLoading = true;
-      const params = {
-        nombre: this.nombre,
-        ciudad: this.ciudad,
-        direccion: this.direccion,
-        celular: this.celular,
-        email: this.email,
-        comentario: this.comentario,
-        notificacion: this.notificacion,
-        //   datos de transacción
-        referencia: this.referencia,
-        fecha: this.fecha,
-        respuesta: this.respuesta,
-        motivo: this.motivo,
-        banco: this.banco,
-        recibo: this.recibo,
-        total: this.total,
-        moneda: this.moneda,
-        //Datos adicionales de transaccion
-        type_payment: this.type_payment,
-        cod_transaction_state: this.cod_transaction_state,
-        errorcode: this.errorcode,
-        cust_id_cliente: this.cust_id_cliente,
-        id_factura: this.id_factura,
-        franchise: this.franchise,
-        cardnumber: this.cardnumber,
-        customer_ip: this.customer_ip,
-        medio: "ePayco",
-      };
-      axios.post("/orders", params).then((response) => {
-        if (response.status == 200) {
-          //salvar el token
-          window.open(
-            `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${response.data.link}`,
-            `_blank`
-          );
-          let token = response.data.serialize;
-          const mailparams = {
-            pedido: response.data.pedido,
-            enlace: response.data.link,
-          };
-          //establecer parametros de envío de MAIL
-          axios.post("/sendingmail/nuevo", mailparams).then((response) => {
-            if (sessionStorage.getItem("currCustomer")) {
-              sessionStorage.removeItem("currCustomer");
-            }
-            setInterval(() => {
-              this.time--;
-            }, 1000);
-            setTimeout(() => {
-              this.$router.push({
-                name: "mipedido",
-                params: { serial: token },
-              });
-            }, 15000);
-            this.fullscreenLoading = false;
-          });
-        }
-      });
     },
   },
 };

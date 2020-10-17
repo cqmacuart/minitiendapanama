@@ -154,7 +154,8 @@ class OrdersController extends Controller
 
         \Cart::clear();
         // \Cart::session(auth()->id())->clear();
-
+        $peticion["referencia"] = $peticion["referencia"] ? $peticion["referencia"] : $pedido;
+        $peticion["customer_ip"] = $peticion["customer_ip"] ? $peticion["customer_ip"] : $_SERVER['REMOTE_ADDR'];
         // ESTABLECER TRANSACCION DE LA ORDEN
         $transanccionData = [
             "id_transaccion" => $peticion["referencia"],
@@ -172,6 +173,7 @@ class OrdersController extends Controller
             "moneda" => $peticion["moneda"],
             "monto" => $peticion["total"],
             "ip" => $peticion["customer_ip"],
+            "medio" => $peticion["medio"],
             "fecha_transaccion" => $peticion["fecha"],
         ];
 

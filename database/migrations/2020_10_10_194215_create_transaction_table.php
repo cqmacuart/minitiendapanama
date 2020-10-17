@@ -30,6 +30,7 @@ class CreateTransactionTable extends Migration
             $table->string("moneda")->nullable(); //x_currency_code
             $table->string("monto")->nullable(); //x_amount
             $table->string("ip")->nullable(); //x_customer_ip
+            $table->string("medio")->nullable(); //Tipo de Pago
             $table->string("fecha_transaccion")->nullable(); //x_fecha_transaccion
             $table->timestamps();
         });

@@ -35,6 +35,7 @@
               </th>
               <td>
                 <el-input
+                  autocomplete="ON"
                   placeholder="Nombre de Cliente"
                   v-model="nombre"
                   maxlength="20"
@@ -51,6 +52,7 @@
               </th>
               <td>
                 <el-input
+                  autocomplete="ON"
                   placeholder="Ciudad"
                   v-model="ciudad"
                   maxlength="20"
@@ -67,6 +69,7 @@
               </th>
               <td>
                 <el-input
+                  autocomplete="ON"
                   placeholder="Dirección"
                   v-model="direccion"
                   maxlength="120"
@@ -83,6 +86,7 @@
               </th>
               <td>
                 <el-input
+                  autocomplete="ON"
                   placeholder="Teléfono Celular"
                   v-model="celular"
                 ></el-input>
@@ -97,6 +101,7 @@
               </th>
               <td>
                 <el-input
+                  autocomplete="ON"
                   placeholder="Email"
                   v-model="email"
                   type="email"
@@ -168,11 +173,81 @@
             Pedir
           </button> -->
 
-          <div
-            v-if="epayco_params.epayco_existed && epayco_params.epayco_param_5"
-          >
-            <div v-if="validate()">
-              <div class="text-right">
+          <!-- VALIDAR DATOS PRIMERO -->
+          <div v-if="validate()">
+            <!--VERIFICAR COD -->
+            <div v-if="cod_params.cod_param_1" class="mb-3">
+              <div class="accordion" id="accordionExample">
+                <div class="card border-0">
+                  <div class="" id="headingOne">
+                    <div class="text-center">
+                      <img
+                        src="/img/payment/cod/codbutton.png"
+                        style="cursor: pointer"
+                        data-toggle="collapse"
+                        data-target="#collapseOne"
+                        aria-expanded="true"
+                        aria-controls="collapseOne"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    id="collapseOne"
+                    class="collapse"
+                    aria-labelledby="headingOne"
+                    data-parent="#accordionExample"
+                  >
+                    <div class="card-body py-1">
+                      <p class="m-0 text-muted text-center">
+                        <small>Pague al recibir/retirar su pedido</small>
+                      </p>
+                      <div
+                        class="row d-flex flex-column flex-sm-row justify-content-center align-items-center mb-3"
+                      >
+                        <label
+                          class="d-flex m-0 align-items-center px-2 pb-3 pb-sm-0"
+                        >
+                          <img
+                            src="/img/payment/cod/cash_disable.png"
+                            v-if="cod_params.cod_choose"
+                          />
+                          <img src="/img/payment/cod/cash.png" v-else />
+                          <el-switch
+                            style="display: block"
+                            v-model="cod_params.cod_choose"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                          >
+                          </el-switch>
+                          <img
+                            src="/img/payment/cod/dataphone_disable.png"
+                            v-if="!cod_params.cod_choose"
+                          />
+                          <img src="/img/payment/cod/dataphone.png" v-else />
+                        </label>
+                        <button
+                          class="btn btn-success px-2"
+                          v-loading.fullscreen.lock="fullscreenLoading"
+                          @click.prevent="setCod"
+                        >
+                          <b>Ordenar</b>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--COD END -->
+            <!--VERIFICAR EPAYCO -->
+            <div
+              v-if="
+                epayco_params.epayco_existed && epayco_params.epayco_param_5
+              "
+              class="mb-3"
+            >
+              <div class="text-center">
                 <img
                   src="/img/payment/epayco/epayco.png"
                   @click="epaycoform()"
@@ -180,14 +255,26 @@
                 />
               </div>
             </div>
-            <div v-else class="text-right">
-              <img src="/img/payment/epayco/epayco_gris.png" />
-            </div>
+            <!-- EPAYCO END -->
           </div>
-          <div v-else>
+          <div v-else class="text-center">
             <small class="text-danger"
-              >No hay ningun medio habilitado para efectuar pagos</small
+              >Complete los datos obligatorios para desplegar medios de
+              pago</small
             >
+            <div>
+              <div class="text-center mb-3" v-if="cod_params.cod_param_1">
+                <img src="/img/payment/cod/codbutton_disable.png" />
+              </div>
+              <div
+                class="text-center mb-3"
+                v-if="
+                  epayco_params.epayco_existed && epayco_params.epayco_param_5
+                "
+              >
+                <img src="/img/payment/epayco/epayco_gris.png" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -228,6 +315,10 @@ export default {
       },
       isColors: null,
       //   Pasarelas de pago
+      cod_params: {
+        cod_param_1: false,
+        cod_choose: false,
+      },
       epayco_params: {
         epayco_param_1: "",
         epayco_param_2: "",
@@ -244,6 +335,7 @@ export default {
     this.getCartTotalAmount();
     this.getAllSettings();
     this.getColorCount();
+    this.getCod();
     this.getEpayco();
   },
   computed: {
@@ -290,7 +382,6 @@ export default {
         });
       });
     },
-
     getCartTotalItems: function () {
       this.totalItems = 0;
       axios.get(`/cartCount`).then((response) => {
@@ -366,6 +457,15 @@ export default {
       }
       return check;
     },
+    getCod() {
+      axios.get(`/admin/cod`).then((response) => {
+        if (response.status == 200) {
+          this.cod_params.cod_param_1 =
+            response.data[0].value == 1 ? true : false;
+        }
+      });
+      this.fullscreenLoading = false;
+    },
     epaycoform() {
       var handler = ePayco.checkout.configure({
         key: `${this.epayco_params.epayco_param_3}`,
@@ -419,6 +519,56 @@ export default {
         }
       });
       this.fullscreenLoading = false;
+    },
+    setCod() {
+      this.fullscreenLoading = true;
+      const params = {
+        nombre: this.nombre,
+        ciudad: this.ciudad,
+        direccion: this.direccion,
+        celular: this.celular,
+        email: this.email,
+        comentario: this.comentario,
+        notificacion: this.notificacion,
+        //   datos de transacción
+        referencia: null,
+        fecha: new Date(),
+        respuesta: "Pago Contra Entrega",
+        motivo: "Realizado con Pago Contra Entrega",
+        banco: null,
+        recibo: null,
+        total: this.totalAmount,
+        moneda: this.fillSetting.currency,
+        //Datos adicionales de transaccion
+        type_payment: this.cod_params.cod_choose ? "Datafono" : "Efectivo",
+        cod_transaction_state: 1,
+        errorcode: "00",
+        cust_id_cliente: null,
+        id_factura: null,
+        franchise: null,
+        cardnumber: null,
+        customer_ip: null,
+        medio: "cod",
+      };
+      axios.post("/orders", params).then((response) => {
+        if (response.status == 200) {
+          let token = response.data.serialize;
+          const mailparams = {
+            pedido: response.data.pedido,
+            enlace: response.data.link,
+          };
+          //establecer parametros de envío de MAIL
+          axios.post("/sendingmail/nuevo", mailparams).then((response) => {
+            this.$router.push({
+              name: "cod.response",
+              params: { cod_ref: token },
+            });
+            this.fullscreenLoading = false;
+          });
+        } else {
+          this.fullscreenLoading = false;
+        }
+      });
     },
   },
 };

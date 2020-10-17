@@ -22,6 +22,7 @@ class Transaction extends Model
         "moneda",
         "monto",
         "ip",
+        "medio",
         "fecha_transaccion",
     ];
 }

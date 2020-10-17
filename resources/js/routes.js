@@ -58,6 +58,17 @@ export default new Router({
                 requiresAuth: true
             }
         },
+        // Cod Response
+        {
+            path: "/cod/response/:cod_ref",
+            name: "cod.response",
+            props: true,
+            component: require("./components/modules/payment/cod/response")
+                .default,
+            meta: {
+                requiresAuth: true
+            }
+        },
         // Epayco Response
         {
             path: "/epayco/response/:ref_payco?",
