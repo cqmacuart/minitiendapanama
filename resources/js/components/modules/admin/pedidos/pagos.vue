@@ -90,7 +90,7 @@
                 <b>moneda: </b>{{ transaction.moneda }}
               </p>
               <p class="my-1 text-capitalize">
-                <b>monto: </b>{{ transaction.monto }}
+                <b>monto: </b>{{ transaction.monto | numeral("0,0.00") }}
               </p>
               <p class="my-1 text-capitalize">
                 <b>ip: </b>{{ transaction.ip }}

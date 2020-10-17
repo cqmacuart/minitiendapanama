@@ -98,7 +98,6 @@ class OrdersController extends Controller
     public function store(Request $request)
     {
         $peticion = $request->all();
-
         // Datos de Cliente.
         $customerData = [
             "order_pedido" => NULL,
@@ -119,6 +118,9 @@ class OrdersController extends Controller
         Customer::create($customerData);
         $ordercustomer = Customer::where('order_pedido', $pedido)->get();
         $unique = uniqid();
+        //validacion de datos para ordenes
+        $peticion["referencia"] = $peticion["referencia"] ? $peticion["referencia"] : $pedido;
+        $peticion["customer_ip"] = $peticion["customer_ip"] ? $peticion["customer_ip"] : $_SERVER['REMOTE_ADDR'];
         $order = [
             "pedido" => $pedido,
             "customer_id" => $ordercustomer[0]->id,
@@ -154,8 +156,7 @@ class OrdersController extends Controller
 
         \Cart::clear();
         // \Cart::session(auth()->id())->clear();
-        $peticion["referencia"] = $peticion["referencia"] ? $peticion["referencia"] : $pedido;
-        $peticion["customer_ip"] = $peticion["customer_ip"] ? $peticion["customer_ip"] : $_SERVER['REMOTE_ADDR'];
+
         // ESTABLECER TRANSACCION DE LA ORDEN
         $transanccionData = [
             "id_transaccion" => $peticion["referencia"],
