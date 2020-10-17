@@ -160,8 +160,6 @@ export default {
         if (response.status == 200) {
           this.orderHeader = response.data.order;
           this.orderCustomer = response.data.customer;
-          console.log(this.orderHeader);
-          console.log(this.orderCustomer);
           window.open(
             `https://wa.me/${this.fillSetting.mobile}?text= Hola, Me gustaría realizar el siguiente pedido: ${this.orderHeader[0].link}`,
             `_blank`
