@@ -91,9 +91,7 @@ Route::post('/authenticate/logout', 'Auth\LoginController@logout');
 // COD (Cobro contra Entrega)
 Route::resource('/admin/cod', 'CodController');
 
-// EPAYCO
-Route::match(["get", "post"], "/epayco/apiresponse/{opt?}", 'EpaycoController@postReceive');
-Route::resource('/admin/epayco', 'EpaycoController');
+//Paguelo Facil
 
 Route::get('/admin/{option?}', function () {
     return view('admin');

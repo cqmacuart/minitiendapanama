@@ -69,12 +69,12 @@ export default new Router({
                 requiresAuth: true
             }
         },
-        // Epayco Response
+        // paguelofacil Response
         {
-            path: "/epayco/response/:ref_payco?",
-            name: "epayco.response",
+            path: "/paguelofacil/response/:ref_payco?",
+            name: "paguelofacil.response",
             props: true,
-            component: require("./components/modules/payment/epayco/response")
+            component: require("./components/modules/payment/paguelofacil/response")
                 .default,
             meta: {
                 requiresAuth: true
