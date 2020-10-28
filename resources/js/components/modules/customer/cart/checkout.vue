@@ -357,15 +357,6 @@ export default {
           : "red",
       };
     },
-    settingPagueloFacil() {
-      this.paguelofacil_params.paguelofacil_param_5 = this.nombre;
-      this.paguelofacil_params.paguelofacil_param_6 = this.ciudad;
-      this.paguelofacil_params.paguelofacil_param_7 = this.direccion;
-      this.paguelofacil_params.paguelofacil_param_8 = this.celular;
-      this.paguelofacil_params.paguelofacil_param_9 = this.email;
-      this.paguelofacil_params.paguelofacil_param_10 = this.comentario;
-      this.paguelofacil_params.paguelofacil_param_11 = this.notificacion;
-    },
   },
   methods: {
     getColorCount: function () {
@@ -459,6 +450,10 @@ export default {
         });
         check = false;
       }
+      //settear valores para enlace
+      if (check) {
+        this.settingPagueloFacil();
+      }
       return check;
     },
     getPaguelofacil() {
@@ -473,6 +468,15 @@ export default {
         }
       });
       this.fullscreenLoading = false;
+    },
+    settingPagueloFacil() {
+      this.paguelofacil_params.paguelofacil_param_5 = this.nombre;
+      this.paguelofacil_params.paguelofacil_param_6 = this.ciudad;
+      this.paguelofacil_params.paguelofacil_param_7 = this.direccion;
+      this.paguelofacil_params.paguelofacil_param_8 = this.celular;
+      this.paguelofacil_params.paguelofacil_param_9 = this.email;
+      this.paguelofacil_params.paguelofacil_param_10 = this.comentario;
+      this.paguelofacil_params.paguelofacil_param_11 = this.notificacion;
     },
     getCod() {
       axios.get(`/admin/cod`).then((response) => {
