@@ -240,22 +240,17 @@
             </div>
 
             <!--COD END -->
-            <!--VERIFICAR EPAYCO -->
-            <div
-              v-if="
-                epayco_params.epayco_existed && epayco_params.epayco_param_5
-              "
-              class="mb-3"
-            >
+            <!--VERIFICAR Paguelofacil -->
+            <div class="mb-3" v-if="paguelofacil_params.paguelofacil_param_3">
               <div class="text-center">
-                <img
-                  src="/img/payment/epayco/epayco.png"
-                  @click="epaycoform()"
-                  style="cursor: pointer"
-                />
+                <a
+                  :href="`https://secure.paguelofacil.com/LinkDeamon.cfm?CCLW=${paguelofacil_params.paguelofacil_param_1}&CMTN=${totalAmount}&CDSC=${paguelofacil_params.paguelofacil_param_4}&URL_RETURN=${paguelofacil_params.paguelofacil_param_2}&PARAM_1=${paguelofacil_params.paguelofacil_param_5}&PARAM_2=${paguelofacil_params.paguelofacil_param_6}&PARAM_3=${paguelofacil_params.paguelofacil_param_7}&PARAM_4=${paguelofacil_params.paguelofacil_param_8}&PARAM_5=${paguelofacil_params.paguelofacil_param_9}&PARAM_6=${paguelofacil_params.paguelofacil_param_10}&PARAM_7=${paguelofacil_params.paguelofacil_param_11}`"
+                >
+                  <img src="/img/payment/paguelofacil/paguelofacil_on.png" />
+                </a>
               </div>
             </div>
-            <!-- EPAYCO END -->
+            <!-- Paguelofacil END -->
           </div>
           <div v-else class="text-center">
             <small class="text-danger"
@@ -266,13 +261,8 @@
               <div class="text-center mb-3" v-if="cod_params.cod_param_1">
                 <img src="/img/payment/cod/codbutton_disable.png" />
               </div>
-              <div
-                class="text-center mb-3"
-                v-if="
-                  epayco_params.epayco_existed && epayco_params.epayco_param_5
-                "
-              >
-                <img src="/img/payment/epayco/epayco_gris.png" />
+              <div class="text-center mb-3">
+                <img src="/img/payment/paguelofacil/paguelofacil_off.png" />
               </div>
             </div>
           </div>
@@ -319,14 +309,19 @@ export default {
         cod_param_1: false,
         cod_choose: false,
       },
-      epayco_params: {
-        epayco_param_1: "",
-        epayco_param_2: "",
-        epayco_param_3: "",
-        epayco_param_4: "",
-        epayco_param_5: false,
-        epayco_existed: false,
-        epayco_test: false,
+      paguelofacil_params: {
+        paguelofacil_param_1: null, //CCWL
+        paguelofacil_param_2: null, //URL RETURN
+        paguelofacil_param_3: false, //ENABLED/DISABLED
+        paguelofacil_param_4: `Pago en línea - PagueloFacil`, //Descripción
+        // parametros extra
+        paguelofacil_param_5: this.nombre,
+        paguelofacil_param_6: this.ciudad,
+        paguelofacil_param_7: this.direccion,
+        paguelofacil_param_8: this.celular,
+        paguelofacil_param_9: this.email,
+        paguelofacil_param_10: this.comentario,
+        paguelofacil_param_11: this.notificacion,
       },
     };
   },
@@ -336,7 +331,7 @@ export default {
     this.getAllSettings();
     this.getColorCount();
     this.getCod();
-    this.getEpayco();
+    this.getPaguelofacil();
   },
   computed: {
     csrf() {
@@ -361,6 +356,15 @@ export default {
           ? this.fillColors.pIcColor
           : "red",
       };
+    },
+    settingPagueloFacil() {
+      this.paguelofacil_params.paguelofacil_param_5 = this.nombre;
+      this.paguelofacil_params.paguelofacil_param_6 = this.ciudad;
+      this.paguelofacil_params.paguelofacil_param_7 = this.direccion;
+      this.paguelofacil_params.paguelofacil_param_8 = this.celular;
+      this.paguelofacil_params.paguelofacil_param_9 = this.email;
+      this.paguelofacil_params.paguelofacil_param_10 = this.comentario;
+      this.paguelofacil_params.paguelofacil_param_11 = this.notificacion;
     },
   },
   methods: {
@@ -457,65 +461,24 @@ export default {
       }
       return check;
     },
-    getCod() {
-      axios.get(`/admin/cod`).then((response) => {
+    getPaguelofacil() {
+      axios.get(`/admin/paguelofacil`).then((response) => {
         if (response.status == 200) {
-          this.cod_params.cod_param_1 =
+          this.paguelofacil_params.paguelofacil_param_1 =
+            response.data[1].value;
+          this.paguelofacil_params.paguelofacil_param_2 =
+            response.data[2].value;
+          this.paguelofacil_params.paguelofacil_param_3 =
             response.data[0].value == 1 ? true : false;
         }
       });
       this.fullscreenLoading = false;
     },
-    epaycoform() {
-      var handler = ePayco.checkout.configure({
-        key: `${this.epayco_params.epayco_param_3}`,
-        test: this.epayco_params.epayco_test,
-      });
-
-      var data = {
-        //Parametros compra (obligatorio)
-        name: this.fillSetting.storename,
-        description: `Pedido en ${this.fillSetting.storename}`,
-        currency: `${this.fillSetting.currency}`,
-        amount: this.totalAmount,
-        tax_base: "0",
-        tax: "0",
-        country: "co",
-        lang: "es",
-
-        //Onpage="false" - Standard="true"
-        external: "false",
-
-        //Atributos opcionales
-        extra1: `${this.nombre}`,
-        extra2: `${this.ciudad}`,
-        extra3: `${this.direccion}`,
-        extra4: `${this.celular}`,
-        extra5: `${this.email}`,
-        extra6: `${this.comentario}`,
-        extra7: `${this.notificacion}`,
-        response: `${this.ruta}/epayco/apiresponse`,
-
-        //Atributos cliente
-        name_billing: `${this.nombre}`,
-        email_billing: `${this.email}`,
-        address_billing: `${this.direccion}`,
-        mobilephone_billing: `${this.celular}`,
-      };
-      handler.open(data);
-    },
-    getEpayco() {
-      axios.get(`/admin/epayco`).then((response) => {
+    getCod() {
+      axios.get(`/admin/cod`).then((response) => {
         if (response.status == 200) {
-          this.epayco_params.epayco_param_1 = response.data[1].value;
-          this.epayco_params.epayco_param_2 = response.data[2].value;
-          this.epayco_params.epayco_param_3 = response.data[3].value;
-          this.epayco_params.epayco_param_4 = response.data[4].value;
-          this.epayco_params.epayco_param_5 =
+          this.cod_params.cod_param_1 =
             response.data[0].value == 1 ? true : false;
-          this.epayco_params.epayco_test =
-            response.data[5].value == 1 ? false : true;
-          this.epayco_params.epayco_existed = true;
         }
       });
       this.fullscreenLoading = false;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Configuracion;
 
-class EpaycoController extends Controller
+class PaguelofacilController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,17 +14,12 @@ class EpaycoController extends Controller
      */
     public function index()
     {
-        $epayco_conf = Configuracion::where("core", "epayco")->orderBy("id", "ASC")->get();
-        if (sizeof($epayco_conf)) {
-            return response()->json($epayco_conf, 200);
+        $paguelofacil_conf = Configuracion::where("core", "paguelofacil")->orderBy("id", "ASC")->get();
+        if (sizeof($paguelofacil_conf)) {
+            return response()->json($paguelofacil_conf, 200);
         } else {
             return response()->json(NULL, 204);
         }
-    }
-
-    public function postReceive(Request $request)
-    {
-        return redirect('/epayco/response/?ref_payco=' . $request->ref_payco);
     }
 
     /**
@@ -47,15 +42,12 @@ class EpaycoController extends Controller
     {
         $entrada = $request->all();
         $fulldata = [
-            ["core" => "epayco", "key" => "ENABLED", "value" => $entrada["epayco_param_5"]],
-            ["core" => "epayco", "key" => "P_CUST_ID_CLIENTE", "value" => $entrada["epayco_param_1"]],
-            ["core" => "epayco", "key" => "P_KEY", "value" => $entrada["epayco_param_2"]],
-            ["core" => "epayco", "key" => "PUBLIC_KEY", "value" => $entrada["epayco_param_3"]],
-            ["core" => "epayco", "key" => "PRIVATE_KEY", "value" => $entrada["epayco_param_4"]],
-            ["core" => "epayco", "key" => "MODO", "value" => $entrada["epayco_param_6"]],
+            ["core" => "paguelofacil", "key" => "ENABLED", "value" => $entrada["paguelofacil_param_3"]],
+            ["core" => "paguelofacil", "key" => "CCWL", "value" => $entrada["paguelofacil_param_1"]],
+            ["core" => "paguelofacil", "key" => "URL_RETURN", "value" => $entrada["paguelofacil_param_2"]],
         ];
         //
-        $exist = Configuracion::where("core", "epayco")->count();
+        $exist = Configuracion::where("core", "paguelofacil")->count();
         if ($exist == 0) {
             foreach ($fulldata as $value) {
                 Configuracion::create($value);
@@ -63,7 +55,7 @@ class EpaycoController extends Controller
             return response()->json($value, 200);
         } else {
             foreach ($fulldata as $value) {
-                $record = Configuracion::where("core", "epayco")->where("key", $value["key"])->get();
+                $record = Configuracion::where("core", "paguelofacil")->where("key", $value["key"])->get();
                 $record[0]->update($value);
                 // var_dump($record[0]);
             }

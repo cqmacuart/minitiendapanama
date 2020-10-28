@@ -92,6 +92,7 @@ Route::post('/authenticate/logout', 'Auth\LoginController@logout');
 Route::resource('/admin/cod', 'CodController');
 
 //Paguelo Facil
+Route::resource('/admin/paguelofacil', 'PaguelofacilController');
 
 Route::get('/admin/{option?}', function () {
     return view('admin');
