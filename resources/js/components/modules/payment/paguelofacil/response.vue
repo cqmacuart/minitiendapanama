@@ -34,10 +34,6 @@
           <td class="text-right">{{ motivo }}</td>
         </tr>
         <tr>
-          <th class="text-nowrap text-left" style="width: 1%">Banco</th>
-          <td class="text-right">{{ banco }}</td>
-        </tr>
-        <tr>
           <th class="text-nowrap text-left" style="width: 1%">Recibo</th>
           <td class="text-right">{{ recibo }}</td>
         </tr>
@@ -158,41 +154,29 @@ export default {
   },
   methods: {
     getPayInfo() {
-      this.ref_payco = this.$route.query.ref_payco;
-      fetch(
-        `https://secure.epayco.co/validation/v1/reference/${this.ref_payco}`
-      )
-        .then((data) => data.json())
-        .then((response) => {
-          this.nombre = response.data.x_extra1;
-          this.ciudad = response.data.x_extra2;
-          this.direccion = response.data.x_extra3;
-          this.celular = response.data.x_extra4;
-          this.email = response.data.x_extra5;
-          this.comentario = response.data.x_extra6;
-          this.notificacion = response.data.x_extra7 == "true" ? true : false;
-          //   DATOS DE TRANSACCION
-          this.referencia = response.data.x_ref_payco;
-          this.fecha = response.data.x_transaction_date;
-          this.respuesta = response.data.x_respuesta;
-          this.motivo = response.data.x_response_reason_text;
-          this.banco = response.data.x_bank_name;
-          this.recibo = response.data.x_ref_payco;
-          this.total = response.data.x_amount;
-          this.moneda = response.data.x_currency_code;
-          //Datos adicionales de transaccion
-          this.type_payment = response.data.x_type_payment;
-          this.cod_transaction_state = response.data.x_cod_transaction_state;
-          this.errorcode = response.data.x_errorcode;
-          this.cust_id_cliente = response.data.x_cust_id_cliente;
-          this.id_factura = response.data.x_id_factura;
-          this.franchise = response.data.x_franchise;
-          this.cardnumber = response.data.x_cardnumber;
-          this.customer_ip = response.data.x_customer_ip;
-        })
-        .then(() => {
-          this.setOrder();
-        });
+      this.nombre = this.$route.query.PARM_1;
+      this.ciudad = this.$route.query.PARM_2;
+      this.direccion = this.$route.query.PARM_3;
+      this.celular = this.$route.query.PARM_4;
+      this.email = this.$route.query.PARM_5;
+      this.comentario = this.$route.query.PARM_6;
+      this.notificacion = this.$route.query.PARM_7 == "true" ? true : false;
+
+      this.referencia = this.$route.query.Oper;
+      this.fecha = this.$route.query.Fecha;
+      this.respuesta = this.$route.query.Estado;
+      this.motivo = this.$route.query.Razon;
+      this.recibo = this.$route.query.Oper;
+      this.total = this.$route.query.TotalPagado;
+      this.moneda = "USD";
+      //Datos adicionales de transaccion
+      this.type_payment = this.$route.query.Tipo;
+      this.cod_transaction_state = this.$route.query.Estado;
+      this.cust_id_cliente = this.$route.query.Usuario;
+      this.id_factura = this.$route.query.Oper;
+      this.franchise = this.$route.query.Tipo;
+
+      this.setOrder();
     },
     //   ESTILOS
     getColorCount: function () {
@@ -249,7 +233,7 @@ export default {
         franchise: this.franchise,
         cardnumber: this.cardnumber,
         customer_ip: this.customer_ip,
-        medio: "ePayco",
+        medio: "Paguelo Facil",
       };
       axios.post("/orders", params).then((response) => {
         if (response.status == 200) {

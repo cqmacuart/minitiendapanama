@@ -244,7 +244,7 @@
             <div class="mb-3" v-if="paguelofacil_params.paguelofacil_param_3">
               <div class="text-center">
                 <a
-                  :href="`https://secure.paguelofacil.com/LinkDeamon.cfm?CCLW=${paguelofacil_params.paguelofacil_param_1}&CMTN=${totalAmount}&CDSC=${paguelofacil_params.paguelofacil_param_4}&URL_RETURN=${paguelofacil_params.paguelofacil_param_2}&PARAM_1=${paguelofacil_params.paguelofacil_param_5}&PARAM_2=${paguelofacil_params.paguelofacil_param_6}&PARAM_3=${paguelofacil_params.paguelofacil_param_7}&PARAM_4=${paguelofacil_params.paguelofacil_param_8}&PARAM_5=${paguelofacil_params.paguelofacil_param_9}&PARAM_6=${paguelofacil_params.paguelofacil_param_10}&PARAM_7=${paguelofacil_params.paguelofacil_param_11}`"
+                  :href="`https://secure.paguelofacil.com/LinkDeamon.cfm?CCLW=${paguelofacil_params.paguelofacil_param_1}&CMTN=${totalAmount}&CDSC=${paguelofacil_params.paguelofacil_param_4}&RETURN_URL=${paguelofacil_params.paguelofacil_param_2}&PARM_1=${paguelofacil_params.paguelofacil_param_5}&PARM_2=${paguelofacil_params.paguelofacil_param_6}&PARM_3=${paguelofacil_params.paguelofacil_param_7}&PARM_4=${paguelofacil_params.paguelofacil_param_8}&PARM_5=${paguelofacil_params.paguelofacil_param_9}&PARM_6=${paguelofacil_params.paguelofacil_param_10}&PARM_7=${paguelofacil_params.paguelofacil_param_11}`"
                 >
                   <img src="/img/payment/paguelofacil/paguelofacil_on.png" />
                 </a>
